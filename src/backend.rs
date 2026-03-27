@@ -27,6 +27,52 @@ impl ServiceRequest {
                     Err(_) => None,
                 }
             }
+            Some(service_request::service_request::Operation::AddToDb(req)) => {
+                let request = tonic::Request::new(req);
+                match client.add_to_db(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(service_response::service_response::Operation::AddToDb(
+                            resp.into_inner(),
+                        )),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::CacheItem(req)) => {
+                let request = tonic::Request::new(req);
+                match client.cache_item(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(service_response::service_response::Operation::CacheItem(
+                            resp.into_inner(),
+                        )),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::ClearCache(req)) => {
+                let request = tonic::Request::new(req);
+                match client.clear_cache(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(service_response::service_response::Operation::ClearCache(
+                            resp.into_inner(),
+                        )),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::GetCacheItem(req)) => {
+                let request = tonic::Request::new(req);
+                match client.get_cache_item(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::GetCacheItem(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
             _ => {
                 panic!("Invalid request");
             }

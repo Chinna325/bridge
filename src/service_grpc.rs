@@ -106,6 +106,50 @@ pub mod service_server_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn get_cache_item(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::GetCacheItem>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::GetCacheItem>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/GetCacheItem",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn clear_cache(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::ClearCache>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ClearCache>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/ClearCache",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
         pub async fn add_to_db(
             &mut self,
             request: impl tonic::IntoRequest<super::super::service_request::AddToDb>,
@@ -149,6 +193,20 @@ pub mod service_server_server {
             request: tonic::Request<super::super::service_request::CacheItem>,
         ) -> Result<
             tonic::Response<super::super::service_response::CacheItem>,
+            tonic::Status,
+        >;
+        async fn get_cache_item(
+            &self,
+            request: tonic::Request<super::super::service_request::GetCacheItem>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::GetCacheItem>,
+            tonic::Status,
+        >;
+        async fn clear_cache(
+            &self,
+            request: tonic::Request<super::super::service_request::ClearCache>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ClearCache>,
             tonic::Status,
         >;
         async fn add_to_db(
@@ -276,6 +334,90 @@ pub mod service_server_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = CacheItemSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/GetCacheItem" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetCacheItemSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::GetCacheItem,
+                    > for GetCacheItemSvc<T> {
+                        type Response = super::super::service_response::GetCacheItem;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::GetCacheItem,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).get_cache_item(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetCacheItemSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/ClearCache" => {
+                    #[allow(non_camel_case_types)]
+                    struct ClearCacheSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::ClearCache,
+                    > for ClearCacheSvc<T> {
+                        type Response = super::super::service_response::ClearCache;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::ClearCache,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).clear_cache(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ClearCacheSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

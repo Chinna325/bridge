@@ -7,9 +7,19 @@ pub struct AddUser {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CacheItem {
-    #[prost(bytes="vec", tag="1")]
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetCacheItem {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(bytes="vec", tag="2")]
     pub data: ::prost::alloc::vec::Vec<u8>,
-    #[prost(enumeration="Status", tag="2")]
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ClearCache {
+    #[prost(enumeration="Status", tag="1")]
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -18,8 +28,21 @@ pub struct AddToDb {
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct User {
+    #[prost(string, tag="1")]
+    pub email: ::prost::alloc::string::String,
+    #[prost(string, tag="2")]
+    pub user_name: ::prost::alloc::string::String,
+    #[prost(bytes="vec", tag="3")]
+    pub password: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, repeated, tag="4")]
+    pub followers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(bytes="vec", tag="5")]
+    pub profile_picture: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceResponse {
-    #[prost(oneof="service_response::Operation", tags="1, 2, 3")]
+    #[prost(oneof="service_response::Operation", tags="1, 2, 3, 4, 5")]
     pub operation: ::core::option::Option<service_response::Operation>,
 }
 /// Nested message and enum types in `ServiceResponse`.
@@ -29,8 +52,12 @@ pub mod service_response {
         #[prost(message, tag="1")]
         AddUser(super::AddUser),
         #[prost(message, tag="2")]
-        AcheItem(super::CacheItem),
+        CacheItem(super::CacheItem),
         #[prost(message, tag="3")]
+        GetCacheItem(super::GetCacheItem),
+        #[prost(message, tag="4")]
+        ClearCache(super::ClearCache),
+        #[prost(message, tag="5")]
         AddToDb(super::AddToDb),
     }
 }
