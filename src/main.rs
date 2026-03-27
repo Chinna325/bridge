@@ -1,12 +1,36 @@
 #![deny(unused)]
 use std::vec;
+pub mod backend;
+pub mod cache;
+pub mod errors;
 pub mod process;
 pub mod request;
 pub mod response;
+pub mod service_grpc;
+pub mod service_request;
+pub mod service_response;
 use tokio::{
     io::{AsyncReadExt, AsyncWriteExt},
     net::TcpListener,
 };
+
+use crate::cache::Cache;
+
+pub struct Context {
+    pub email: String,
+    pub is_acuthenticated: bool,
+    pub cache: Cache,
+}
+
+impl Context {
+    pub fn new() -> Self {
+        Self {
+            email: String::new(),
+            is_acuthenticated: false,
+            cache: Cache::new(),
+        }
+    }
+}
 
 #[tokio::main]
 async fn main() {
@@ -19,7 +43,10 @@ async fn main() {
         match conn.read(&mut buffer).await {
             Ok(size) => {
                 let data = buffer[0..size].to_vec();
-                let resp = process::process_request(data).await.unwrap_or_default();
+                let mut ctx = Context::new();
+                let resp = process::process_request(data, &mut ctx)
+                    .await
+                    .unwrap_or_default();
                 match conn.write(&resp).await {
                     Ok(_) => {}
                     Err(e) => {

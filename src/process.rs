@@ -1,8 +1,12 @@
+use crate::{
+    Context, backend, errors, request,
+    response::{self, Response},
+    service_request, service_response,
+};
 use prost::Message;
-
-use crate::{request, response::Response};
-
-pub async fn process_request(data: Vec<u8>) -> Option<Vec<u8>> {
+use sha2::Digest;
+use vortex_otp_lib::{OtpCharSet, generate_otp};
+pub async fn process_request(data: Vec<u8>, _ctx: &mut Context) -> Option<Vec<u8>> {
     let req = request::Request::decode(data.as_slice()).ok()?;
     let resp = req.handle().await?;
     Some(resp.encode_to_vec())
@@ -102,7 +106,58 @@ impl request::Request {
 
 impl request::AddUser {
     pub async fn handle(&self) -> Option<Response> {
-        todo!()
+        let email = self.email.clone();
+        let user_name = self.user_name.clone();
+        let password = self.password.clone();
+        if email.is_empty() || user_name.is_empty() || password.is_empty() {
+            return Some(errors::form_response("AddUser", response::Status::BackendError).await);
+        }
+        let email_otp = match generate_otp(6, OtpCharSet::Numeric) {
+            Ok(otp) => otp,
+            Err(_) => {
+                return Some(
+                    errors::form_response("AddUser", response::Status::BackendError).await,
+                );
+            }
+        };
+        let mut hasher = sha2::Sha256::new();
+        hasher.update(password);
+        let password_hash = hasher.finalize().to_vec();
+        let redis_object = service_request::RedisObject {
+            email: email.clone(),
+            user_name: user_name.clone(),
+            email_otp: Some(email_otp),
+        };
+        let data = redis_object.encode_to_vec();
+        let req = service_request::ServiceRequest {
+            operation: Some(service_request::service_request::Operation::AddUser(
+                service_request::AddUser {
+                    email,
+                    user_name,
+                    data,
+                    password_hash,
+                },
+            )),
+        };
+        let client = backend::ceate_grpc_connection().await;
+        let resp = req.execute(client).await;
+        if resp.is_none() {
+            return Some(errors::form_response("AddUser", response::Status::BackendError).await);
+        }
+        let resp = resp.unwrap();
+        if let service_response::ServiceResponse {
+            operation: Some(service_response::service_response::Operation::AddUser(resp)),
+        } = resp
+        {
+            if resp.status != service_response::Status::Success as i32 {
+                return Some(
+                    errors::form_response("AddUser", response::Status::BackendError).await,
+                );
+            }
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::AddUser(response::AddUser {})),
+        })
     }
 }
 

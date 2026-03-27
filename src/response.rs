@@ -149,3 +149,9 @@ pub mod response {
         UndoReactToTweet(super::UndoReactToTweet),
     }
 }
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum Status {
+    Success = 0,
+    BackendError = 1,
+}
