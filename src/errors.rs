@@ -20,6 +20,24 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
                 )),
             };
         }
+        "SignIn" => {
+            return response::Response {
+                operation: Some(response::response::Operation::SignIn(response::SignIn {
+                    status: status as i32,
+                    message: None,
+                })),
+            };
+        }
+        "RemoveUser" => {
+            return response::Response {
+                operation: Some(response::response::Operation::RemoveUser(
+                    response::RemoveUser {
+                        status: status as i32,
+                        message: None,
+                    },
+                )),
+            };
+        }
         _ => {
             panic!("Invalid operation");
         }

@@ -28,82 +28,82 @@ impl request::Request {
                 return req.handle(ctx).await;
             }
             Some(request::request::Operation::RemoveUser(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::AddTweet(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::ChangePassword(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::GetProfilePicture(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::GetUser(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::UpdateUser(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::RemoveProfilePicture(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::RemoveReply(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::RemoveTweet(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::GetTweet(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::SignIn(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::SignOut(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::Follow(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::UnFollow(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::ListFollowers(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::ListReplies(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::RepostTweet(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::ListTweets(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::ReplyToTweet(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::ReactToTweet(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::UndoReactToTweet(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::UpdateTweet(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::EditReply(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::GetReply(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::UpdateProfilePicture(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             Some(request::request::Operation::ResetPassword(req)) => {
-                return req.handle().await;
+                return req.handle(ctx).await;
             }
             _ => return None,
         }
@@ -216,162 +216,468 @@ impl request::VerifyUser {
                 },
             )),
         })
-        // todo!()
     }
 }
 
 impl request::RemoveUser {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(errors::form_response("RemoveUser", response::Status::BackendError).await);
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::RemoveUser(
+                response::RemoveUser {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::AddTweet {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(errors::form_response("AddTweet", response::Status::BackendError).await);
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::AddTweet(
+                response::AddTweet {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::ChangePassword {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("ChangePassword", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::ChangePassword(
+                response::ChangePassword {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::GetProfilePicture {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("GetProfilePicture", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::GetProfilePicture(
+                response::GetProfilePicture {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::GetUser {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(errors::form_response("GetUser", response::Status::BackendError).await);
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::GetUser(response::GetUser {
+                status: response::Status::Success as i32,
+                message: None,
+            })),
+        })
     }
 }
 
 impl request::UpdateUser {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(errors::form_response("UpdateUser", response::Status::BackendError).await);
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::UpdateUser(
+                response::UpdateUser {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::RemoveReply {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("RemoveReply", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::RemoveReply(
+                response::RemoveReply {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::RemoveTweet {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("RemoveReply", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::RemoveReply(
+                response::RemoveReply {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::GetTweet {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("RemoveReply", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::RemoveReply(
+                response::RemoveReply {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::SignIn {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if self.user_name.is_some() {
+            if self.password.is_none() {
+                return Some(errors::form_response("SignIn", response::Status::BackendError).await);
+            }
+            let user_name = self.user_name.clone().unwrap();
+            let user = service_response::User::get(user_name.clone()).await;
+            if user.is_none() {
+                return Some(errors::form_response("SignIn", response::Status::BackendError).await);
+            }
+            let user = user.unwrap();
+            let passowrd = self.password.clone().unwrap();
+            let mut hasher = sha2::Sha256::new();
+            hasher.update(passowrd);
+            let hash = hasher.finalize().to_vec();
+            if user.password != hash {
+                return Some(errors::form_response("SignIn", response::Status::BackendError).await);
+            }
+            ctx.is_acuthenticated = true;
+            ctx.email = user.email.clone();
+        } else {
+            return Some(response::Response {
+                operation: Some(response::response::Operation::SignIn(response::SignIn {
+                    status: response::Status::BackendError as i32,
+                    message: Some("Invalid Credentials".to_string()),
+                })),
+            });
+            //jwt token
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::SignIn(response::SignIn {
+                status: response::Status::Success as i32,
+                message: None,
+            })),
+        })
     }
 }
 
 impl request::SignOut {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(errors::form_response("SignOut", response::Status::BackendError).await);
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::SignOut(response::SignOut {
+                status: response::Status::Success as i32,
+                message: None,
+            })),
+        })
     }
 }
 
 impl request::Follow {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(errors::form_response("Follow", response::Status::BackendError).await);
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::Follow(response::Follow {
+                status: response::Status::Success as i32,
+                message: None,
+            })),
+        })
     }
 }
 
 impl request::UnFollow {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(errors::form_response("UnFollow", response::Status::BackendError).await);
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::UnFollow(
+                response::UnFollow {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::ListFollowers {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("ListFollowers", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::ListFollowers(
+                response::ListFollowers {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::ListReplies {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("ListReplies", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::ListReplies(
+                response::ListReplies {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::RepostTweet {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("RepostTweet", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::RepostTweet(
+                response::RepostTweet {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::ListTweets {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(errors::form_response("ListTweets", response::Status::BackendError).await);
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::ListTweets(
+                response::ListTweets {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::ReplyToTweet {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("ReplyToTweet", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::ReplyToTweet(
+                response::ReplyToTweet {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::ReactToTweet {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("ReactToTweet", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::ReactToTweet(
+                response::ReactToTweet {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::UndoReactToTweet {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("UndoReactToTweet", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::UndoReactToTweet(
+                response::UndoReactToTweet {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::UpdateTweet {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("UpdateTweet", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::UpdateTweet(
+                response::UpdateTweet {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::EditReply {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(errors::form_response("EditReply", response::Status::BackendError).await);
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::EditReply(
+                response::EditReply {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::GetReply {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(errors::form_response("GetReply", response::Status::BackendError).await);
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::GetReply(
+                response::GetReply {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::UploadProfilePicture {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("UploadProfilePicture", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::UpdateProfilePicture(
+                response::UploadProfilePicture {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::ResetPassword {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, _ctx: &mut Context) -> Option<Response> {
+        // if ctx.is_acuthenticated {
+        //     return Some(
+        //         errors::form_response("RemoveReply", response::Status::BackendError).await,
+        //     );
+        // }
+        Some(response::Response {
+            operation: Some(response::response::Operation::ResetPassword(
+                response::ResetPassword {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }
 
 impl request::RemoveProfilePicture {
-    pub async fn handle(&self) -> Option<Response> {
-        todo!()
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("RemoveProfilePicture", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::RemoveProfilePicture(
+                response::RemoveProfilePicture {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
     }
 }

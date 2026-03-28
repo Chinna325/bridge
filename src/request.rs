@@ -35,9 +35,15 @@ pub struct ResetPassword {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SignIn {
+    #[prost(string, optional, tag="1")]
+    pub user_name: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag="2")]
+    pub password: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SignOut {
+    #[prost(string, optional, tag="1")]
+    pub email: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Follow {
