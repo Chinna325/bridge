@@ -60,8 +60,18 @@ pub struct User {
     pub profile_picture: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetUser {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveUser {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceRequest {
-    #[prost(oneof="service_request::Operation", tags="1, 2, 3, 4, 5")]
+    #[prost(oneof="service_request::Operation", tags="1, 2, 3, 4, 5, 6, 7")]
     pub operation: ::core::option::Option<service_request::Operation>,
 }
 /// Nested message and enum types in `ServiceRequest`.
@@ -78,5 +88,9 @@ pub mod service_request {
         ClearCache(super::ClearCache),
         #[prost(message, tag="5")]
         AddToDb(super::AddToDb),
+        #[prost(message, tag="6")]
+        GetUser(super::GetUser),
+        #[prost(message, tag="7")]
+        RemoveUser(super::RemoveUser),
     }
 }
