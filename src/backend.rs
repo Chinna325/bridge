@@ -5,7 +5,7 @@ use service_grpc::service_server_client::ServiceServerClient;
 use service_request::ServiceRequest;
 use tonic::transport::Channel;
 pub async fn ceate_grpc_connection() -> ServiceServerClient<Channel> {
-    service_grpc::service_server_client::ServiceServerClient::connect("127.0.0.1:6678")
+    service_grpc::service_server_client::ServiceServerClient::connect("http://127.0.0.1:5576")
         .await
         .unwrap()
 }
@@ -15,7 +15,8 @@ impl ServiceRequest {
         &self,
         mut client: ServiceServerClient<Channel>,
     ) -> Option<ServiceResponse> {
-        match self.operation.clone() {
+        // println!("Service Request :{:?}", self.clone());
+        let resp = match self.operation.clone() {
             Some(service_request::service_request::Operation::AddUser(req)) => {
                 let request = tonic::Request::new(req);
                 match client.add_user(request).await {
@@ -76,6 +77,10 @@ impl ServiceRequest {
             _ => {
                 panic!("Invalid request");
             }
-        }
+        };
+        // let re
+        let resp = resp.unwrap();
+        // println!("Service Response :{:?}", resp);
+        Some(resp)
     }
 }

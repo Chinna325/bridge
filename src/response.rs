@@ -1,86 +1,205 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddUser {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct VerifyUser {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveUser {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateUser {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUser {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ChangePassword {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ResetPassword {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SignIn {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SignOut {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Follow {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UnFollow {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListFollowers {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddTweet {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveTweet {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListTweets {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetTweet {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateTweet {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UploadProfilePicture {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveProfilePicture {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProfilePicture {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RepostTweet {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReplyToTweet {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EditReply {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveReply {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetReply {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListReplies {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReactToTweet {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UndoReactToTweet {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct User {
+    #[prost(string, tag="1")]
+    pub email: ::prost::alloc::string::String,
+    #[prost(uint64, tag="2")]
+    pub create_at: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Response {

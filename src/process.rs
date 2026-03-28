@@ -9,9 +9,12 @@ use crate::{
 use prost::Message;
 use sha2::Digest;
 use vortex_otp_lib::{OtpCharSet, generate_otp};
+
 pub async fn process_request(data: Vec<u8>, ctx: &mut Context) -> Option<Vec<u8>> {
     let req = request::Request::decode(data.as_slice()).ok()?;
+    // println!("Req :{:?}", req);
     let resp = req.handle(ctx).await?;
+    // println!("Response :{:?}", resp);
     Some(resp.encode_to_vec())
 }
 
@@ -123,6 +126,7 @@ impl request::AddUser {
                 );
             }
         };
+        println!("Email otp :{}", email_otp);
         let mut hasher = sha2::Sha256::new();
         hasher.update(password);
         let password_hash = hasher.finalize().to_vec();
@@ -132,7 +136,7 @@ impl request::AddUser {
         let redis_object = service_request::RedisObject {
             email: email.clone(),
             user_name: user_name.clone(),
-            email_otp: Some(email_otp),
+            email_otp: Some("111111".to_string()),
             password: password_hash,
         };
         let data = redis_object.encode_to_vec();
@@ -164,7 +168,10 @@ impl request::AddUser {
         }
         ctx.email = self.email.clone();
         Some(response::Response {
-            operation: Some(response::response::Operation::AddUser(response::AddUser {})),
+            operation: Some(response::response::Operation::AddUser(response::AddUser {
+                status: response::Status::Success as i32,
+                message: None,
+            })),
         })
     }
 }
@@ -203,7 +210,10 @@ impl request::VerifyUser {
         ctx.email = self.email.clone();
         Some(response::Response {
             operation: Some(response::response::Operation::VerifyUser(
-                response::VerifyUser {},
+                response::VerifyUser {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
             )),
         })
         // todo!()
