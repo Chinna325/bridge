@@ -32,6 +32,8 @@ pub struct GetUser {
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, optional, tag="3")]
+    pub user: ::core::option::Option<User>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ChangePassword {
@@ -137,6 +139,8 @@ pub struct GetProfilePicture {
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(bytes="vec", tag="3")]
+    pub data: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RepostTweet {

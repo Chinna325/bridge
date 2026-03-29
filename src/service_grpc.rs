@@ -216,6 +216,100 @@ pub mod service_server_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn update_user(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::UpdateUser>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::UpdateUser>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/UpdateUser",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn set_profile_picture(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::SetProfilePicture,
+            >,
+        ) -> Result<
+            tonic::Response<super::super::service_response::SetProfilePicture>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/SetProfilePicture",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn get_profile_picture(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::GetProfilePicture,
+            >,
+        ) -> Result<
+            tonic::Response<super::super::service_response::GetProfilePicture>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/GetProfilePicture",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn remove_profile_picture(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::RemoveProfilePicture,
+            >,
+        ) -> Result<
+            tonic::Response<super::super::service_response::RemoveProfilePicture>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/RemoveProfilePicture",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -272,6 +366,34 @@ pub mod service_server_server {
             request: tonic::Request<super::super::service_request::RemoveUser>,
         ) -> Result<
             tonic::Response<super::super::service_response::RemoveUser>,
+            tonic::Status,
+        >;
+        async fn update_user(
+            &self,
+            request: tonic::Request<super::super::service_request::UpdateUser>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::UpdateUser>,
+            tonic::Status,
+        >;
+        async fn set_profile_picture(
+            &self,
+            request: tonic::Request<super::super::service_request::SetProfilePicture>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::SetProfilePicture>,
+            tonic::Status,
+        >;
+        async fn get_profile_picture(
+            &self,
+            request: tonic::Request<super::super::service_request::GetProfilePicture>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::GetProfilePicture>,
+            tonic::Status,
+        >;
+        async fn remove_profile_picture(
+            &self,
+            request: tonic::Request<super::super::service_request::RemoveProfilePicture>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::RemoveProfilePicture>,
             tonic::Status,
         >;
     }
@@ -597,6 +719,176 @@ pub mod service_server_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = RemoveUserSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/UpdateUser" => {
+                    #[allow(non_camel_case_types)]
+                    struct UpdateUserSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::UpdateUser,
+                    > for UpdateUserSvc<T> {
+                        type Response = super::super::service_response::UpdateUser;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::UpdateUser,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).update_user(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = UpdateUserSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/SetProfilePicture" => {
+                    #[allow(non_camel_case_types)]
+                    struct SetProfilePictureSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::SetProfilePicture,
+                    > for SetProfilePictureSvc<T> {
+                        type Response = super::super::service_response::SetProfilePicture;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::SetProfilePicture,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).set_profile_picture(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = SetProfilePictureSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/GetProfilePicture" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetProfilePictureSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::GetProfilePicture,
+                    > for GetProfilePictureSvc<T> {
+                        type Response = super::super::service_response::GetProfilePicture;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::GetProfilePicture,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).get_profile_picture(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetProfilePictureSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/RemoveProfilePicture" => {
+                    #[allow(non_camel_case_types)]
+                    struct RemoveProfilePictureSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::RemoveProfilePicture,
+                    > for RemoveProfilePictureSvc<T> {
+                        type Response = super::super::service_response::RemoveProfilePicture;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::RemoveProfilePicture,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).remove_profile_picture(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = RemoveProfilePictureSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

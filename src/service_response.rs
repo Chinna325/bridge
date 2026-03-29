@@ -9,6 +9,8 @@ pub struct AddUser {
 pub struct CacheItem {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCacheItem {
@@ -16,16 +18,22 @@ pub struct GetCacheItem {
     pub status: i32,
     #[prost(bytes="vec", tag="2")]
     pub data: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, optional, tag="3")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ClearCache {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddToDb {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct User {
@@ -53,8 +61,32 @@ pub struct RemoveUser {
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateUser {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, optional, tag="2")]
+    pub message: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SetProfilePicture {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetProfilePicture {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(bytes="vec", tag="2")]
+    pub blob: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveProfilePicture {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceResponse {
-    #[prost(oneof="service_response::Operation", tags="1, 2, 3, 4, 5, 6, 7")]
+    #[prost(oneof="service_response::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11")]
     pub operation: ::core::option::Option<service_response::Operation>,
 }
 /// Nested message and enum types in `ServiceResponse`.
@@ -75,6 +107,14 @@ pub mod service_response {
         GetUser(super::GetUser),
         #[prost(message, tag="7")]
         RemoveUser(super::RemoveUser),
+        #[prost(message, tag="8")]
+        UpdateUser(super::UpdateUser),
+        #[prost(message, tag="9")]
+        SetProfilePicture(super::SetProfilePicture),
+        #[prost(message, tag="10")]
+        GetProfilePicture(super::GetProfilePicture),
+        #[prost(message, tag="11")]
+        RemoveProfilePicture(super::RemoveProfilePicture),
     }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

@@ -17,7 +17,7 @@ pub struct VerifyUser {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveUser {
     #[prost(string, tag="1")]
-    pub user_email: ::prost::alloc::string::String,
+    pub user_name: ::prost::alloc::string::String,
     #[prost(string, tag="2")]
     pub password: ::prost::alloc::string::String,
 }
@@ -26,12 +26,22 @@ pub struct UpdateUser {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUser {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ChangePassword {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
+    #[prost(string, tag="2")]
+    pub old_password: ::prost::alloc::string::String,
+    #[prost(string, tag="3")]
+    pub new_password: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ResetPassword {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SignIn {
@@ -71,12 +81,20 @@ pub struct UpdateTweet {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UploadProfilePicture {
+    #[prost(bytes="vec", tag="1")]
+    pub data: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag="2")]
+    pub user_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveProfilePicture {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProfilePicture {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RepostTweet {

@@ -74,6 +74,45 @@ impl ServiceRequest {
                     Err(_) => None,
                 }
             }
+            Some(service_request::service_request::Operation::SetProfilePicture(req)) => {
+                let request = tonic::Request::new(req);
+                match client.set_profile_picture(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::SetProfilePicture(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::GetProfilePicture(req)) => {
+                let request = tonic::Request::new(req);
+                match client.get_profile_picture(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::GetProfilePicture(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::RemoveProfilePicture(req)) => {
+                let request = tonic::Request::new(req);
+                match client.remove_profile_picture(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::RemoveProfilePicture(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
             _ => {
                 panic!("Invalid request");
             }

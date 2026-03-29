@@ -8,8 +8,8 @@ use crate::{
 };
 use prost::Message;
 use sha2::Digest;
+use uuid::Uuid;
 use vortex_otp_lib::{OtpCharSet, generate_otp};
-
 pub async fn process_request(data: Vec<u8>, ctx: &mut Context) -> Option<Vec<u8>> {
     let req = request::Request::decode(data.as_slice()).ok()?;
     // println!("Req :{:?}", req);
@@ -224,6 +224,21 @@ impl request::RemoveUser {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("RemoveUser", response::Status::BackendError).await);
         }
+        let user = service_response::User::get(self.user_name.clone()).await;
+        if user.is_none() {
+            return Some(errors::form_response("RemoveUser", response::Status::BackendError).await);
+        }
+        let user = user.unwrap();
+        let mut hasher = sha2::Sha256::new();
+        hasher.update(self.password.clone());
+        let hash = hasher.finalize().to_vec();
+        if hash != user.password {
+            return Some(errors::form_response("RemoveUser", response::Status::BackendError).await);
+        }
+        let resp = user.remove().await;
+        if resp.is_none() {
+            return Some(errors::form_response("RemoveUser", response::Status::BackendError).await);
+        }
         Some(response::Response {
             operation: Some(response::response::Operation::RemoveUser(
                 response::RemoveUser {
@@ -258,6 +273,36 @@ impl request::ChangePassword {
                 errors::form_response("ChangePassword", response::Status::BackendError).await,
             );
         }
+        if self.old_password.is_empty() || self.new_password.is_empty() {
+            return Some(
+                errors::form_response("ChangePassword", response::Status::BackendError).await,
+            );
+        }
+        let user = service_response::User::get(self.user_name.clone()).await;
+        if user.is_none() {
+            return Some(
+                errors::form_response("ChangePassword", response::Status::BackendError).await,
+            );
+        }
+        let mut user = user.unwrap();
+        let mut hasher = sha2::Sha256::new();
+        hasher.update(self.old_password.clone());
+        let hash = hasher.finalize().to_vec();
+        if user.password != hash {
+            return Some(
+                errors::form_response("ChangePassword", response::Status::BackendError).await,
+            );
+        }
+        let mut hasher = sha2::Sha256::new();
+        hasher.update(self.new_password.clone());
+        let hash = hasher.finalize().to_vec();
+        user.password = hash;
+        let res = user.update().await;
+        if res.is_none() {
+            return Some(
+                errors::form_response("ChangePassword", response::Status::BackendError).await,
+            );
+        }
         Some(response::Response {
             operation: Some(response::response::Operation::ChangePassword(
                 response::ChangePassword {
@@ -276,11 +321,25 @@ impl request::GetProfilePicture {
                 errors::form_response("GetProfilePicture", response::Status::BackendError).await,
             );
         }
+        let user = service_response::User::get(self.user_name.clone()).await;
+        if user.is_none() {
+            return Some(
+                errors::form_response("GetProfilePicture", response::Status::BackendError).await,
+            );
+        }
+        let user = user.unwrap();
+        let data = user.get_profile_picture().await;
+        if data.is_none() {
+            return Some(
+                errors::form_response("GetProfilePicture", response::Status::BackendError).await,
+            );
+        }
         Some(response::Response {
             operation: Some(response::response::Operation::GetProfilePicture(
                 response::GetProfilePicture {
                     status: response::Status::Success as i32,
                     message: None,
+                    data: data.unwrap(),
                 },
             )),
         })
@@ -292,10 +351,19 @@ impl request::GetUser {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("GetUser", response::Status::BackendError).await);
         }
+        let user = service_response::User::get(self.user_name.clone()).await;
+        if user.is_none() {
+            return Some(errors::form_response("GetUser", response::Status::BackendError).await);
+        }
+        let user = user.unwrap();
         Some(response::Response {
             operation: Some(response::response::Operation::GetUser(response::GetUser {
                 status: response::Status::Success as i32,
                 message: None,
+                user: Some(response::User {
+                    email: user.email.clone(),
+                    create_at: 0_u64,
+                }),
             })),
         })
     }
@@ -635,6 +703,22 @@ impl request::UploadProfilePicture {
                 errors::form_response("UploadProfilePicture", response::Status::BackendError).await,
             );
         }
+        let user = service_response::User::get(self.user_name.clone()).await;
+        if user.is_none() {
+            return Some(
+                errors::form_response("UploadProfilePicture", response::Status::BackendError).await,
+            );
+        }
+        let mut user = user.unwrap();
+        if blob_name.is_empty() {
+            let uuid = Uuid::new_v4();
+            let mut bytes = uuid.as_bytes().to_vec();
+            // let
+            let millis = now.as_millis() as u64;
+
+            bytes.extend_from_slice(&millis.to_be_bytes());
+            user.profile_picture = bytes;
+        }
         Some(response::Response {
             operation: Some(response::response::Operation::UpdateProfilePicture(
                 response::UploadProfilePicture {
@@ -667,6 +751,24 @@ impl request::ResetPassword {
 impl request::RemoveProfilePicture {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("RemoveProfilePicture", response::Status::BackendError).await,
+            );
+        }
+        let user = service_response::User::get(self.user_name.clone()).await;
+        if user.is_none() {
+            return Some(
+                errors::form_response("RemoveProfilePicture", response::Status::BackendError).await,
+            );
+        }
+        let user = user.unwrap();
+        if user.email != ctx.email {
+            return Some(
+                errors::form_response("RemoveProfilePicture", response::Status::BackendError).await,
+            );
+        }
+        let res = user.remove_profile_picture().await;
+        if res.is_none() {
             return Some(
                 errors::form_response("RemoveProfilePicture", response::Status::BackendError).await,
             );

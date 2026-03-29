@@ -70,8 +70,34 @@ pub struct RemoveUser {
     pub user_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateUser {
+    #[prost(message, optional, tag="1")]
+    pub user: ::core::option::Option<User>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SetProfilePicture {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
+    #[prost(bytes="vec", tag="2")]
+    pub blob_name: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="3")]
+    pub data: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetProfilePicture {
+    #[prost(bytes="vec", tag="1")]
+    pub blob_name: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveProfilePicture {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
+    #[prost(bytes="vec", tag="2")]
+    pub blob_name: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceRequest {
-    #[prost(oneof="service_request::Operation", tags="1, 2, 3, 4, 5, 6, 7")]
+    #[prost(oneof="service_request::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11")]
     pub operation: ::core::option::Option<service_request::Operation>,
 }
 /// Nested message and enum types in `ServiceRequest`.
@@ -92,5 +118,13 @@ pub mod service_request {
         GetUser(super::GetUser),
         #[prost(message, tag="7")]
         RemoveUser(super::RemoveUser),
+        #[prost(message, tag="8")]
+        UpdateUser(super::UpdateUser),
+        #[prost(message, tag="9")]
+        SetProfilePicture(super::SetProfilePicture),
+        #[prost(message, tag="10")]
+        GetProfilePicture(super::GetProfilePicture),
+        #[prost(message, tag="11")]
+        RemoveProfilePicture(super::RemoveProfilePicture),
     }
 }
