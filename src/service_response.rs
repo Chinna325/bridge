@@ -115,6 +115,10 @@ pub struct PublicMetrics {
     pub bookmark_count: i32,
     #[prost(int32, tag="6")]
     pub impression_count: i32,
+    #[prost(int32, tag="7")]
+    pub love_count: i32,
+    #[prost(int32, tag="8")]
+    pub dislike_count: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Reply {
@@ -149,6 +153,8 @@ pub struct GetTweet {
 pub struct ListTweets {
     #[prost(bytes="vec", repeated, tag="1")]
     pub tweet_ids: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
+    #[prost(enumeration="Status", tag="2")]
+    pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveTweet {
@@ -161,8 +167,67 @@ pub struct UpdateTweet {
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddLike {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveLike {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AdddisLike {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveDisLike {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddLove {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveLove {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddReply {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveReply {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateReply {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListReplies {
+    #[prost(message, repeated, tag="1")]
+    pub replies: ::prost::alloc::vec::Vec<Reply>,
+    #[prost(enumeration="Status", tag="2")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetReply {
+    #[prost(message, optional, tag="1")]
+    pub reply: ::core::option::Option<Reply>,
+    #[prost(enumeration="Status", tag="2")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceResponse {
-    #[prost(oneof="service_response::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16")]
+    #[prost(oneof="service_response::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27")]
     pub operation: ::core::option::Option<service_response::Operation>,
 }
 /// Nested message and enum types in `ServiceResponse`.
@@ -201,6 +266,28 @@ pub mod service_response {
         ListTweets(super::ListTweets),
         #[prost(message, tag="16")]
         UpdateTweet(super::UpdateTweet),
+        #[prost(message, tag="17")]
+        AddLike(super::AddLike),
+        #[prost(message, tag="18")]
+        RemoveLike(super::RemoveLike),
+        #[prost(message, tag="19")]
+        RemoveDisLike(super::RemoveDisLike),
+        #[prost(message, tag="20")]
+        AdddisLike(super::AdddisLike),
+        #[prost(message, tag="21")]
+        AddLove(super::AddLove),
+        #[prost(message, tag="22")]
+        RemoveLove(super::RemoveLove),
+        #[prost(message, tag="23")]
+        AddReply(super::AddReply),
+        #[prost(message, tag="24")]
+        UpdateReply(super::UpdateReply),
+        #[prost(message, tag="25")]
+        RemoveReply(super::RemoveReply),
+        #[prost(message, tag="26")]
+        GetReply(super::GetReply),
+        #[prost(message, tag="27")]
+        ListReplies(super::ListReplies),
     }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

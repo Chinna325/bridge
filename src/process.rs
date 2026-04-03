@@ -545,24 +545,6 @@ impl request::ReplyToTweet {
     }
 }
 
-impl request::ReactToTweet {
-    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        if !ctx.is_acuthenticated {
-            return Some(
-                errors::form_response("ReactToTweet", response::Status::BackendError).await,
-            );
-        }
-        Some(response::Response {
-            operation: Some(response::response::Operation::ReactToTweet(
-                response::ReactToTweet {
-                    status: response::Status::Success as i32,
-                    message: None,
-                },
-            )),
-        })
-    }
-}
-
 impl request::UndoReactToTweet {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {

@@ -122,24 +122,132 @@ impl service_request::Tweet {
     }
 
     pub async fn add_like(&mut self) -> Result<(), ()> {
-        todo!()
+        let req = ServiceRequest {
+            operation: Some(service_request::service_request::Operation::AddLike(
+                service_request::AddLike {
+                    tweet_id: self.tweet_id.clone(),
+                    tweet_data: self.clone().encode_to_vec(),
+                },
+            )),
+        };
+        let mut conn = backend::ceate_grpc_connection().await;
+        let resp = req.execute(conn).await.ok_or(Err(()))?;
+        if let service_response::ServiceResponse {
+            operation: Some(service_response::service_response::Operation::AddLike(resp)),
+        } = resp
+        {
+            if resp.status != service_response::Status::Success as i32 {
+                return Err(());
+            }
+        }
+        Ok(())
     }
     pub async fn remove_like(&mut self) -> Result<(), ()> {
-        todo!()
+        let req = ServiceRequest {
+            operation: Some(service_request::service_request::Operation::RemoveLike(
+                service_request::RemoveLike {
+                    tweet_id: self.tweet_id.clone(),
+                    tweet_data: self.clone().encode_to_vec(),
+                },
+            )),
+        };
+        let mut conn = backend::ceate_grpc_connection().await;
+        let resp = req.execute(conn).await.ok_or(Err(()))?;
+        if let service_response::ServiceResponse {
+            operation: Some(service_response::service_response::Operation::RemoveLike(resp)),
+        } = resp
+        {
+            if resp.status != service_response::Status::Success as i32 {
+                return Err(());
+            }
+        }
+        Ok(())
     }
 
     pub async fn add_dislike(&mut self) -> Result<(), ()> {
-        todo!()
+        let req = ServiceRequest {
+            operation: Some(service_request::service_request::Operation::AdddisLike(
+                service_request::AdddisLike {
+                    tweet_id: self.tweet_id.clone(),
+                    tweet_data: self.clone().encode_to_vec(),
+                },
+            )),
+        };
+        let mut conn = backend::ceate_grpc_connection().await;
+        let resp = req.execute(conn).await.ok_or(Err(()))?;
+        if let service_response::ServiceResponse {
+            operation: Some(service_response::service_response::Operation::AdddisLike(resp)),
+        } = resp
+        {
+            if resp.status != service_response::Status::Success as i32 {
+                return Err(());
+            }
+        }
+        Ok(())
     }
     pub async fn remove_dislike(&mut self) -> Result<(), ()> {
-        todo!()
+        let req = ServiceRequest {
+            operation: Some(service_request::service_request::Operation::RemoveDisLike(
+                service_request::RemoveDisLike {
+                    tweet_id: self.tweet_id.clone(),
+                    tweet_data: self.clone().encode_to_vec(),
+                },
+            )),
+        };
+        let mut conn = backend::ceate_grpc_connection().await;
+        let resp = req.execute(conn).await.ok_or(Err(()))?;
+        if let service_response::ServiceResponse {
+            operation: Some(service_response::service_response::Operation::RemoveDisLike(resp)),
+        } = resp
+        {
+            if resp.status != service_response::Status::Success as i32 {
+                return Err(());
+            }
+        }
+        Ok(())
     }
 
     pub async fn add_love(&mut self) -> Result<(), ()> {
-        todo!()
+        let req = ServiceRequest {
+            operation: Some(service_request::service_request::Operation::AddLove(
+                service_request::AddLove {
+                    tweet_id: self.tweet_id.clone(),
+                    tweet_data: self.clone().encode_to_vec(),
+                },
+            )),
+        };
+        let mut conn = backend::ceate_grpc_connection().await;
+        let resp = req.execute(conn).await.ok_or(Err(()))?;
+        if let service_response::ServiceResponse {
+            operation: Some(service_response::service_response::Operation::AddLove(resp)),
+        } = resp
+        {
+            if resp.status != service_response::Status::Success as i32 {
+                return Err(());
+            }
+        }
+        Ok(())
     }
     pub async fn remove_love(&mut self) -> Result<(), ()> {
-        todo!()
+        let req = ServiceRequest {
+            operation: Some(service_request::service_request::Operation::RemoveLove(
+                service_request::RemoveLove {
+                    tweet_id: self.tweet_id.clone(),
+                    tweet_data: self.clone().encode_to_vec(),
+                },
+            )),
+        };
+        let mut conn = backend::ceate_grpc_connection().await;
+        let resp = req.execute(conn).await.ok_or(Err(()))?;
+        if let service_response::ServiceResponse {
+            operation: Some(service_response::service_response::Operation::RemoveLove(resp)),
+        } = resp
+        {
+            if resp.status != service_response::Status::Success as i32 {
+                return Err(());
+            }
+        }
+        Ok(())
     }
     pub fn form(tweet: request::Tweet) -> Self {
         Self {
@@ -311,13 +419,6 @@ impl request::UpdateTweet {
                 errors::form_response("UpdateTweet", response::Status::BackendError).await,
             );
         }
-        let tweet = self.tweet.clone();
-        if tweet.is_none() {
-            return Some(
-                errors::form_response("UpdateTweet", response::Status::BackendError).await,
-            );
-        }
-        let tweet = tweet.unwrap();
         let tweet = service_request::Tweet::from_uuid(self.tweet_id.clone()).await;
         if tweet.is_err() {
             return Some(
@@ -325,6 +426,11 @@ impl request::UpdateTweet {
             );
         }
         let mut tweet = tweet.unwrap();
+        if tweet.owner != ctx.email {
+            return Some(
+                errors::form_response("UpdateTweet", response::Status::BackendError).await,
+            );
+        }
         tweet.hashtags = self.hash_tags.clone();
         tweet.user_names = self.user_names.clone();
         tweet.text = self.text.clone();
@@ -337,6 +443,60 @@ impl request::UpdateTweet {
         Some(response::Response {
             operation: Some(response::response::Operation::UpdateTweet(
                 response::UpdateTweet {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
+        })
+    }
+}
+
+impl request::ReactToTweet {
+    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        if !ctx.is_acuthenticated {
+            return Some(
+                errors::form_response("ReactToTweet", response::Status::BackendError).await,
+            );
+        }
+        let tweet = service_request::Tweet::from_uuid(self.tweet_id.clone()).await;
+        if tweet.is_err() {
+            return Some(
+                errors::form_response("ReactToTweet", response::Status::BackendError).await,
+            );
+        }
+        let mut tweet = tweet.unwrap();
+        let metrics = tweet.public_metrics.clone();
+        let mut metrics = metrics.unwrap();
+        let resp = match self.tweet_react.into() {
+            request::TweetReact::Like => {
+                metrics.like_count += 1;
+                tweet.public_metrics = Some(metrics.clone());
+                tweet.add_like().await
+            }
+            request::TweetReact::Love => {
+                metrics.love_count += 1;
+                tweet.public_metrics = Some(metrics.clone());
+                tweet.add_love().await
+            }
+            request::TweetReact::DisLike => {
+                metrics.dislike_count += 1;
+                tweet.public_metrics = Some(metrics.clone());
+                tweet.remove_love().await
+            }
+            _ => {
+                return Some(
+                    errors::form_response("ReactToTweet", response::Status::BackendError).await,
+                );
+            }
+        };
+        if resp.is_err() {
+            return Some(
+                errors::form_response("ReactToTweet", response::Status::BackendError).await,
+            );
+        }
+        Some(response::Response {
+            operation: Some(response::response::Operation::ReactToTweet(
+                response::ReactToTweet {
                     status: response::Status::Success as i32,
                     message: None,
                 },

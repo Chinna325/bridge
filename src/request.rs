@@ -84,7 +84,6 @@ pub struct GetTweet {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateTweet {
-    /// Tweet tweet=1;
     #[prost(string, tag="1")]
     pub text: ::prost::alloc::string::String,
     #[prost(string, repeated, tag="2")]
@@ -131,9 +130,17 @@ pub struct ListReplies {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReactToTweet {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(enumeration="TweetReact", tag="2")]
+    pub tweet_react: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UndoReactToTweet {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(enumeration="UndoTweetReact", tag="2")]
+    pub tweet_react: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Tweet {
@@ -217,4 +224,18 @@ pub mod request {
         #[prost(message, tag="28")]
         UndoReactToTweet(super::UndoReactToTweet),
     }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum TweetReact {
+    Like = 0,
+    Love = 1,
+    DisLike = 2,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum UndoTweetReact {
+    UndoLike = 0,
+    UndoDisLike = 1,
+    UndoLove = 2,
 }

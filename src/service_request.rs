@@ -126,6 +126,10 @@ pub struct PublicMetrics {
     pub bookmark_count: i32,
     #[prost(int32, tag="6")]
     pub impression_count: i32,
+    #[prost(int32, tag="7")]
+    pub love_count: i32,
+    #[prost(int32, tag="8")]
+    pub dislike_count: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Reply {
@@ -148,12 +152,14 @@ pub struct Reply {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddTweet {
-    #[prost(message, optional, tag="1")]
-    pub tweet: ::core::option::Option<Tweet>,
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
     #[prost(enumeration="TweetAdd", tag="2")]
     pub tweet_add: i32,
     #[prost(bytes="vec", tag="3")]
     pub tweet_data: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="4")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetTweet {
@@ -162,6 +168,8 @@ pub struct GetTweet {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListTweets {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateTweet {
@@ -174,10 +182,87 @@ pub struct UpdateTweet {
 pub struct RemoveTweet {
     #[prost(enumeration="TweetRemove", tag="1")]
     pub tweet_remove: i32,
+    #[prost(bytes="vec", tag="2")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddLike {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub tweet_data: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveLike {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub tweet_data: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AdddisLike {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub tweet_data: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveDisLike {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub tweet_data: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddLove {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub tweet_data: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveLove {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub tweet_data: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddReply {
+    #[prost(message, optional, tag="1")]
+    pub reply: ::core::option::Option<Reply>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveReply {
+    #[prost(bytes="vec", tag="1")]
+    pub reply_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub parent_id: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateReply {
+    #[prost(bytes="vec", tag="1")]
+    pub reply_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub parent_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag="3")]
+    pub text: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListReplies {
+    #[prost(bytes="vec", tag="1")]
+    pub parent_id: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetReply {
+    #[prost(bytes="vec", tag="1")]
+    pub parent_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub reply_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceRequest {
-    #[prost(oneof="service_request::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16")]
+    #[prost(oneof="service_request::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27")]
     pub operation: ::core::option::Option<service_request::Operation>,
 }
 /// Nested message and enum types in `ServiceRequest`.
@@ -216,6 +301,28 @@ pub mod service_request {
         ListTweets(super::ListTweets),
         #[prost(message, tag="16")]
         UpdateTweet(super::UpdateTweet),
+        #[prost(message, tag="17")]
+        AddLike(super::AddLike),
+        #[prost(message, tag="18")]
+        RemoveLike(super::RemoveLike),
+        #[prost(message, tag="19")]
+        RemoveDisLike(super::RemoveDisLike),
+        #[prost(message, tag="20")]
+        AdddisLike(super::AdddisLike),
+        #[prost(message, tag="21")]
+        AddLove(super::AddLove),
+        #[prost(message, tag="22")]
+        RemoveLove(super::RemoveLove),
+        #[prost(message, tag="23")]
+        AddReply(super::AddReply),
+        #[prost(message, tag="24")]
+        UpdateReply(super::UpdateReply),
+        #[prost(message, tag="25")]
+        RemoveReply(super::RemoveReply),
+        #[prost(message, tag="26")]
+        GetReply(super::GetReply),
+        #[prost(message, tag="27")]
+        ListReplies(super::ListReplies),
     }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
