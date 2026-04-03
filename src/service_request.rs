@@ -96,8 +96,88 @@ pub struct RemoveProfilePicture {
     pub blob_name: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Tweet {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag="2")]
+    pub text: ::prost::alloc::string::String,
+    #[prost(uint64, tag="3")]
+    pub created_at: u64,
+    #[prost(string, tag="4")]
+    pub owner: ::prost::alloc::string::String,
+    #[prost(message, optional, tag="5")]
+    pub public_metrics: ::core::option::Option<PublicMetrics>,
+    #[prost(string, repeated, tag="6")]
+    pub hashtags: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, repeated, tag="7")]
+    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PublicMetrics {
+    #[prost(int32, tag="1")]
+    pub retweet_count: i32,
+    #[prost(int32, tag="2")]
+    pub reply_count: i32,
+    #[prost(int32, tag="3")]
+    pub like_count: i32,
+    #[prost(int32, tag="4")]
+    pub quote_count: i32,
+    #[prost(int32, tag="5")]
+    pub bookmark_count: i32,
+    #[prost(int32, tag="6")]
+    pub impression_count: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Reply {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag="2")]
+    pub user_name: ::prost::alloc::string::String,
+    #[prost(string, tag="3")]
+    pub text: ::prost::alloc::string::String,
+    #[prost(bytes="vec", tag="4")]
+    pub reply_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="5")]
+    pub parent_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(int32, tag="6")]
+    pub likes: i32,
+    #[prost(int32, tag="7")]
+    pub dislikes: i32,
+    #[prost(uint64, tag="8")]
+    pub created_at: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddTweet {
+    #[prost(message, optional, tag="1")]
+    pub tweet: ::core::option::Option<Tweet>,
+    #[prost(enumeration="TweetAdd", tag="2")]
+    pub tweet_add: i32,
+    #[prost(bytes="vec", tag="3")]
+    pub tweet_data: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetTweet {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListTweets {
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateTweet {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_data: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveTweet {
+    #[prost(enumeration="TweetRemove", tag="1")]
+    pub tweet_remove: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceRequest {
-    #[prost(oneof="service_request::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11")]
+    #[prost(oneof="service_request::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16")]
     pub operation: ::core::option::Option<service_request::Operation>,
 }
 /// Nested message and enum types in `ServiceRequest`.
@@ -126,5 +206,27 @@ pub mod service_request {
         GetProfilePicture(super::GetProfilePicture),
         #[prost(message, tag="11")]
         RemoveProfilePicture(super::RemoveProfilePicture),
+        #[prost(message, tag="12")]
+        AddTweet(super::AddTweet),
+        #[prost(message, tag="13")]
+        GetTweet(super::GetTweet),
+        #[prost(message, tag="14")]
+        RemoveTweet(super::RemoveTweet),
+        #[prost(message, tag="15")]
+        ListTweets(super::ListTweets),
+        #[prost(message, tag="16")]
+        UpdateTweet(super::UpdateTweet),
     }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum TweetRemove {
+    OwnTweet = 0,
+    RepostedTweet = 1,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum TweetAdd {
+    Add = 0,
+    Repost = 1,
 }

@@ -9,6 +9,7 @@ pub mod response;
 pub mod service_grpc;
 pub mod service_request;
 pub mod service_response;
+pub mod tweet;
 pub mod users;
 use tokio::{
     io::{AsyncReadExt, AsyncWriteExt},

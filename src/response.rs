@@ -90,6 +90,8 @@ pub struct AddTweet {
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(bytes="vec", tag="3")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveTweet {
@@ -104,6 +106,8 @@ pub struct ListTweets {
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(bytes="vec", repeated, tag="3")]
+    pub tweets: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetTweet {
@@ -111,6 +115,8 @@ pub struct GetTweet {
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, optional, tag="3")]
+    pub tweet: ::core::option::Option<Tweet>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateTweet {
@@ -204,6 +210,55 @@ pub struct User {
     pub email: ::prost::alloc::string::String,
     #[prost(uint64, tag="2")]
     pub create_at: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Tweet {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag="2")]
+    pub text: ::prost::alloc::string::String,
+    #[prost(uint64, tag="3")]
+    pub created_at: u64,
+    #[prost(string, tag="4")]
+    pub owner: ::prost::alloc::string::String,
+    #[prost(message, optional, tag="5")]
+    pub public_metrics: ::core::option::Option<PublicMetrics>,
+    #[prost(string, repeated, tag="6")]
+    pub hashtags: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, repeated, tag="7")]
+    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PublicMetrics {
+    #[prost(int32, tag="1")]
+    pub retweet_count: i32,
+    #[prost(int32, tag="2")]
+    pub reply_count: i32,
+    #[prost(int32, tag="3")]
+    pub like_count: i32,
+    #[prost(int32, tag="4")]
+    pub quote_count: i32,
+    #[prost(int32, tag="5")]
+    pub bookmark_count: i32,
+    #[prost(int32, tag="6")]
+    pub impression_count: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Reply {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag="2")]
+    pub user_name: ::prost::alloc::string::String,
+    #[prost(string, tag="3")]
+    pub text: ::prost::alloc::string::String,
+    #[prost(bytes="vec", tag="4")]
+    pub reply_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="5")]
+    pub parent_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(int32, tag="6")]
+    pub likes: i32,
+    #[prost(int32, tag="7")]
+    pub dislikes: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Response {

@@ -66,18 +66,33 @@ pub struct ListFollowers {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddTweet {
+    #[prost(message, optional, tag="1")]
+    pub tweet: ::core::option::Option<Tweet>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveTweet {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListTweets {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetTweet {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateTweet {
+    /// Tweet tweet=1;
+    #[prost(string, tag="1")]
+    pub text: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag="2")]
+    pub hash_tags: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, repeated, tag="3")]
+    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(bytes="vec", tag="4")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UploadProfilePicture {
@@ -119,6 +134,22 @@ pub struct ReactToTweet {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UndoReactToTweet {
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Tweet {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag="2")]
+    pub text: ::prost::alloc::string::String,
+    #[prost(string, tag="3")]
+    pub created_at: ::prost::alloc::string::String,
+    #[prost(string, tag="4")]
+    pub owner: ::prost::alloc::string::String,
+    /// PublicMetrics publicMetrics=5;
+    #[prost(string, repeated, tag="6")]
+    pub hashtags: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, repeated, tag="7")]
+    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Request {

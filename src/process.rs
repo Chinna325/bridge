@@ -3,8 +3,8 @@
 use crate::{
     Context, backend, errors, request,
     response::{self, Response},
-    service_request::{self},
-    service_response,
+    service_request::{self, Tweet},
+    service_response, tweet,
 };
 use prost::Message;
 use sha2::Digest;
@@ -250,21 +250,6 @@ impl request::RemoveUser {
     }
 }
 
-impl request::AddTweet {
-    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        if !ctx.is_acuthenticated {
-            return Some(errors::form_response("AddTweet", response::Status::BackendError).await);
-        }
-        Some(response::Response {
-            operation: Some(response::response::Operation::AddTweet(
-                response::AddTweet {
-                    status: response::Status::Success as i32,
-                    message: None,
-                },
-            )),
-        })
-    }
-}
 
 impl request::ChangePassword {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
@@ -403,41 +388,6 @@ impl request::RemoveReply {
     }
 }
 
-impl request::RemoveTweet {
-    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        if !ctx.is_acuthenticated {
-            return Some(
-                errors::form_response("RemoveReply", response::Status::BackendError).await,
-            );
-        }
-        Some(response::Response {
-            operation: Some(response::response::Operation::RemoveReply(
-                response::RemoveReply {
-                    status: response::Status::Success as i32,
-                    message: None,
-                },
-            )),
-        })
-    }
-}
-
-impl request::GetTweet {
-    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        if !ctx.is_acuthenticated {
-            return Some(
-                errors::form_response("RemoveReply", response::Status::BackendError).await,
-            );
-        }
-        Some(response::Response {
-            operation: Some(response::response::Operation::RemoveReply(
-                response::RemoveReply {
-                    status: response::Status::Success as i32,
-                    message: None,
-                },
-            )),
-        })
-    }
-}
 
 impl request::SignIn {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
@@ -576,21 +526,6 @@ impl request::RepostTweet {
     }
 }
 
-impl request::ListTweets {
-    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        if !ctx.is_acuthenticated {
-            return Some(errors::form_response("ListTweets", response::Status::BackendError).await);
-        }
-        Some(response::Response {
-            operation: Some(response::response::Operation::ListTweets(
-                response::ListTweets {
-                    status: response::Status::Success as i32,
-                    message: None,
-                },
-            )),
-        })
-    }
-}
 
 impl request::ReplyToTweet {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
@@ -638,24 +573,6 @@ impl request::UndoReactToTweet {
         Some(response::Response {
             operation: Some(response::response::Operation::UndoReactToTweet(
                 response::UndoReactToTweet {
-                    status: response::Status::Success as i32,
-                    message: None,
-                },
-            )),
-        })
-    }
-}
-
-impl request::UpdateTweet {
-    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        if !ctx.is_acuthenticated {
-            return Some(
-                errors::form_response("UpdateTweet", response::Status::BackendError).await,
-            );
-        }
-        Some(response::Response {
-            operation: Some(response::response::Operation::UpdateTweet(
-                response::UpdateTweet {
                     status: response::Status::Success as i32,
                     message: None,
                 },
@@ -713,9 +630,7 @@ impl request::UploadProfilePicture {
         if blob_name.is_empty() {
             let uuid = Uuid::new_v4();
             let mut bytes = uuid.as_bytes().to_vec();
-            // let
-            let millis = now.as_millis() as u64;
-
+            let millis = chrono::Utc::now().timestamp_millis() as u64;
             bytes.extend_from_slice(&millis.to_be_bytes());
             user.profile_picture = bytes;
         }

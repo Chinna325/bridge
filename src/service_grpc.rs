@@ -310,6 +310,116 @@ pub mod service_server_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn add_tweet(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::AddTweet>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::AddTweet>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/AddTweet",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn get_tweet(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::GetTweet>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::GetTweet>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/GetTweet",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn remove_tweet(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::RemoveTweet>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::RemoveTweet>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/RemoveTweet",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn update_tweet(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::UpdateTweet>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::UpdateTweet>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/UpdateTweet",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn list_tweets(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::ListTweets>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ListTweets>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/ListTweets",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -394,6 +504,41 @@ pub mod service_server_server {
             request: tonic::Request<super::super::service_request::RemoveProfilePicture>,
         ) -> Result<
             tonic::Response<super::super::service_response::RemoveProfilePicture>,
+            tonic::Status,
+        >;
+        async fn add_tweet(
+            &self,
+            request: tonic::Request<super::super::service_request::AddTweet>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::AddTweet>,
+            tonic::Status,
+        >;
+        async fn get_tweet(
+            &self,
+            request: tonic::Request<super::super::service_request::GetTweet>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::GetTweet>,
+            tonic::Status,
+        >;
+        async fn remove_tweet(
+            &self,
+            request: tonic::Request<super::super::service_request::RemoveTweet>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::RemoveTweet>,
+            tonic::Status,
+        >;
+        async fn update_tweet(
+            &self,
+            request: tonic::Request<super::super::service_request::UpdateTweet>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::UpdateTweet>,
+            tonic::Status,
+        >;
+        async fn list_tweets(
+            &self,
+            request: tonic::Request<super::super::service_request::ListTweets>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ListTweets>,
             tonic::Status,
         >;
     }
@@ -889,6 +1034,215 @@ pub mod service_server_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = RemoveProfilePictureSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/AddTweet" => {
+                    #[allow(non_camel_case_types)]
+                    struct AddTweetSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::AddTweet,
+                    > for AddTweetSvc<T> {
+                        type Response = super::super::service_response::AddTweet;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::AddTweet,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).add_tweet(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = AddTweetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/GetTweet" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetTweetSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::GetTweet,
+                    > for GetTweetSvc<T> {
+                        type Response = super::super::service_response::GetTweet;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::GetTweet,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).get_tweet(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetTweetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/RemoveTweet" => {
+                    #[allow(non_camel_case_types)]
+                    struct RemoveTweetSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::RemoveTweet,
+                    > for RemoveTweetSvc<T> {
+                        type Response = super::super::service_response::RemoveTweet;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::RemoveTweet,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).remove_tweet(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = RemoveTweetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/UpdateTweet" => {
+                    #[allow(non_camel_case_types)]
+                    struct UpdateTweetSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::UpdateTweet,
+                    > for UpdateTweetSvc<T> {
+                        type Response = super::super::service_response::UpdateTweet;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::UpdateTweet,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).update_tweet(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = UpdateTweetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/ListTweets" => {
+                    #[allow(non_camel_case_types)]
+                    struct ListTweetsSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::ListTweets,
+                    > for ListTweetsSvc<T> {
+                        type Response = super::super::service_response::ListTweets;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::ListTweets,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).list_tweets(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ListTweetsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
