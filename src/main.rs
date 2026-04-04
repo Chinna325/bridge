@@ -29,7 +29,7 @@ impl Context {
     pub fn new() -> Self {
         Self {
             email: String::new(),
-            is_acuthenticated: false,
+            is_acuthenticated: true,
             cache: Cache::new(),
             user_name: String::new(),
         }

@@ -38,6 +38,27 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
                 )),
             };
         }
+        "AddTweet" => {
+            return response::Response {
+                operation: Some(response::response::Operation::AddTweet(
+                    response::AddTweet {
+                        status: status as i32,
+                        message: None,
+                        tweet_id: Vec::new(),
+                    },
+                )),
+            };
+        }
+        "RemoveTweet" => {
+            return response::Response {
+                operation: Some(response::response::Operation::RemoveTweet(
+                    response::RemoveTweet {
+                        status: status as i32,
+                        message: None,
+                    },
+                )),
+            };
+        }
         _ => {
             panic!("Invalid operation");
         }

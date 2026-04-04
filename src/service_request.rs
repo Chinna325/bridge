@@ -215,6 +215,8 @@ pub struct UpdateReply {
     pub hash_tags: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, repeated, tag="5")]
     pub user_name: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(bytes="vec", tag="6")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListReplies {

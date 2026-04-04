@@ -243,6 +243,7 @@ impl service_request::Reply {
                     text: self.text.clone(),
                     hash_tags: self.hash_tags.clone(),
                     user_name: self.user_names.clone(),
+                    tweet_id: self.tweet_id.clone(),
                 },
             )),
         };
@@ -340,7 +341,8 @@ impl request::AddTweet {
             let millis = chrono::Utc::now().timestamp_millis() as u64;
             bytes.extend_from_slice(&millis.to_be_bytes());
             tweet_id = bytes;
-            let tweet = service_request::Tweet::form(tweet.clone());
+            let mut tweet = service_request::Tweet::form(tweet.clone());
+            tweet.tweet_id = tweet_id.clone();
             let resp = tweet.new(tweet_add, tweet.encode_to_vec()).await;
             if resp.is_err() {
                 return Some(
@@ -455,7 +457,7 @@ impl request::ListTweets {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("ListTweets", response::Status::BackendError).await);
         }
-        let tweets = service_request::Tweet::list("".to_string()).await;
+        let tweets = service_request::Tweet::list(self.user_name.clone()).await;
         if tweets.is_err() {
             return Some(errors::form_response("ListTweets", response::Status::BackendError).await);
         }

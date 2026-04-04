@@ -76,6 +76,8 @@ pub struct RemoveTweet {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListTweets {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetTweet {
@@ -197,8 +199,8 @@ pub struct Tweet {
     pub tweet_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag="2")]
     pub text: ::prost::alloc::string::String,
-    #[prost(string, tag="3")]
-    pub created_at: ::prost::alloc::string::String,
+    #[prost(uint64, tag="3")]
+    pub created_at: u64,
     #[prost(string, tag="4")]
     pub owner: ::prost::alloc::string::String,
     /// PublicMetrics publicMetrics=5;
