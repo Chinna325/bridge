@@ -112,21 +112,70 @@ pub struct GetProfilePicture {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RepostTweet {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReplyToTweet {
+    #[prost(message, optional, tag="1")]
+    pub reply: ::core::option::Option<Reply>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Reply {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag="2")]
+    pub user_name: ::prost::alloc::string::String,
+    #[prost(string, tag="3")]
+    pub text: ::prost::alloc::string::String,
+    #[prost(bytes="vec", tag="4")]
+    pub reply_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="5")]
+    pub parent_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(int32, tag="6")]
+    pub likes: i32,
+    #[prost(int32, tag="7")]
+    pub dislikes: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EditReply {
+    #[prost(bytes="vec", tag="1")]
+    pub reply_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub parent_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, repeated, tag="3")]
+    pub hash_tags: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, repeated, tag="4")]
+    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(bytes="vec", tag="5")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag="6")]
+    pub text: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveReply {
+    #[prost(bytes="vec", tag="1")]
+    pub reply_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub parent_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="3")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetReply {
+    #[prost(bytes="vec", tag="1")]
+    pub reply_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub parent_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="3")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListReplies {
+    #[prost(bytes="vec", tag="1")]
+    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub parent_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReactToTweet {

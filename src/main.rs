@@ -22,6 +22,7 @@ pub struct Context {
     pub email: String,
     pub is_acuthenticated: bool,
     pub cache: Cache,
+    pub user_name: String,
 }
 
 impl Context {
@@ -30,6 +31,7 @@ impl Context {
             email: String::new(),
             is_acuthenticated: false,
             cache: Cache::new(),
+            user_name: String::new(),
         }
     }
 }

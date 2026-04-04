@@ -161,6 +161,8 @@ pub struct ReplyToTweet {
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(bytes="vec", tag="3")]
+    pub reply_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EditReply {
@@ -182,6 +184,8 @@ pub struct GetReply {
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, optional, tag="3")]
+    pub reply: ::core::option::Option<Reply>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListReplies {
@@ -189,6 +193,8 @@ pub struct ListReplies {
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, repeated, tag="3")]
+    pub replies: ::prost::alloc::vec::Vec<Reply>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReactToTweet {

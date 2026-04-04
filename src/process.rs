@@ -3,8 +3,8 @@
 use crate::{
     Context, backend, errors, request,
     response::{self, Response},
-    service_request::{self, Tweet},
-    service_response, tweet,
+    service_request::{self},
+    service_response,
 };
 use prost::Message;
 use sha2::Digest;
@@ -250,7 +250,6 @@ impl request::RemoveUser {
     }
 }
 
-
 impl request::ChangePassword {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
@@ -370,25 +369,6 @@ impl request::UpdateUser {
     }
 }
 
-impl request::RemoveReply {
-    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        if !ctx.is_acuthenticated {
-            return Some(
-                errors::form_response("RemoveReply", response::Status::BackendError).await,
-            );
-        }
-        Some(response::Response {
-            operation: Some(response::response::Operation::RemoveReply(
-                response::RemoveReply {
-                    status: response::Status::Success as i32,
-                    message: None,
-                },
-            )),
-        })
-    }
-}
-
-
 impl request::SignIn {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if self.user_name.is_some() {
@@ -490,111 +470,6 @@ impl request::ListFollowers {
     }
 }
 
-impl request::ListReplies {
-    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        if !ctx.is_acuthenticated {
-            return Some(
-                errors::form_response("ListReplies", response::Status::BackendError).await,
-            );
-        }
-        Some(response::Response {
-            operation: Some(response::response::Operation::ListReplies(
-                response::ListReplies {
-                    status: response::Status::Success as i32,
-                    message: None,
-                },
-            )),
-        })
-    }
-}
-
-impl request::RepostTweet {
-    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        if !ctx.is_acuthenticated {
-            return Some(
-                errors::form_response("RepostTweet", response::Status::BackendError).await,
-            );
-        }
-        Some(response::Response {
-            operation: Some(response::response::Operation::RepostTweet(
-                response::RepostTweet {
-                    status: response::Status::Success as i32,
-                    message: None,
-                },
-            )),
-        })
-    }
-}
-
-
-impl request::ReplyToTweet {
-    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        if !ctx.is_acuthenticated {
-            return Some(
-                errors::form_response("ReplyToTweet", response::Status::BackendError).await,
-            );
-        }
-        Some(response::Response {
-            operation: Some(response::response::Operation::ReplyToTweet(
-                response::ReplyToTweet {
-                    status: response::Status::Success as i32,
-                    message: None,
-                },
-            )),
-        })
-    }
-}
-
-impl request::UndoReactToTweet {
-    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        if !ctx.is_acuthenticated {
-            return Some(
-                errors::form_response("UndoReactToTweet", response::Status::BackendError).await,
-            );
-        }
-        Some(response::Response {
-            operation: Some(response::response::Operation::UndoReactToTweet(
-                response::UndoReactToTweet {
-                    status: response::Status::Success as i32,
-                    message: None,
-                },
-            )),
-        })
-    }
-}
-
-impl request::EditReply {
-    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        if !ctx.is_acuthenticated {
-            return Some(errors::form_response("EditReply", response::Status::BackendError).await);
-        }
-        Some(response::Response {
-            operation: Some(response::response::Operation::EditReply(
-                response::EditReply {
-                    status: response::Status::Success as i32,
-                    message: None,
-                },
-            )),
-        })
-    }
-}
-
-impl request::GetReply {
-    pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        if !ctx.is_acuthenticated {
-            return Some(errors::form_response("GetReply", response::Status::BackendError).await);
-        }
-        Some(response::Response {
-            operation: Some(response::response::Operation::GetReply(
-                response::GetReply {
-                    status: response::Status::Success as i32,
-                    message: None,
-                },
-            )),
-        })
-    }
-}
-
 impl request::UploadProfilePicture {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
@@ -609,12 +484,18 @@ impl request::UploadProfilePicture {
             );
         }
         let mut user = user.unwrap();
-        if blob_name.is_empty() {
+        if user.profile_picture.is_empty() {
             let uuid = Uuid::new_v4();
             let mut bytes = uuid.as_bytes().to_vec();
             let millis = chrono::Utc::now().timestamp_millis() as u64;
             bytes.extend_from_slice(&millis.to_be_bytes());
             user.profile_picture = bytes;
+        }
+        let resp = user.set_profile_picture(self.data.clone()).await;
+        if resp.is_none() {
+            return Some(
+                errors::form_response("UploadProfilePicture", response::Status::BackendError).await,
+            );
         }
         Some(response::Response {
             operation: Some(response::response::Operation::UpdateProfilePicture(

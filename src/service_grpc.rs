@@ -420,11 +420,11 @@ pub mod service_server_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn add_like(
+        pub async fn tweet_react(
             &mut self,
-            request: impl tonic::IntoRequest<super::super::service_request::AddLike>,
+            request: impl tonic::IntoRequest<super::super::service_request::TweetReact>,
         ) -> Result<
-            tonic::Response<super::super::service_response::AddLike>,
+            tonic::Response<super::super::service_response::TweetReact>,
             tonic::Status,
         > {
             self.inner
@@ -438,119 +438,7 @@ pub mod service_server_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/AddLike",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        pub async fn remove_like(
-            &mut self,
-            request: impl tonic::IntoRequest<super::super::service_request::RemoveLike>,
-        ) -> Result<
-            tonic::Response<super::super::service_response::RemoveLike>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/RemoveLike",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        pub async fn adddis_like(
-            &mut self,
-            request: impl tonic::IntoRequest<super::super::service_request::AdddisLike>,
-        ) -> Result<
-            tonic::Response<super::super::service_response::AdddisLike>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/AdddisLike",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        pub async fn remove_dis_like(
-            &mut self,
-            request: impl tonic::IntoRequest<
-                super::super::service_request::RemoveDisLike,
-            >,
-        ) -> Result<
-            tonic::Response<super::super::service_response::RemoveDisLike>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/RemoveDisLike",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        pub async fn add_love(
-            &mut self,
-            request: impl tonic::IntoRequest<super::super::service_request::AddLove>,
-        ) -> Result<
-            tonic::Response<super::super::service_response::AddLove>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/AddLove",
-            );
-            self.inner.unary(request.into_request(), path, codec).await
-        }
-        pub async fn remove_love(
-            &mut self,
-            request: impl tonic::IntoRequest<super::super::service_request::RemoveLove>,
-        ) -> Result<
-            tonic::Response<super::super::service_response::RemoveLove>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/RemoveLove",
+                "/service_grpc.ServiceServer/TweetReact",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -785,46 +673,11 @@ pub mod service_server_server {
             tonic::Response<super::super::service_response::ListTweets>,
             tonic::Status,
         >;
-        async fn add_like(
+        async fn tweet_react(
             &self,
-            request: tonic::Request<super::super::service_request::AddLike>,
+            request: tonic::Request<super::super::service_request::TweetReact>,
         ) -> Result<
-            tonic::Response<super::super::service_response::AddLike>,
-            tonic::Status,
-        >;
-        async fn remove_like(
-            &self,
-            request: tonic::Request<super::super::service_request::RemoveLike>,
-        ) -> Result<
-            tonic::Response<super::super::service_response::RemoveLike>,
-            tonic::Status,
-        >;
-        async fn adddis_like(
-            &self,
-            request: tonic::Request<super::super::service_request::AdddisLike>,
-        ) -> Result<
-            tonic::Response<super::super::service_response::AdddisLike>,
-            tonic::Status,
-        >;
-        async fn remove_dis_like(
-            &self,
-            request: tonic::Request<super::super::service_request::RemoveDisLike>,
-        ) -> Result<
-            tonic::Response<super::super::service_response::RemoveDisLike>,
-            tonic::Status,
-        >;
-        async fn add_love(
-            &self,
-            request: tonic::Request<super::super::service_request::AddLove>,
-        ) -> Result<
-            tonic::Response<super::super::service_response::AddLove>,
-            tonic::Status,
-        >;
-        async fn remove_love(
-            &self,
-            request: tonic::Request<super::super::service_request::RemoveLove>,
-        ) -> Result<
-            tonic::Response<super::super::service_response::RemoveLove>,
+            tonic::Response<super::super::service_response::TweetReact>,
             tonic::Status,
         >;
         async fn add_reply(
@@ -1575,55 +1428,15 @@ pub mod service_server_server {
                     };
                     Box::pin(fut)
                 }
-                "/service_grpc.ServiceServer/AddLike" => {
+                "/service_grpc.ServiceServer/TweetReact" => {
                     #[allow(non_camel_case_types)]
-                    struct AddLikeSvc<T: ServiceServer>(pub Arc<T>);
-                    impl<
-                        T: ServiceServer,
-                    > tonic::server::UnaryService<super::super::service_request::AddLike>
-                    for AddLikeSvc<T> {
-                        type Response = super::super::service_response::AddLike;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::super::service_request::AddLike,
-                            >,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).add_like(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = AddLikeSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/service_grpc.ServiceServer/RemoveLike" => {
-                    #[allow(non_camel_case_types)]
-                    struct RemoveLikeSvc<T: ServiceServer>(pub Arc<T>);
+                    struct TweetReactSvc<T: ServiceServer>(pub Arc<T>);
                     impl<
                         T: ServiceServer,
                     > tonic::server::UnaryService<
-                        super::super::service_request::RemoveLike,
-                    > for RemoveLikeSvc<T> {
-                        type Response = super::super::service_response::RemoveLike;
+                        super::super::service_request::TweetReact,
+                    > for TweetReactSvc<T> {
+                        type Response = super::super::service_response::TweetReact;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -1631,11 +1444,11 @@ pub mod service_server_server {
                         fn call(
                             &mut self,
                             request: tonic::Request<
-                                super::super::service_request::RemoveLike,
+                                super::super::service_request::TweetReact,
                             >,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move { (*inner).remove_like(request).await };
+                            let fut = async move { (*inner).tweet_react(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -1644,172 +1457,7 @@ pub mod service_server_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = RemoveLikeSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/service_grpc.ServiceServer/AdddisLike" => {
-                    #[allow(non_camel_case_types)]
-                    struct AdddisLikeSvc<T: ServiceServer>(pub Arc<T>);
-                    impl<
-                        T: ServiceServer,
-                    > tonic::server::UnaryService<
-                        super::super::service_request::AdddisLike,
-                    > for AdddisLikeSvc<T> {
-                        type Response = super::super::service_response::AdddisLike;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::super::service_request::AdddisLike,
-                            >,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).adddis_like(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = AdddisLikeSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/service_grpc.ServiceServer/RemoveDisLike" => {
-                    #[allow(non_camel_case_types)]
-                    struct RemoveDisLikeSvc<T: ServiceServer>(pub Arc<T>);
-                    impl<
-                        T: ServiceServer,
-                    > tonic::server::UnaryService<
-                        super::super::service_request::RemoveDisLike,
-                    > for RemoveDisLikeSvc<T> {
-                        type Response = super::super::service_response::RemoveDisLike;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::super::service_request::RemoveDisLike,
-                            >,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move {
-                                (*inner).remove_dis_like(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = RemoveDisLikeSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/service_grpc.ServiceServer/AddLove" => {
-                    #[allow(non_camel_case_types)]
-                    struct AddLoveSvc<T: ServiceServer>(pub Arc<T>);
-                    impl<
-                        T: ServiceServer,
-                    > tonic::server::UnaryService<super::super::service_request::AddLove>
-                    for AddLoveSvc<T> {
-                        type Response = super::super::service_response::AddLove;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::super::service_request::AddLove,
-                            >,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).add_love(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = AddLoveSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            );
-                        let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/service_grpc.ServiceServer/RemoveLove" => {
-                    #[allow(non_camel_case_types)]
-                    struct RemoveLoveSvc<T: ServiceServer>(pub Arc<T>);
-                    impl<
-                        T: ServiceServer,
-                    > tonic::server::UnaryService<
-                        super::super::service_request::RemoveLove,
-                    > for RemoveLoveSvc<T> {
-                        type Response = super::super::service_response::RemoveLove;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<
-                                super::super::service_request::RemoveLove,
-                            >,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { (*inner).remove_love(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let inner = inner.0;
-                        let method = RemoveLoveSvc(inner);
+                        let method = TweetReactSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

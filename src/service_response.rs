@@ -136,6 +136,12 @@ pub struct Reply {
     pub likes: i32,
     #[prost(int32, tag="7")]
     pub dislikes: i32,
+    #[prost(string, repeated, tag="8")]
+    pub hash_tags: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, repeated, tag="9")]
+    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(uint64, tag="10")]
+    pub created_at: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddTweet {
@@ -167,32 +173,7 @@ pub struct UpdateTweet {
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddLike {
-    #[prost(enumeration="Status", tag="1")]
-    pub status: i32,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RemoveLike {
-    #[prost(enumeration="Status", tag="1")]
-    pub status: i32,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AdddisLike {
-    #[prost(enumeration="Status", tag="1")]
-    pub status: i32,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RemoveDisLike {
-    #[prost(enumeration="Status", tag="1")]
-    pub status: i32,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddLove {
-    #[prost(enumeration="Status", tag="1")]
-    pub status: i32,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RemoveLove {
+pub struct TweetReact {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
 }
@@ -227,7 +208,7 @@ pub struct GetReply {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceResponse {
-    #[prost(oneof="service_response::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27")]
+    #[prost(oneof="service_response::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22")]
     pub operation: ::core::option::Option<service_response::Operation>,
 }
 /// Nested message and enum types in `ServiceResponse`.
@@ -267,26 +248,16 @@ pub mod service_response {
         #[prost(message, tag="16")]
         UpdateTweet(super::UpdateTweet),
         #[prost(message, tag="17")]
-        AddLike(super::AddLike),
+        TweetReact(super::TweetReact),
         #[prost(message, tag="18")]
-        RemoveLike(super::RemoveLike),
-        #[prost(message, tag="19")]
-        RemoveDisLike(super::RemoveDisLike),
-        #[prost(message, tag="20")]
-        AdddisLike(super::AdddisLike),
-        #[prost(message, tag="21")]
-        AddLove(super::AddLove),
-        #[prost(message, tag="22")]
-        RemoveLove(super::RemoveLove),
-        #[prost(message, tag="23")]
         AddReply(super::AddReply),
-        #[prost(message, tag="24")]
+        #[prost(message, tag="19")]
         UpdateReply(super::UpdateReply),
-        #[prost(message, tag="25")]
+        #[prost(message, tag="20")]
         RemoveReply(super::RemoveReply),
-        #[prost(message, tag="26")]
+        #[prost(message, tag="21")]
         GetReply(super::GetReply),
-        #[prost(message, tag="27")]
+        #[prost(message, tag="22")]
         ListReplies(super::ListReplies),
     }
 }
