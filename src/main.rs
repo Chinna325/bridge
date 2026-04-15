@@ -11,6 +11,7 @@ pub mod service_request;
 pub mod service_response;
 pub mod tweet;
 pub mod users;
+pub mod chat;
 use tokio::{
     io::{AsyncReadExt, AsyncWriteExt},
     net::TcpListener,

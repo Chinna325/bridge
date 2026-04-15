@@ -207,8 +207,128 @@ pub struct GetReply {
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateOneToOneChat {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateGroup {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateGroup {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Message {
+    #[prost(string, tag="1")]
+    pub owner: ::prost::alloc::string::String,
+    #[prost(string, tag="2")]
+    pub content: ::prost::alloc::string::String,
+    #[prost(uint64, tag="3")]
+    pub created_at: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveGroup {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListGroups {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(message, repeated, tag="2")]
+    pub groups: ::prost::alloc::vec::Vec<Group>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddUserToGroup {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveUserFromGroup {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ExitFromGroup {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Chat {
+    #[prost(string, tag="2")]
+    pub user_name: ::prost::alloc::string::String,
+    #[prost(uint64, tag="3")]
+    pub last_message_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetChat {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(message, optional, tag="2")]
+    pub chat: ::core::option::Option<Chat>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SendMessage {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ClearChat {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveMessage {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct EditMessage {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListChat {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReadMessage {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetMessage {
+    #[prost(enumeration="Status", tag="2")]
+    pub status: i32,
+    #[prost(message, optional, tag="1")]
+    pub message: ::core::option::Option<Message>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Group {
+    #[prost(bytes="vec", tag="1")]
+    pub group_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, repeated, tag="2")]
+    pub users: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, tag="3")]
+    pub created_by: ::prost::alloc::string::String,
+    #[prost(uint64, tag="4")]
+    pub created_at: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetGroup {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(message, optional, tag="2")]
+    pub group: ::core::option::Option<Group>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceResponse {
-    #[prost(oneof="service_response::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22")]
+    #[prost(oneof="service_response::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45")]
     pub operation: ::core::option::Option<service_response::Operation>,
 }
 /// Nested message and enum types in `ServiceResponse`.
@@ -259,6 +379,40 @@ pub mod service_response {
         GetReply(super::GetReply),
         #[prost(message, tag="22")]
         ListReplies(super::ListReplies),
+        #[prost(message, tag="29")]
+        CreateOneToOneChat(super::CreateOneToOneChat),
+        #[prost(message, tag="30")]
+        CreateGroup(super::CreateGroup),
+        #[prost(message, tag="31")]
+        RemoveGroup(super::RemoveGroup),
+        #[prost(message, tag="32")]
+        UpdateGroup(super::UpdateGroup),
+        #[prost(message, tag="33")]
+        ListGroups(super::ListGroups),
+        #[prost(message, tag="34")]
+        AddUserToGroup(super::AddUserToGroup),
+        #[prost(message, tag="35")]
+        RemoveUserFromGroup(super::RemoveUserFromGroup),
+        #[prost(message, tag="36")]
+        ExitFromGroup(super::ExitFromGroup),
+        #[prost(message, tag="37")]
+        GetChat(super::GetChat),
+        #[prost(message, tag="38")]
+        ClearChat(super::ClearChat),
+        #[prost(message, tag="39")]
+        SendMessage(super::SendMessage),
+        #[prost(message, tag="40")]
+        RemoveMessage(super::RemoveMessage),
+        #[prost(message, tag="41")]
+        EditMessage(super::EditMessage),
+        #[prost(message, tag="42")]
+        ListChat(super::ListChat),
+        #[prost(message, tag="43")]
+        ReadMessage(super::ReadMessage),
+        #[prost(message, tag="44")]
+        GetMessage(super::GetMessage),
+        #[prost(message, tag="45")]
+        GetGroup(super::GetGroup),
     }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

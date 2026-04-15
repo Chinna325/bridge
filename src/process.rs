@@ -105,6 +105,51 @@ impl request::Request {
             Some(request::request::Operation::ResetPassword(req)) => {
                 return req.handle(ctx).await;
             }
+
+            Some(request::request::Operation::CreateOneToOneChat(req)) => {
+                return req.handle(ctx).await;
+            }
+            Some(request::request::Operation::CreateGroup(req)) => {
+                return req.handle(ctx).await;
+            }
+            Some(request::request::Operation::UpdateGroup(req)) => {
+                return req.handle(ctx).await;
+            }
+            Some(request::request::Operation::ListGroups(req)) => {
+                return req.handle(ctx).await;
+            }
+            Some(request::request::Operation::AddUserToGroup(req)) => {
+                return req.handle(ctx).await;
+            }
+
+            Some(request::request::Operation::RemoveUserFromGroup(req)) => {
+                return req.handle(ctx).await;
+            }
+            Some(request::request::Operation::ExitFromGroup(req)) => {
+                return req.handle(ctx).await;
+            }
+            Some(request::request::Operation::GetChat(req)) => {
+                return req.handle(ctx).await;
+            }
+            Some(request::request::Operation::ClearChat(req)) => {
+                return req.handle(ctx).await;
+            }
+            Some(request::request::Operation::SendMessage(req)) => {
+                return req.handle(ctx).await;
+            }
+
+            Some(request::request::Operation::RemoveMessage(req)) => {
+                return req.handle(ctx).await;
+            }
+            Some(request::request::Operation::EditMessage(req)) => {
+                return req.handle(ctx).await;
+            }
+            Some(request::request::Operation::ListChat(req)) => {
+                return req.handle(ctx).await;
+            }
+            Some(request::request::Operation::ReadMessage(req)) => {
+                return req.handle(ctx).await;
+            }
             _ => return None,
         }
     }

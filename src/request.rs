@@ -210,8 +210,112 @@ pub struct Tweet {
     pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateOneToOneChat {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateGroup {
+    #[prost(string, tag="1")]
+    pub name: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag="2")]
+    pub users: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveGroup {
+    #[prost(bytes="vec", tag="1")]
+    pub group_id: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateGroup {
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListGroups {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddUserToGroup {
+    #[prost(bytes="vec", tag="1")]
+    pub chat_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag="2")]
+    pub user_name: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveUserFromGroup {
+    #[prost(bytes="vec", tag="1")]
+    pub chat_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag="2")]
+    pub user_name: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ExitFromGroup {
+    #[prost(bytes="vec", tag="1")]
+    pub chat_id: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetChat {
+    #[prost(bytes="vec", tag="1")]
+    pub chat_id: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ClearChat {
+    #[prost(bytes="vec", tag="1")]
+    pub chat_id: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SendMessage {
+    #[prost(bytes="vec", tag="1")]
+    pub chat_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag="2")]
+    pub content: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveMessage {
+    #[prost(bytes="vec", tag="1")]
+    pub chat_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint64, tag="2")]
+    pub message_id: u64,
+    #[prost(enumeration="MessageRemove", tag="3")]
+    pub message_remove: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct EditMessage {
+    #[prost(bytes="vec", tag="1")]
+    pub chat_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint64, tag="2")]
+    pub message_id: u64,
+    #[prost(string, tag="3")]
+    pub content: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListChat {
+    #[prost(bytes="vec", tag="1")]
+    pub chat_id: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReadMessage {
+    #[prost(bytes="vec", tag="1")]
+    pub chat_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint64, tag="2")]
+    pub message_id: u64,
+}
+///create group
+///delete group
+/// clear chat
+///get chat
+///list chats
+///update chat
+///add usertochat
+///remove user to chat
+///send message
+///edit message
+///delete message
+///list messages
+///
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Request {
-    #[prost(oneof="request::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28")]
+    #[prost(oneof="request::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43")]
     pub operation: ::core::option::Option<request::Operation>,
 }
 /// Nested message and enum types in `Request`.
@@ -274,6 +378,36 @@ pub mod request {
         ReactToTweet(super::ReactToTweet),
         #[prost(message, tag="28")]
         UndoReactToTweet(super::UndoReactToTweet),
+        #[prost(message, tag="29")]
+        CreateOneToOneChat(super::CreateOneToOneChat),
+        #[prost(message, tag="30")]
+        CreateGroup(super::CreateGroup),
+        #[prost(message, tag="31")]
+        RemoveGroup(super::RemoveGroup),
+        #[prost(message, tag="32")]
+        UpdateGroup(super::UpdateGroup),
+        #[prost(message, tag="33")]
+        ListGroups(super::ListGroups),
+        #[prost(message, tag="34")]
+        AddUserToGroup(super::AddUserToGroup),
+        #[prost(message, tag="35")]
+        RemoveUserFromGroup(super::RemoveUserFromGroup),
+        #[prost(message, tag="36")]
+        ExitFromGroup(super::ExitFromGroup),
+        #[prost(message, tag="37")]
+        GetChat(super::GetChat),
+        #[prost(message, tag="38")]
+        ClearChat(super::ClearChat),
+        #[prost(message, tag="39")]
+        SendMessage(super::SendMessage),
+        #[prost(message, tag="40")]
+        RemoveMessage(super::RemoveMessage),
+        #[prost(message, tag="41")]
+        EditMessage(super::EditMessage),
+        #[prost(message, tag="42")]
+        ListChat(super::ListChat),
+        #[prost(message, tag="43")]
+        ReadMessage(super::ReadMessage),
     }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -289,4 +423,10 @@ pub enum UndoTweetReact {
     UndoLike = 0,
     UndoDisLike = 1,
     UndoLove = 2,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum MessageRemove {
+    RemoveForme = 0,
+    RemoveForAll = 1,
 }

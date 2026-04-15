@@ -552,6 +552,390 @@ pub mod service_server_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn send_message(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::SendMessage>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::SendMessage>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/SendMessage",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn clear_chat(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::ClearChat>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ClearChat>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/ClearChat",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn get_chat(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::GetChat>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::GetChat>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/GetChat",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn exit_from_group(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::ExitFromGroup,
+            >,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ExitFromGroup>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/ExitFromGroup",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn remove_user_from_group(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::RemoveUserFromGroup,
+            >,
+        ) -> Result<
+            tonic::Response<super::super::service_response::RemoveUserFromGroup>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/RemoveUserFromGroup",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn add_user_to_group(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::AddUserToGroup,
+            >,
+        ) -> Result<
+            tonic::Response<super::super::service_response::AddUserToGroup>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/AddUserToGroup",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn list_groups(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::ListGroups>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ListGroups>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/ListGroups",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn update_group(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::UpdateGroup>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::UpdateGroup>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/UpdateGroup",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn remove_group(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::RemoveGroup>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::RemoveGroup>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/RemoveGroup",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn create_group(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::CreateGroup>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::CreateGroup>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/CreateGroup",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn create_one_to_one_chat(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::CreateOneToOneChat,
+            >,
+        ) -> Result<
+            tonic::Response<super::super::service_response::CreateOneToOneChat>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/CreateOneToOneChat",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn edit_message(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::EditMessage>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::EditMessage>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/EditMessage",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn remove_message(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::RemoveMessage,
+            >,
+        ) -> Result<
+            tonic::Response<super::super::service_response::RemoveMessage>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/RemoveMessage",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn list_chat(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::ListChat>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ListChat>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/ListChat",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn read_message(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::ReadMessage>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ReadMessage>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/ReadMessage",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn get_message(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::GetMessage>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::GetMessage>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/GetMessage",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn get_group(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::GetGroup>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::GetGroup>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/GetGroup",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -713,6 +1097,125 @@ pub mod service_server_server {
             request: tonic::Request<super::super::service_request::UpdateReply>,
         ) -> Result<
             tonic::Response<super::super::service_response::UpdateReply>,
+            tonic::Status,
+        >;
+        async fn send_message(
+            &self,
+            request: tonic::Request<super::super::service_request::SendMessage>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::SendMessage>,
+            tonic::Status,
+        >;
+        async fn clear_chat(
+            &self,
+            request: tonic::Request<super::super::service_request::ClearChat>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ClearChat>,
+            tonic::Status,
+        >;
+        async fn get_chat(
+            &self,
+            request: tonic::Request<super::super::service_request::GetChat>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::GetChat>,
+            tonic::Status,
+        >;
+        async fn exit_from_group(
+            &self,
+            request: tonic::Request<super::super::service_request::ExitFromGroup>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ExitFromGroup>,
+            tonic::Status,
+        >;
+        async fn remove_user_from_group(
+            &self,
+            request: tonic::Request<super::super::service_request::RemoveUserFromGroup>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::RemoveUserFromGroup>,
+            tonic::Status,
+        >;
+        async fn add_user_to_group(
+            &self,
+            request: tonic::Request<super::super::service_request::AddUserToGroup>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::AddUserToGroup>,
+            tonic::Status,
+        >;
+        async fn list_groups(
+            &self,
+            request: tonic::Request<super::super::service_request::ListGroups>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ListGroups>,
+            tonic::Status,
+        >;
+        async fn update_group(
+            &self,
+            request: tonic::Request<super::super::service_request::UpdateGroup>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::UpdateGroup>,
+            tonic::Status,
+        >;
+        async fn remove_group(
+            &self,
+            request: tonic::Request<super::super::service_request::RemoveGroup>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::RemoveGroup>,
+            tonic::Status,
+        >;
+        async fn create_group(
+            &self,
+            request: tonic::Request<super::super::service_request::CreateGroup>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::CreateGroup>,
+            tonic::Status,
+        >;
+        async fn create_one_to_one_chat(
+            &self,
+            request: tonic::Request<super::super::service_request::CreateOneToOneChat>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::CreateOneToOneChat>,
+            tonic::Status,
+        >;
+        async fn edit_message(
+            &self,
+            request: tonic::Request<super::super::service_request::EditMessage>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::EditMessage>,
+            tonic::Status,
+        >;
+        async fn remove_message(
+            &self,
+            request: tonic::Request<super::super::service_request::RemoveMessage>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::RemoveMessage>,
+            tonic::Status,
+        >;
+        async fn list_chat(
+            &self,
+            request: tonic::Request<super::super::service_request::ListChat>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ListChat>,
+            tonic::Status,
+        >;
+        async fn read_message(
+            &self,
+            request: tonic::Request<super::super::service_request::ReadMessage>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ReadMessage>,
+            tonic::Status,
+        >;
+        async fn get_message(
+            &self,
+            request: tonic::Request<super::super::service_request::GetMessage>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::GetMessage>,
+            tonic::Status,
+        >;
+        async fn get_group(
+            &self,
+            request: tonic::Request<super::super::service_request::GetGroup>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::GetGroup>,
             tonic::Status,
         >;
     }
@@ -1669,6 +2172,724 @@ pub mod service_server_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = UpdateReplySvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/SendMessage" => {
+                    #[allow(non_camel_case_types)]
+                    struct SendMessageSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::SendMessage,
+                    > for SendMessageSvc<T> {
+                        type Response = super::super::service_response::SendMessage;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::SendMessage,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).send_message(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = SendMessageSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/ClearChat" => {
+                    #[allow(non_camel_case_types)]
+                    struct ClearChatSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::ClearChat,
+                    > for ClearChatSvc<T> {
+                        type Response = super::super::service_response::ClearChat;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::ClearChat,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).clear_chat(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ClearChatSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/GetChat" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetChatSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<super::super::service_request::GetChat>
+                    for GetChatSvc<T> {
+                        type Response = super::super::service_response::GetChat;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::GetChat,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).get_chat(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetChatSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/ExitFromGroup" => {
+                    #[allow(non_camel_case_types)]
+                    struct ExitFromGroupSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::ExitFromGroup,
+                    > for ExitFromGroupSvc<T> {
+                        type Response = super::super::service_response::ExitFromGroup;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::ExitFromGroup,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).exit_from_group(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ExitFromGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/RemoveUserFromGroup" => {
+                    #[allow(non_camel_case_types)]
+                    struct RemoveUserFromGroupSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::RemoveUserFromGroup,
+                    > for RemoveUserFromGroupSvc<T> {
+                        type Response = super::super::service_response::RemoveUserFromGroup;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::RemoveUserFromGroup,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).remove_user_from_group(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = RemoveUserFromGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/AddUserToGroup" => {
+                    #[allow(non_camel_case_types)]
+                    struct AddUserToGroupSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::AddUserToGroup,
+                    > for AddUserToGroupSvc<T> {
+                        type Response = super::super::service_response::AddUserToGroup;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::AddUserToGroup,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).add_user_to_group(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = AddUserToGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/ListGroups" => {
+                    #[allow(non_camel_case_types)]
+                    struct ListGroupsSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::ListGroups,
+                    > for ListGroupsSvc<T> {
+                        type Response = super::super::service_response::ListGroups;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::ListGroups,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).list_groups(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ListGroupsSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/UpdateGroup" => {
+                    #[allow(non_camel_case_types)]
+                    struct UpdateGroupSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::UpdateGroup,
+                    > for UpdateGroupSvc<T> {
+                        type Response = super::super::service_response::UpdateGroup;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::UpdateGroup,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).update_group(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = UpdateGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/RemoveGroup" => {
+                    #[allow(non_camel_case_types)]
+                    struct RemoveGroupSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::RemoveGroup,
+                    > for RemoveGroupSvc<T> {
+                        type Response = super::super::service_response::RemoveGroup;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::RemoveGroup,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).remove_group(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = RemoveGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/CreateGroup" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateGroupSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::CreateGroup,
+                    > for CreateGroupSvc<T> {
+                        type Response = super::super::service_response::CreateGroup;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::CreateGroup,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).create_group(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CreateGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/CreateOneToOneChat" => {
+                    #[allow(non_camel_case_types)]
+                    struct CreateOneToOneChatSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::CreateOneToOneChat,
+                    > for CreateOneToOneChatSvc<T> {
+                        type Response = super::super::service_response::CreateOneToOneChat;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::CreateOneToOneChat,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).create_one_to_one_chat(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = CreateOneToOneChatSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/EditMessage" => {
+                    #[allow(non_camel_case_types)]
+                    struct EditMessageSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::EditMessage,
+                    > for EditMessageSvc<T> {
+                        type Response = super::super::service_response::EditMessage;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::EditMessage,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).edit_message(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = EditMessageSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/RemoveMessage" => {
+                    #[allow(non_camel_case_types)]
+                    struct RemoveMessageSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::RemoveMessage,
+                    > for RemoveMessageSvc<T> {
+                        type Response = super::super::service_response::RemoveMessage;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::RemoveMessage,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).remove_message(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = RemoveMessageSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/ListChat" => {
+                    #[allow(non_camel_case_types)]
+                    struct ListChatSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::ListChat,
+                    > for ListChatSvc<T> {
+                        type Response = super::super::service_response::ListChat;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::ListChat,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).list_chat(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ListChatSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/ReadMessage" => {
+                    #[allow(non_camel_case_types)]
+                    struct ReadMessageSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::ReadMessage,
+                    > for ReadMessageSvc<T> {
+                        type Response = super::super::service_response::ReadMessage;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::ReadMessage,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).read_message(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ReadMessageSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/GetMessage" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetMessageSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::GetMessage,
+                    > for GetMessageSvc<T> {
+                        type Response = super::super::service_response::GetMessage;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::GetMessage,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).get_message(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetMessageSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/GetGroup" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetGroupSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::GetGroup,
+                    > for GetGroupSvc<T> {
+                        type Response = super::super::service_response::GetGroup;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::GetGroup,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).get_group(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetGroupSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
