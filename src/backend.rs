@@ -247,6 +247,218 @@ impl ServiceRequest {
                     Err(_) => None,
                 }
             }
+
+            Some(service_request::service_request::Operation::CreateOneToOneChat(req)) => {
+                let request = tonic::Request::new(req);
+                match client.create_one_to_one_chat(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::CreateOneToOneChat(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::CreateGroup(req)) => {
+                let request = tonic::Request::new(req);
+                match client.create_group(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::CreateGroup(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::RemoveGroup(req)) => {
+                let request = tonic::Request::new(req);
+                match client.remove_group(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::RemoveGroup(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::UpdateGroup(req)) => {
+                let request = tonic::Request::new(req);
+                match client.update_group(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::UpdateGroup(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::ListGroups(req)) => {
+                let request = tonic::Request::new(req);
+                match client.list_groups(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(service_response::service_response::Operation::ListGroups(
+                            resp.into_inner(),
+                        )),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::AddUserToGroup(req)) => {
+                let request = tonic::Request::new(req);
+                match client.add_user_to_group(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::AddUserToGroup(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::RemoveUserFromGroup(req)) => {
+                let request = tonic::Request::new(req);
+                match client.remove_user_from_group(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::RemoveUserFromGroup(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::ExitFromGroup(req)) => {
+                let request = tonic::Request::new(req);
+                match client.exit_from_group(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::ExitFromGroup(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::GetChat(req)) => {
+                let request = tonic::Request::new(req);
+                match client.get_chat(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(service_response::service_response::Operation::GetChat(
+                            resp.into_inner(),
+                        )),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::ClearChat(req)) => {
+                let request = tonic::Request::new(req);
+                match client.clear_chat(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(service_response::service_response::Operation::ClearChat(
+                            resp.into_inner(),
+                        )),
+                    }),
+                    Err(_) => None,
+                }
+            }
+
+            Some(service_request::service_request::Operation::SendMessage(req)) => {
+                let request = tonic::Request::new(req);
+                match client.send_message(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::SendMessage(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::RemoveMessage(req)) => {
+                let request = tonic::Request::new(req);
+                match client.remove_message(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::RemoveMessage(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::EditMessage(req)) => {
+                let request = tonic::Request::new(req);
+                match client.edit_message(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::EditMessage(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::ListChat(req)) => {
+                let request = tonic::Request::new(req);
+                match client.list_chat(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(service_response::service_response::Operation::ListChat(
+                            resp.into_inner(),
+                        )),
+                    }),
+                    Err(_) => None,
+                }
+            }
+
+            Some(service_request::service_request::Operation::ReadMessage(req)) => {
+                let request = tonic::Request::new(req);
+                match client.read_message(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::ReadMessage(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::GetMessage(req)) => {
+                let request = tonic::Request::new(req);
+                match client.get_message(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(service_response::service_response::Operation::GetMessage(
+                            resp.into_inner(),
+                        )),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::GetGroup(req)) => {
+                let request = tonic::Request::new(req);
+                match client.get_group(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(service_response::service_response::Operation::GetGroup(
+                            resp.into_inner(),
+                        )),
+                    }),
+                    Err(_) => None,
+                }
+            }
             _ => {
                 panic!("Invalid request");
             }
