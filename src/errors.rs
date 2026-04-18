@@ -267,6 +267,7 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
                 operation: Some(response::response::Operation::GetChat(response::GetChat {
                     status: status as i32,
                     message: None,
+                    chat: None,
                 })),
             };
         }

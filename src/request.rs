@@ -289,6 +289,13 @@ pub struct EditMessage {
     pub content: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetMessage {
+    #[prost(bytes="vec", tag="1")]
+    pub chat_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint64, tag="2")]
+    pub message_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListChat {
     #[prost(bytes="vec", tag="1")]
     pub chat_id: ::prost::alloc::vec::Vec<u8>,
@@ -300,22 +307,14 @@ pub struct ReadMessage {
     #[prost(uint64, tag="2")]
     pub message_id: u64,
 }
-///create group
-///delete group
-/// clear chat
-///get chat
-///list chats
-///update chat
-///add usertochat
-///remove user to chat
-///send message
-///edit message
-///delete message
-///list messages
-///
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetGroup {
+    #[prost(bytes="vec", tag="1")]
+    pub group_id: ::prost::alloc::vec::Vec<u8>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Request {
-    #[prost(oneof="request::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43")]
+    #[prost(oneof="request::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45")]
     pub operation: ::core::option::Option<request::Operation>,
 }
 /// Nested message and enum types in `Request`.
@@ -408,6 +407,10 @@ pub mod request {
         ListChat(super::ListChat),
         #[prost(message, tag="43")]
         ReadMessage(super::ReadMessage),
+        #[prost(message, tag="44")]
+        GetGroup(super::GetGroup),
+        #[prost(message, tag="45")]
+        GetMessage(super::GetMessage),
     }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

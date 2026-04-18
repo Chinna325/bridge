@@ -482,6 +482,9 @@ impl request::ListGroups {
                 users: group.users.clone(),
                 created_by: group.created_by.clone(),
                 created_at: group.created_at,
+                group_name: group.group_name.clone(),
+                last_message_at: group.last_message_at,
+                last_message_id: group.last_message_id,
             });
         }
         Some(response::Response {
@@ -670,10 +673,12 @@ impl request::ClearChat {
             return Some(errors::form_response("ClearChat", response::Status::BackendError).await);
         }
         Some(response::Response {
-            operation: Some(response::response::Operation::GetChat(response::GetChat {
-                status: response::Status::Success as i32,
-                message: None,
-            })),
+            operation: Some(response::response::Operation::ClearChat(
+                response::ClearChat {
+                    status: response::Status::Success as i32,
+                    message: None,
+                },
+            )),
         })
     }
 }
