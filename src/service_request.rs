@@ -273,6 +273,12 @@ pub struct Group {
     pub created_by: ::prost::alloc::string::String,
     #[prost(uint64, tag="4")]
     pub created_at: u64,
+    #[prost(string, tag="5")]
+    pub group_name: ::prost::alloc::string::String,
+    #[prost(uint64, tag="7")]
+    pub last_message_id: u64,
+    #[prost(uint64, tag="8")]
+    pub last_message_at: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateOneToOneChat {
@@ -334,6 +340,8 @@ pub struct ClearChat {
     pub chat_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag="2")]
     pub user_name: ::prost::alloc::string::String,
+    #[prost(uint64, tag="3")]
+    pub message_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveMessage {
@@ -371,6 +379,8 @@ pub struct GetMessage {
 pub struct ListChat {
     #[prost(bytes="vec", tag="1")]
     pub chat_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(uint64, tag="2")]
+    pub last_cleared_message: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReadMessage {
@@ -378,6 +388,8 @@ pub struct ReadMessage {
     pub chat_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(uint64, tag="2")]
     pub message_id: u64,
+    #[prost(string, tag="3")]
+    pub user_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceRequest {

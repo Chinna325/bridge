@@ -109,12 +109,13 @@ impl service_request::Message {
         Ok(())
     }
 
-    pub async fn read(&self) -> Result<(), ()> {
+    pub async fn read(&self, user_name: String) -> Result<(), ()> {
         let req = service_request::ServiceRequest {
             operation: Some(service_request::service_request::Operation::ReadMessage(
                 service_request::ReadMessage {
                     chat_id: self.chat_id.clone(),
                     message_id: self.message_id.clone(),
+                    user_name: user_name.clone(),
                 },
             )),
         };
@@ -191,12 +192,13 @@ impl service_request::Chat {
         todo!()
     }
 
-    pub async fn remove(&self) -> Result<(), ()> {
+    pub async fn remove(&self, message_id: u64) -> Result<(), ()> {
         let req = ServiceRequest {
             operation: Some(service_request::service_request::Operation::ClearChat(
                 service_request::ClearChat {
                     chat_id: self.chat_id.clone(),
                     user_name: self.user_name.clone(),
+                    message_id: message_id,
                 },
             )),
         };
@@ -308,6 +310,9 @@ impl service_request::Group {
                 users: group.users.clone(),
                 created_at: group.created_at,
                 created_by: group.created_by.clone(),
+                group_name: group.group_name.clone(),
+                last_message_at: group.last_message_at,
+                last_message_id: group.last_message_id,
             });
         }
         Err(())
@@ -426,6 +431,9 @@ impl request::CreateGroup {
             users: self.users.clone(),
             created_by: ctx.user_name.clone(),
             created_at: Utc::now().timestamp() as u64,
+            group_name: self.name.clone(),
+            last_message_at: 0,
+            last_message_id: 0,
         };
         let resp = group.new().await;
         if resp.is_err() {
@@ -657,7 +665,7 @@ impl request::ClearChat {
             return Some(errors::form_response("ClearChat", response::Status::BackendError).await);
         }
         let chat = chat.unwrap();
-        let resp = chat.remove().await;
+        let resp = chat.remove(chat.last_message_id).await;
         if resp.is_err() {
             return Some(errors::form_response("ClearChat", response::Status::BackendError).await);
         }
@@ -819,7 +827,7 @@ impl request::ReadMessage {
                 errors::form_response("ReadMessage", response::Status::BackendError).await,
             );
         }
-        let resp = message.read().await;
+        let resp = message.read(ctx.user_name.clone()).await;
         if resp.is_err() {
             return Some(
                 errors::form_response("ReadMessage", response::Status::BackendError).await,

@@ -15,7 +15,7 @@ impl ServiceRequest {
         &self,
         mut client: ServiceServerClient<Channel>,
     ) -> Option<ServiceResponse> {
-        // println!("Service Request :{:?}", self.clone());
+        println!("Service Request :{:?}", self.clone());
         let resp = match self.operation.clone() {
             Some(service_request::service_request::Operation::AddUser(req)) => {
                 let request = tonic::Request::new(req);
@@ -459,13 +459,25 @@ impl ServiceRequest {
                     Err(_) => None,
                 }
             }
+
+            Some(service_request::service_request::Operation::GetUser(req)) => {
+                let request = tonic::Request::new(req);
+                match client.get_user(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(service_response::service_response::Operation::GetUser(
+                            resp.into_inner(),
+                        )),
+                    }),
+                    Err(_) => None,
+                }
+            }
             _ => {
-                panic!("Invalid request");
+                panic!("Invalid request :{:?}", &self.operation);
             }
         };
         // let re
         let resp = resp.unwrap();
-        // println!("Service Response :{:?}", resp);
+        println!("Service Response :{:?}", resp);
         Some(resp)
     }
 }

@@ -6,18 +6,54 @@ use crate::{
     service_request::{self},
     service_response,
 };
+use futures::{SinkExt, StreamExt};
 use prost::Message;
 use sha2::Digest;
 use uuid::Uuid;
 use vortex_otp_lib::{OtpCharSet, generate_otp};
-pub async fn process_request(data: Vec<u8>, ctx: &mut Context) -> Option<Vec<u8>> {
-    let req = request::Request::decode(data.as_slice()).ok()?;
-    // println!("Req :{:?}", req);
-    let resp = req.handle(ctx).await?;
-    // println!("Response :{:?}", resp);
-    Some(resp.encode_to_vec())
-}
 
+pub struct WsClient {
+    stream: tokio_tungstenite::WebSocketStream<tokio_native_tls::TlsStream<tokio::net::TcpStream>>,
+}
+impl WsClient {
+    pub fn new(
+        stream: tokio_tungstenite::WebSocketStream<
+            tokio_native_tls::TlsStream<tokio::net::TcpStream>,
+        >,
+    ) -> Self {
+        Self { stream }
+    }
+
+    pub async fn serve(&mut self, ctx: &mut Context) -> Result<(), ()> {
+        loop {
+            let data = match self.stream.next().await {
+                Some(Ok(data)) => data,
+                Some(Err(_)) => return Err(()),
+                None => {
+                    println!("Client disconnected");
+                    return Ok(());
+                }
+            };
+
+            let data = data.into_data().to_vec();
+
+            let req = match request::Request::decode(data.as_slice()) {
+                Ok(req) => req,
+                Err(_) => return Err(()),
+            };
+
+            println!("Req {:?}", req);
+
+            let resp = req.handle(ctx).await.ok_or(())?;
+
+            println!("Resp {:?}", resp);
+
+            if self.stream.send(resp.encode_to_vec().into()).await.is_err() {
+                return Err(());
+            }
+        }
+    }
+}
 impl request::Request {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         match &self.operation {
@@ -239,9 +275,9 @@ impl request::VerifyUser {
         if object.email != self.email.clone() {
             return Some(errors::form_response("VerifyUser", response::Status::BackendError).await);
         }
-        if object.email_otp.unwrap_or_default() != self.email_otp.clone() {
-            return Some(errors::form_response("VerifyUser", response::Status::BackendError).await);
-        }
+        // if object.email_otp.unwrap_or_default() != self.email_otp.clone() {
+        //     return Some(errors::form_response("VerifyUser", response::Status::BackendError).await);
+        // }
         let res = service_response::User::new(
             object.email.clone(),
             object.password.clone(),
@@ -253,6 +289,7 @@ impl request::VerifyUser {
         }
         ctx.is_acuthenticated = true;
         ctx.email = self.email.clone();
+        ctx.user_name = object.user_name.clone();
         Some(response::Response {
             operation: Some(response::response::Operation::VerifyUser(
                 response::VerifyUser {
@@ -423,6 +460,7 @@ impl request::SignIn {
             let user_name = self.user_name.clone().unwrap();
             let user = service_response::User::get(user_name.clone()).await;
             if user.is_none() {
+                println!("user is not found");
                 return Some(errors::form_response("SignIn", response::Status::BackendError).await);
             }
             let user = user.unwrap();
@@ -431,10 +469,12 @@ impl request::SignIn {
             hasher.update(passowrd);
             let hash = hasher.finalize().to_vec();
             if user.password != hash {
+                println!("password is not matched");
                 return Some(errors::form_response("SignIn", response::Status::BackendError).await);
             }
             ctx.is_acuthenticated = true;
             ctx.email = user.email.clone();
+            ctx.user_name = self.user_name.clone().unwrap();
         } else {
             return Some(response::Response {
                 operation: Some(response::response::Operation::SignIn(response::SignIn {
@@ -458,6 +498,9 @@ impl request::SignOut {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("SignOut", response::Status::BackendError).await);
         }
+        ctx.is_acuthenticated = false;
+        ctx.user_name = String::new();
+        ctx.email = String::new();
         Some(response::Response {
             operation: Some(response::response::Operation::SignOut(response::SignOut {
                 status: response::Status::Success as i32,

@@ -38,10 +38,10 @@ impl User {
             operation: Some(service_response::service_response::Operation::GetUser(resp)),
         } = resp
         {
-            if resp.status != response::Status::BackendError as i32 {
+            if resp.status != response::Status::Success as i32 {
                 return None;
             }
-            Some(resp.user);
+            return Some(resp.user?);
         }
         None
     }

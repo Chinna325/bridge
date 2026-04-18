@@ -343,6 +343,7 @@ impl request::AddTweet {
             tweet_id = bytes;
             let mut tweet = service_request::Tweet::form(tweet.clone());
             tweet.tweet_id = tweet_id.clone();
+            tweet.owner = ctx.user_name.clone();
             let resp = tweet.new(tweet_add, tweet.encode_to_vec()).await;
             if resp.is_err() {
                 return Some(
