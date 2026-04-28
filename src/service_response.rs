@@ -339,8 +339,25 @@ pub struct GetGroup {
     pub group: ::core::option::Option<Group>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Follow {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UnFollow {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListFollowers {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(string, repeated, tag="2")]
+    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceResponse {
-    #[prost(oneof="service_response::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45")]
+    #[prost(oneof="service_response::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48")]
     pub operation: ::core::option::Option<service_response::Operation>,
 }
 /// Nested message and enum types in `ServiceResponse`.
@@ -425,6 +442,12 @@ pub mod service_response {
         GetMessage(super::GetMessage),
         #[prost(message, tag="45")]
         GetGroup(super::GetGroup),
+        #[prost(message, tag="46")]
+        Follow(super::Follow),
+        #[prost(message, tag="47")]
+        UnFollow(super::UnFollow),
+        #[prost(message, tag="48")]
+        ListFollowers(super::ListFollowers),
     }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

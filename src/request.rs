@@ -57,12 +57,20 @@ pub struct SignOut {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Follow {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UnFollow {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListFollowers {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
+    #[prost(int32, tag="2")]
+    pub page: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddTweet {

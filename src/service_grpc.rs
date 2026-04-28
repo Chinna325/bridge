@@ -936,6 +936,74 @@ pub mod service_server_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn follow(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::Follow>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::Follow>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/Follow",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn un_follow(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::service_request::UnFollow>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::UnFollow>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/UnFollow",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn list_followers(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::ListFollowers,
+            >,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ListFollowers>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/ListFollowers",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -1216,6 +1284,27 @@ pub mod service_server_server {
             request: tonic::Request<super::super::service_request::GetGroup>,
         ) -> Result<
             tonic::Response<super::super::service_response::GetGroup>,
+            tonic::Status,
+        >;
+        async fn follow(
+            &self,
+            request: tonic::Request<super::super::service_request::Follow>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::Follow>,
+            tonic::Status,
+        >;
+        async fn un_follow(
+            &self,
+            request: tonic::Request<super::super::service_request::UnFollow>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::UnFollow>,
+            tonic::Status,
+        >;
+        async fn list_followers(
+            &self,
+            request: tonic::Request<super::super::service_request::ListFollowers>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ListFollowers>,
             tonic::Status,
         >;
     }
@@ -2890,6 +2979,130 @@ pub mod service_server_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = GetGroupSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/Follow" => {
+                    #[allow(non_camel_case_types)]
+                    struct FollowSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<super::super::service_request::Follow>
+                    for FollowSvc<T> {
+                        type Response = super::super::service_response::Follow;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::Follow,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).follow(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = FollowSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/UnFollow" => {
+                    #[allow(non_camel_case_types)]
+                    struct UnFollowSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::UnFollow,
+                    > for UnFollowSvc<T> {
+                        type Response = super::super::service_response::UnFollow;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::UnFollow,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move { (*inner).un_follow(request).await };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = UnFollowSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/ListFollowers" => {
+                    #[allow(non_camel_case_types)]
+                    struct ListFollowersSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::ListFollowers,
+                    > for ListFollowersSvc<T> {
+                        type Response = super::super::service_response::ListFollowers;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::ListFollowers,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).list_followers(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ListFollowersSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

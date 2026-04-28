@@ -515,6 +515,19 @@ impl request::Follow {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("Follow", response::Status::BackendError).await);
         }
+        let user = service_response::User::get(ctx.user_name.clone()).await;
+        if user.is_none() {
+            return Some(errors::form_response("Follow", response::Status::BackendError).await);
+        }
+        let user = service_response::User::get(self.user_name.clone()).await;
+        if user.is_none() {
+            return Some(errors::form_response("Follow", response::Status::BackendError).await);
+        }
+        let user = user.unwrap();
+        let resp = user.follow(self.user_name.clone()).await;
+        if resp.is_none() {
+            return Some(errors::form_response("Follow", response::Status::BackendError).await);
+        }
         Some(response::Response {
             operation: Some(response::response::Operation::Follow(response::Follow {
                 status: response::Status::Success as i32,
@@ -527,6 +540,19 @@ impl request::Follow {
 impl request::UnFollow {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
+            return Some(errors::form_response("UnFollow", response::Status::BackendError).await);
+        }
+        let user = service_response::User::get(ctx.user_name.clone()).await;
+        if user.is_none() {
+            return Some(errors::form_response("UnFollow", response::Status::BackendError).await);
+        }
+        let user = service_response::User::get(self.user_name.clone()).await;
+        if user.is_none() {
+            return Some(errors::form_response("UnFollow", response::Status::BackendError).await);
+        }
+        let user = user.unwrap();
+        let resp = user.unfollow(self.user_name.clone()).await;
+        if resp.is_none() {
             return Some(errors::form_response("UnFollow", response::Status::BackendError).await);
         }
         Some(response::Response {
@@ -547,11 +573,26 @@ impl request::ListFollowers {
                 errors::form_response("ListFollowers", response::Status::BackendError).await,
             );
         }
+        let user = service_response::User::get(self.user_name.clone()).await;
+        if user.is_none() {
+            return Some(
+                errors::form_response("ListFollowers", response::Status::BackendError).await,
+            );
+        }
+        let user = user.unwrap();
+        let followers = user.list_followers(self.page).await;
+        if followers.is_none() {
+            return Some(
+                errors::form_response("ListFollowers", response::Status::BackendError).await,
+            );
+        }
+        let followers = followers.unwrap();
         Some(response::Response {
             operation: Some(response::response::Operation::ListFollowers(
                 response::ListFollowers {
                     status: response::Status::Success as i32,
                     message: None,
+                    user_names: followers,
                 },
             )),
         })

@@ -392,8 +392,29 @@ pub struct ReadMessage {
     pub user_name: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Follow {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
+    #[prost(string, tag="2")]
+    pub follower: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UnFollow {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
+    #[prost(string, tag="2")]
+    pub follower: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListFollowers {
+    #[prost(string, tag="1")]
+    pub user_name: ::prost::alloc::string::String,
+    #[prost(int32, tag="2")]
+    pub page: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceRequest {
-    #[prost(oneof="service_request::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45")]
+    #[prost(oneof="service_request::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48")]
     pub operation: ::core::option::Option<service_request::Operation>,
 }
 /// Nested message and enum types in `ServiceRequest`.
@@ -478,6 +499,12 @@ pub mod service_request {
         GetMessage(super::GetMessage),
         #[prost(message, tag="45")]
         GetGroup(super::GetGroup),
+        #[prost(message, tag="46")]
+        Follow(super::Follow),
+        #[prost(message, tag="47")]
+        UnFollow(super::UnFollow),
+        #[prost(message, tag="48")]
+        ListFollowers(super::ListFollowers),
     }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

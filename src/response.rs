@@ -83,6 +83,8 @@ pub struct ListFollowers {
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, repeated, tag="3")]
+    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddTweet {

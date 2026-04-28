@@ -162,4 +162,70 @@ impl User {
         }
         None
     }
+    pub async fn follow(&self, follower: String) -> Option<()> {
+        let req = ServiceRequest {
+            operation: Some(service_request::service_request::Operation::Follow(
+                service_request::Follow {
+                    user_name: self.user_name.clone(),
+                    follower: follower,
+                },
+            )),
+        };
+        let client = backend::ceate_grpc_connection().await;
+        let resp = req.execute(client).await?;
+        if let service_response::ServiceResponse {
+            operation: Some(service_response::service_response::Operation::Follow(resp)),
+        } = resp
+        {
+            if resp.status != service_response::Status::Success as i32 {
+                return None;
+            }
+        }
+        Some(())
+    }
+
+    pub async fn unfollow(&self, follower: String) -> Option<()> {
+        let req = ServiceRequest {
+            operation: Some(service_request::service_request::Operation::UnFollow(
+                service_request::UnFollow {
+                    user_name: self.user_name.clone(),
+                    follower: follower,
+                },
+            )),
+        };
+        let client = backend::ceate_grpc_connection().await;
+        let resp = req.execute(client).await?;
+        if let service_response::ServiceResponse {
+            operation: Some(service_response::service_response::Operation::UnFollow(resp)),
+        } = resp
+        {
+            if resp.status != service_response::Status::Success as i32 {
+                return None;
+            }
+        }
+        Some(())
+    }
+
+    pub async fn list_followers(&self, page: i32) -> Option<Vec<String>> {
+        let req = ServiceRequest {
+            operation: Some(service_request::service_request::Operation::ListFollowers(
+                service_request::ListFollowers {
+                    user_name: self.user_name.clone(),
+                    page: page,
+                },
+            )),
+        };
+        let client = backend::ceate_grpc_connection().await;
+        let resp = req.execute(client).await?;
+        if let service_response::ServiceResponse {
+            operation: Some(service_response::service_response::Operation::ListFollowers(resp)),
+        } = resp
+        {
+            if resp.status != service_response::Status::Success as i32 {
+                return None;
+            }
+            return Some(resp.user_names);
+        }
+        None
+    }
 }

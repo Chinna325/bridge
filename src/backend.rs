@@ -471,6 +471,43 @@ impl ServiceRequest {
                     Err(_) => None,
                 }
             }
+
+            Some(service_request::service_request::Operation::Follow(req)) => {
+                let request = tonic::Request::new(req);
+                match client.follow(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(service_response::service_response::Operation::Follow(
+                            resp.into_inner(),
+                        )),
+                    }),
+                    Err(_) => None,
+                }
+            }
+            Some(service_request::service_request::Operation::UnFollow(req)) => {
+                let request = tonic::Request::new(req);
+                match client.un_follow(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(service_response::service_response::Operation::UnFollow(
+                            resp.into_inner(),
+                        )),
+                    }),
+                    Err(_) => None,
+                }
+            }
+
+            Some(service_request::service_request::Operation::ListFollowers(req)) => {
+                let request = tonic::Request::new(req);
+                match client.list_followers(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(
+                            service_response::service_response::Operation::ListFollowers(
+                                resp.into_inner(),
+                            ),
+                        ),
+                    }),
+                    Err(_) => None,
+                }
+            }
             _ => {
                 panic!("Invalid request :{:?}", &self.operation);
             }
