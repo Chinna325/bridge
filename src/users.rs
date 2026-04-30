@@ -206,12 +206,13 @@ impl User {
         Some(())
     }
 
-    pub async fn list_followers(&self, page: i32) -> Option<Vec<String>> {
+    pub async fn list_followers(&self, page: i32, ltype: i32) -> Option<Vec<String>> {
         let req = ServiceRequest {
             operation: Some(service_request::service_request::Operation::ListFollowers(
                 service_request::ListFollowers {
                     user_name: self.user_name.clone(),
                     page: page,
+                    ltype: ltype,
                 },
             )),
         };

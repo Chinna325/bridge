@@ -580,7 +580,7 @@ impl request::ListFollowers {
             );
         }
         let user = user.unwrap();
-        let followers = user.list_followers(self.page).await;
+        let followers = user.list_followers(self.page, self.ltype as i32).await;
         if followers.is_none() {
             return Some(
                 errors::form_response("ListFollowers", response::Status::BackendError).await,

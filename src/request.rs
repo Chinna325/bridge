@@ -71,6 +71,8 @@ pub struct ListFollowers {
     pub user_name: ::prost::alloc::string::String,
     #[prost(int32, tag="2")]
     pub page: i32,
+    #[prost(enumeration="LType", tag="3")]
+    pub ltype: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddTweet {
@@ -420,6 +422,12 @@ pub mod request {
         #[prost(message, tag="45")]
         GetMessage(super::GetMessage),
     }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum LType {
+    Followers = 0,
+    Followings = 1,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]

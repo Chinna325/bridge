@@ -411,6 +411,8 @@ pub struct ListFollowers {
     pub user_name: ::prost::alloc::string::String,
     #[prost(int32, tag="2")]
     pub page: i32,
+    #[prost(enumeration="LType", tag="3")]
+    pub ltype: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceRequest {
@@ -524,4 +526,10 @@ pub enum TweetAdd {
 pub enum MessageRemove {
     DeleteForMe = 0,
     DeleteForEveryOne = 1,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum LType {
+    Followers = 0,
+    Followings = 1,
 }
