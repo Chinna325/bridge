@@ -115,6 +115,17 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
             };
         }
 
+        "ListFollowers" => {
+            return response::Response {
+                operation: Some(response::response::Operation::ListFollowers(
+                    response::ListFollowers {
+                        status: status as i32,
+                        message: None,
+                        user_names: Vec::new(),
+                    },
+                )),
+            };
+        }
         "RepostTweet" => {
             return response::Response {
                 operation: Some(response::response::Operation::RepostTweet(
@@ -341,6 +352,25 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
             return response::Response {
                 operation: Some(response::response::Operation::ReadMessage(
                     response::ReadMessage {
+                        status: status as i32,
+                        message: None,
+                    },
+                )),
+            };
+        }
+
+        "Follow" => {
+            return response::Response {
+                operation: Some(response::response::Operation::Follow(response::Follow {
+                    status: status as i32,
+                    message: None,
+                })),
+            };
+        }
+        "UnFollow" => {
+            return response::Response {
+                operation: Some(response::response::Operation::UnFollow(
+                    response::UnFollow {
                         status: status as i32,
                         message: None,
                     },

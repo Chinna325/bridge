@@ -532,4 +532,5 @@ pub enum MessageRemove {
 pub enum LType {
     Followers = 0,
     Followings = 1,
+    All = 2,
 }

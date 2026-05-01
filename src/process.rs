@@ -4,7 +4,7 @@ use crate::{
     Context, backend, errors, request,
     response::{self, Response},
     service_request::{self},
-    service_response,
+    service_response::{self},
 };
 use futures::{SinkExt, StreamExt};
 use prost::Message;
@@ -512,6 +512,8 @@ impl request::SignOut {
 
 impl request::Follow {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
+        println!("Self {:?}", self.clone());
+        println!("login context  {}", ctx.user_name.clone());
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("Follow", response::Status::BackendError).await);
         }
@@ -523,8 +525,10 @@ impl request::Follow {
         if user.is_none() {
             return Some(errors::form_response("Follow", response::Status::BackendError).await);
         }
-        let user = user.unwrap();
-        let resp = user.follow(self.user_name.clone()).await;
+        let mut user = user.unwrap();
+        user.user_name = self.user_name.clone();
+        println!("User  {:?}", user);
+        let resp = user.follow(ctx.user_name.clone()).await;
         if resp.is_none() {
             return Some(errors::form_response("Follow", response::Status::BackendError).await);
         }
@@ -573,7 +577,7 @@ impl request::ListFollowers {
                 errors::form_response("ListFollowers", response::Status::BackendError).await,
             );
         }
-        let user = service_response::User::get(self.user_name.clone()).await;
+        let user = service_response::User::get(ctx.user_name.clone()).await;
         if user.is_none() {
             return Some(
                 errors::form_response("ListFollowers", response::Status::BackendError).await,

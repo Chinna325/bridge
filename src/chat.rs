@@ -5,6 +5,7 @@ use crate::{
 };
 use crate::{errors, service_request, service_response};
 use chrono::Utc;
+// use futures::sink::Feed;
 use uuid::Uuid;
 pub const MAX_NAME: u64 = 32;
 impl service_request::Message {
@@ -147,7 +148,7 @@ impl service_request::Chat {
         let conn = backend::ceate_grpc_connection().await;
         let resp = req.execute(conn).await.ok_or(())?;
         if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::ReadMessage(resp)),
+            operation: Some(service_response::service_response::Operation::CreateOneToOneChat(resp)),
         } = resp
         {
             if resp.status != service_response::Status::Success as i32 {
@@ -808,7 +809,15 @@ impl request::ListChat {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("UnFollow", response::Status::BackendError).await);
         }
-        todo!()
+        Some(response::Response {
+            operation: Some(response::response::Operation::ListChat(
+                response::ListChat {
+                    status: response::Status::Success as i32,
+                    message: None,
+                    messages: Vec::new(),
+                },
+            )),
+        })
     }
 }
 

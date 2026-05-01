@@ -428,6 +428,7 @@ pub mod request {
 pub enum LType {
     Followers = 0,
     Followings = 1,
+    All = 2,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
