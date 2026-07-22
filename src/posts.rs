@@ -1,39 +1,38 @@
-// use crate::request::Tweet;
+// use crate::request::Post;
 use crate::errors;
-use crate::response::Response;
-use crate::{Context, response};
+use crate::protos::common;
+use crate::protos::response::Response;
+use crate::{Context, protos::response};
 use crate::{
     backend,
-    request,
-    // response::PublicMetrics,
-    service_request::{self, ServiceRequest},
-    service_response::{self},
-    // tweet,
+    protos::request,
+    protos::service_request::{self, ServiceRequest},
+    protos::service_response::{self},
 };
 use chrono::Utc;
 use prost::Message;
 use uuid::Uuid;
 
-impl service_request::Tweet {
+impl service_request::Post {
     pub async fn new(
         &self,
-        type_of_add: service_request::TweetAdd,
-        tweet_data: Vec<u8>,
+        type_of_add: service_request::PostAdd,
+        post_data: Vec<u8>,
     ) -> Result<(), ()> {
         let req = ServiceRequest {
-            operation: Some(service_request::service_request::Operation::AddTweet(
-                service_request::AddTweet {
+            operation: Some(service_request::service_request::Operation::AddPost(
+                service_request::AddPost {
                     user_name: self.owner.clone(),
-                    tweet_data: tweet_data,
-                    tweet_add: type_of_add as i32,
-                    tweet_id: self.tweet_id.clone(),
+                    post_data: post_data,
+                    post_add: type_of_add as i32,
+                    post_id: self.post_id.clone(),
                 },
             )),
         };
         let conn = backend::ceate_grpc_connection().await;
         let resp = req.execute(conn).await.ok_or(())?;
         if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::AddTweet(resp)),
+            operation: Some(service_response::service_response::Operation::AddPost(resp)),
         } = resp
         {
             if resp.status != service_response::Status::Success as i32 {
@@ -44,41 +43,41 @@ impl service_request::Tweet {
     }
     pub async fn from_uuid(uuid: Vec<u8>) -> Result<Self, ()> {
         let req = ServiceRequest {
-            operation: Some(service_request::service_request::Operation::GetTweet(
-                service_request::GetTweet { tweet_id: uuid },
+            operation: Some(service_request::service_request::Operation::GetPost(
+                service_request::GetPost { post_id: uuid },
             )),
         };
         let conn = backend::ceate_grpc_connection().await;
         let resp = req.execute(conn).await.ok_or(())?;
         if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::GetTweet(resp)),
+            operation: Some(service_response::service_response::Operation::GetPost(resp)),
         } = resp
         {
             if resp.status != service_response::Status::Success as i32 {
                 return Err(());
             }
-            let tweet_data = resp.tweet_data.clone();
-            let tweet = service_request::Tweet::decode(tweet_data.as_slice());
-            if tweet.is_err() {
+            let post_data = resp.post_data.clone();
+            let post = service_request::Post::decode(post_data.as_slice());
+            if post.is_err() {
                 return Err(());
             }
-            return Ok(tweet.unwrap());
+            return Ok(post.unwrap());
         }
         Err(())
     }
-    pub async fn remove(&self, tweet_remove: service_request::TweetRemove) -> Result<(), ()> {
+    pub async fn remove(&self, post_remove: service_request::PostRemove) -> Result<(), ()> {
         let req = ServiceRequest {
-            operation: Some(service_request::service_request::Operation::RemoveTweet(
-                service_request::RemoveTweet {
-                    tweet_remove: tweet_remove as i32,
-                    tweet_id: self.tweet_id.clone(),
+            operation: Some(service_request::service_request::Operation::RemovePost(
+                service_request::RemovePost {
+                    post_remove: post_remove as i32,
+                    post_id: self.post_id.clone(),
                 },
             )),
         };
         let conn = backend::ceate_grpc_connection().await;
         let resp = req.execute(conn).await.ok_or(())?;
         if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::RemoveTweet(resp)),
+            operation: Some(service_response::service_response::Operation::RemovePost(resp)),
         } = resp
         {
             if resp.status != service_response::Status::Success as i32 {
@@ -89,17 +88,17 @@ impl service_request::Tweet {
     }
     pub async fn update(&mut self) -> Result<(), ()> {
         let req = ServiceRequest {
-            operation: Some(service_request::service_request::Operation::UpdateTweet(
-                service_request::UpdateTweet {
-                    tweet_data: self.clone().encode_to_vec(),
-                    tweet_id: self.tweet_id.clone(),
+            operation: Some(service_request::service_request::Operation::UpdatePost(
+                service_request::UpdatePost {
+                    post_data: self.clone().encode_to_vec(),
+                    post_id: self.post_id.clone(),
                 },
             )),
         };
         let conn = backend::ceate_grpc_connection().await;
         let resp = req.execute(conn).await.ok_or(())?;
         if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::UpdateTweet(resp)),
+            operation: Some(service_response::service_response::Operation::UpdatePost(resp)),
         } = resp
         {
             if resp.status != service_response::Status::Success as i32 {
@@ -110,37 +109,37 @@ impl service_request::Tweet {
     }
     pub async fn list(user_name: String) -> Result<Vec<Vec<u8>>, ()> {
         let req = ServiceRequest {
-            operation: Some(service_request::service_request::Operation::ListTweets(
-                service_request::ListTweets { user_name },
+            operation: Some(service_request::service_request::Operation::ListPosts(
+                service_request::ListPosts { user_name },
             )),
         };
         let conn = backend::ceate_grpc_connection().await;
         let resp = req.execute(conn).await.ok_or(())?;
         if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::ListTweets(resp)),
+            operation: Some(service_response::service_response::Operation::ListPosts(resp)),
         } = resp
         {
             if resp.status != service_response::Status::Success as i32 {
                 return Err(());
             }
-            return Ok(resp.tweet_ids);
+            return Ok(resp.post_ids);
         }
         Err(())
     }
 
-    pub async fn react_to_tweet(&mut self) -> Result<(), ()> {
+    pub async fn react_to_post(&mut self) -> Result<(), ()> {
         let req = ServiceRequest {
-            operation: Some(service_request::service_request::Operation::TweetReact(
-                service_request::TweetReact {
-                    tweet_id: self.tweet_id.clone(),
-                    tweet_data: self.clone().encode_to_vec(),
+            operation: Some(service_request::service_request::Operation::PostReact(
+                service_request::PostReact {
+                    post_id: self.post_id.clone(),
+                    post_data: self.clone().encode_to_vec(),
                 },
             )),
         };
         let conn = backend::ceate_grpc_connection().await;
         let resp = req.execute(conn).await.ok_or(())?;
         if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::TweetReact(resp)),
+            operation: Some(service_response::service_response::Operation::PostReact(resp)),
         } = resp
         {
             if resp.status != service_response::Status::Success as i32 {
@@ -157,7 +156,7 @@ impl service_request::Tweet {
         let req = ServiceRequest {
             operation: Some(service_request::service_request::Operation::ListReplies(
                 service_request::ListReplies {
-                    tweet_id: self.tweet_id.clone(),
+                    post_id: self.post_id.clone(),
                     parent_id: parent_id.clone(),
                 },
             )),
@@ -176,15 +175,15 @@ impl service_request::Tweet {
         }
         Err(())
     }
-    pub fn form(tweet: request::Tweet) -> Self {
+    pub fn form(post: common::Post) -> Self {
         Self {
-            tweet_id: tweet.tweet_id.clone(),
-            text: tweet.text.clone(),
+            post_id: post.post_id.clone(),
+            text: post.text.clone(),
             created_at: Utc::now().timestamp() as u64,
-            owner: tweet.owner.clone(),
+            owner: post.owner.clone(),
             public_metrics: Some(service_request::PublicMetrics::default()),
-            hashtags: tweet.hashtags.clone(),
-            user_names: tweet.user_names.clone(),
+            hashtags: post.hashtags.clone(),
+            user_names: post.user_names.clone(),
         }
     }
 }
@@ -217,7 +216,7 @@ impl service_request::Reply {
                 service_request::RemoveReply {
                     reply_id: self.reply_id.clone(),
                     parent_id: self.parent_id.clone(),
-                    tweet_id: self.tweet_id.clone(),
+                    post_id: self.post_id.clone(),
                 },
             )),
         };
@@ -243,7 +242,7 @@ impl service_request::Reply {
                     text: self.text.clone(),
                     hash_tags: self.hash_tags.clone(),
                     user_name: self.user_names.clone(),
-                    tweet_id: self.tweet_id.clone(),
+                    post_id: self.post_id.clone(),
                 },
             )),
         };
@@ -261,7 +260,7 @@ impl service_request::Reply {
     }
 
     pub async fn from_uuid(
-        tweet_id: Vec<u8>,
+        post_id: Vec<u8>,
         reply_id: Vec<u8>,
         parent_id: Vec<u8>,
     ) -> Result<Self, ()> {
@@ -270,7 +269,7 @@ impl service_request::Reply {
                 service_request::GetReply {
                     reply_id: reply_id.clone(),
                     parent_id: parent_id.clone(),
-                    tweet_id: tweet_id.clone(),
+                    post_id: post_id.clone(),
                 },
             )),
         };
@@ -289,7 +288,7 @@ impl service_request::Reply {
             }
             let reply = reply.unwrap();
             return Ok(Self {
-                tweet_id,
+                post_id,
                 user_name: reply.user_name.clone(),
                 text: reply.text.clone(),
                 reply_id,
@@ -309,7 +308,7 @@ impl service_request::Reply {
 
     pub fn from(reply: request::Reply) -> Self {
         Self {
-            tweet_id: reply.tweet_id.clone(),
+            post_id: reply.post_id.clone(),
             user_name: reply.user_name.clone(),
             text: reply.text.clone(),
             reply_id: reply.reply_id.clone(),
@@ -323,88 +322,80 @@ impl service_request::Reply {
     }
 }
 
-impl request::AddTweet {
+impl request::AddPost {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
-            return Some(errors::form_response("AddTweet", response::Status::BackendError).await);
+            return Some(errors::form_response("AddPost", response::Status::BackendError).await);
         }
-        let tweet = self.tweet.clone();
-        if tweet.is_none() {
-            return Some(errors::form_response("AddTweet", response::Status::BackendError).await);
+        let post = self.post.clone();
+        if post.is_none() {
+            return Some(errors::form_response("AddPost", response::Status::BackendError).await);
         }
-        let tweet = tweet.unwrap();
-        let mut tweet_id = tweet.tweet_id.clone();
-        let mut tweet_add = service_request::TweetAdd::Add;
-        if tweet_id.is_empty() {
+        let post = post.unwrap();
+        let mut post_id = post.post_id.clone();
+        let mut post_add = service_request::PostAdd::Add;
+        if post_id.is_empty() {
             let uuid = Uuid::new_v4();
             let mut bytes = uuid.as_bytes().to_vec();
             let millis = chrono::Utc::now().timestamp_millis() as u64;
             bytes.extend_from_slice(&millis.to_be_bytes());
-            tweet_id = bytes;
-            let mut tweet = service_request::Tweet::form(tweet.clone());
-            tweet.tweet_id = tweet_id.clone();
-            tweet.owner = ctx.user_name.clone();
-            let resp = tweet.new(tweet_add, tweet.encode_to_vec()).await;
+            post_id = bytes;
+            let mut post = service_request::Post::form(post.clone());
+            post.post_id = post_id.clone();
+            post.owner = ctx.user_name.clone();
+            let resp = post.new(post_add, post.encode_to_vec()).await;
             if resp.is_err() {
                 return Some(
-                    errors::form_response("AddTweet", response::Status::BackendError).await,
+                    errors::form_response("AddPost", response::Status::BackendError).await,
                 );
             }
         } else {
-            let tweet = service_request::Tweet::from_uuid(tweet_id.clone()).await;
-            if tweet.is_err() {
+            let post = service_request::Post::from_uuid(post_id.clone()).await;
+            if post.is_err() {
                 return Some(
-                    errors::form_response("AddTweet", response::Status::BackendError).await,
+                    errors::form_response("AddPost", response::Status::BackendError).await,
                 );
             }
-            let tweet = tweet.unwrap();
-            tweet_add = service_request::TweetAdd::Repost;
-            let resp = tweet.new(tweet_add, Vec::new()).await;
+            let post = post.unwrap();
+            post_add = service_request::PostAdd::Repost;
+            let resp = post.new(post_add, Vec::new()).await;
             if resp.is_err() {
                 return Some(
-                    errors::form_response("AddTweet", response::Status::BackendError).await,
+                    errors::form_response("AddPost", response::Status::BackendError).await,
                 );
             }
         }
         Some(response::Response {
-            operation: Some(response::response::Operation::AddTweet(
-                response::AddTweet {
-                    status: response::Status::Success as i32,
-                    message: None,
-                    tweet_id: tweet_id.clone(),
-                },
-            )),
+            operation: Some(response::response::Operation::AddPost(response::AddPost {
+                status: response::Status::Success as i32,
+                message: None,
+                post_id: post_id.clone(),
+            })),
         })
     }
 }
 
-impl request::RemoveTweet {
+impl request::RemovePost {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
-            return Some(
-                errors::form_response("RemoveTweet", response::Status::BackendError).await,
-            );
+            return Some(errors::form_response("RemovePost", response::Status::BackendError).await);
         }
-        let tweet = service_request::Tweet::from_uuid(self.tweet_id.clone()).await;
-        if tweet.is_err() {
-            return Some(
-                errors::form_response("RemoveTweet", response::Status::BackendError).await,
-            );
+        let post = service_request::Post::from_uuid(self.post_id.clone()).await;
+        if post.is_err() {
+            return Some(errors::form_response("RemovePost", response::Status::BackendError).await);
         }
-        let tweet = tweet.unwrap();
-        let mut tweet_remove = service_request::TweetRemove::OwnTweet;
-        if ctx.email != tweet.owner {
-            tweet_remove = service_request::TweetRemove::RepostedTweet;
+        let post = post.unwrap();
+        let mut post_remove = service_request::PostRemove::OwnPost;
+        if ctx.email != post.owner {
+            post_remove = service_request::PostRemove::RepostedPost;
         }
-        let resp = tweet.remove(tweet_remove).await;
+        let resp = post.remove(post_remove).await;
         if resp.is_err() {
-            return Some(
-                errors::form_response("RemoveTweet", response::Status::BackendError).await,
-            );
+            return Some(errors::form_response("RemovePost", response::Status::BackendError).await);
         }
         Some(response::Response {
-            operation: Some(response::response::Operation::RemoveTweet(
-                response::RemoveTweet {
+            operation: Some(response::response::Operation::RemovePost(
+                response::RemovePost {
                     status: response::Status::Success as i32,
                     message: None,
                 },
@@ -413,99 +404,89 @@ impl request::RemoveTweet {
     }
 }
 
-impl request::GetTweet {
+impl request::GetPost {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
-            return Some(errors::form_response("GetTweet", response::Status::BackendError).await);
+            return Some(errors::form_response("GetPost", response::Status::BackendError).await);
         }
-        let tweet = service_request::Tweet::from_uuid(self.tweet_id.clone()).await;
-        if tweet.is_err() {
-            return Some(errors::form_response("GetTweet", response::Status::BackendError).await);
+        let post = service_request::Post::from_uuid(self.post_id.clone()).await;
+        if post.is_err() {
+            return Some(errors::form_response("GetPost", response::Status::BackendError).await);
         }
-        let tweet = tweet.unwrap();
-        let metrics = tweet.public_metrics.clone().unwrap();
-        let public_metrics = response::PublicMetrics {
-            retweet_count: metrics.retweet_count,
+        let post = post.unwrap();
+        let metrics = post.public_metrics.clone().unwrap();
+        let public_metrics = common::PublicMetrics {
+            re_post_count: metrics.repost_count,
             reply_count: metrics.reply_count,
             like_count: metrics.like_count,
             quote_count: metrics.quote_count,
             bookmark_count: metrics.bookmark_count,
             impression_count: metrics.impression_count,
         };
-        let tweet = response::Tweet {
-            tweet_id: self.tweet_id.clone(),
-            text: tweet.text.clone(),
-            created_at: tweet.created_at,
-            owner: tweet.owner.clone(),
-            hashtags: tweet.hashtags.clone(),
-            user_names: tweet.user_names.clone(),
+        let post = common::Post {
+            post_id: self.post_id.clone(),
+            text: post.text.clone(),
+            created_at: post.created_at,
+            owner: post.owner.clone(),
+            hashtags: post.hashtags.clone(),
+            user_names: post.user_names.clone(),
             public_metrics: Some(public_metrics),
         };
         Some(response::Response {
-            operation: Some(response::response::Operation::GetTweet(
-                response::GetTweet {
-                    status: response::Status::Success as i32,
-                    message: None,
-                    tweet: Some(tweet),
-                },
-            )),
+            operation: Some(response::response::Operation::GetPost(response::GetPost {
+                status: response::Status::Success as i32,
+                message: None,
+                post: Some(post),
+            })),
         })
     }
 }
 
-impl request::ListTweets {
+impl request::ListPosts {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
-            return Some(errors::form_response("ListTweets", response::Status::BackendError).await);
+            return Some(errors::form_response("ListPosts", response::Status::BackendError).await);
         }
-        let tweets = service_request::Tweet::list(self.user_name.clone()).await;
-        if tweets.is_err() {
-            return Some(errors::form_response("ListTweets", response::Status::BackendError).await);
+        let posts = service_request::Post::list(self.user_name.clone()).await;
+        if posts.is_err() {
+            return Some(errors::form_response("ListPosts", response::Status::BackendError).await);
         }
-        let tweets = tweets.unwrap();
+        let posts = posts.unwrap();
         Some(response::Response {
-            operation: Some(response::response::Operation::ListTweets(
-                response::ListTweets {
+            operation: Some(response::response::Operation::ListPosts(
+                response::ListPosts {
                     status: response::Status::Success as i32,
                     message: None,
-                    tweets: tweets,
+                    posts: posts,
                 },
             )),
         })
     }
 }
 
-impl request::UpdateTweet {
+impl request::UpdatePost {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
-            return Some(
-                errors::form_response("UpdateTweet", response::Status::BackendError).await,
-            );
+            return Some(errors::form_response("UpdatePost", response::Status::BackendError).await);
         }
-        let tweet = service_request::Tweet::from_uuid(self.tweet_id.clone()).await;
-        if tweet.is_err() {
-            return Some(
-                errors::form_response("UpdateTweet", response::Status::BackendError).await,
-            );
+        let post = service_request::Post::from_uuid(self.post_id.clone()).await;
+        if post.is_err() {
+            return Some(errors::form_response("UpdatePost", response::Status::BackendError).await);
         }
-        let mut tweet = tweet.unwrap();
-        if tweet.owner != ctx.email {
-            return Some(
-                errors::form_response("UpdateTweet", response::Status::BackendError).await,
-            );
+        let mut post = post.unwrap();
+        if post.owner != ctx.email {
+            return Some(errors::form_response("UpdatePost", response::Status::BackendError).await);
         }
-        tweet.hashtags = self.hash_tags.clone();
-        tweet.user_names = self.user_names.clone();
-        tweet.text = self.text.clone();
-        let resp = tweet.update().await;
+        post.hashtags = self.hash_tags.clone();
+        post.user_names = self.user_names.clone();
+        post.text = self.text.clone();
+        let resp = post.update().await;
         if resp.is_err() {
-            return Some(
-                errors::form_response("UpdateTweet", response::Status::BackendError).await,
-            );
+            return Some(errors::form_response("UpdatePost", response::Status::BackendError).await);
         }
         Some(response::Response {
-            operation: Some(response::response::Operation::UpdateTweet(
-                response::UpdateTweet {
+            operation: Some(response::response::Operation::UpdatePost(
+                response::UpdatePost {
                     status: response::Status::Success as i32,
                     message: None,
                 },
@@ -514,7 +495,7 @@ impl request::UpdateTweet {
     }
 }
 
-impl request::TweetReact {
+impl common::PostReact {
     pub fn from(number: i32) -> Self {
         match number {
             0 => Self::Like,
@@ -525,7 +506,7 @@ impl request::TweetReact {
     }
 }
 
-impl request::UndoTweetReact {
+impl common::UndoPostReact {
     pub fn from(number: i32) -> Self {
         match number {
             0 => Self::UndoLike,
@@ -535,48 +516,48 @@ impl request::UndoTweetReact {
         }
     }
 }
-impl request::ReactToTweet {
+impl request::ReactToPost {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
             return Some(
-                errors::form_response("ReactToTweet", response::Status::BackendError).await,
+                errors::form_response("ReactToPost", response::Status::BackendError).await,
             );
         }
-        let tweet = service_request::Tweet::from_uuid(self.tweet_id.clone()).await;
-        if tweet.is_err() {
+        let post = service_request::Post::from_uuid(self.post_id.clone()).await;
+        if post.is_err() {
             return Some(
-                errors::form_response("ReactToTweet", response::Status::BackendError).await,
+                errors::form_response("ReactToPost", response::Status::BackendError).await,
             );
         }
-        let mut tweet = tweet.unwrap();
-        let metrics = tweet.public_metrics.clone();
+        let mut post = post.unwrap();
+        let metrics = post.public_metrics.clone();
         let mut metrics = metrics.unwrap();
-        let operation = request::TweetReact::from(self.tweet_react);
+        let operation = common::PostReact::from(self.post_react);
         let resp = match operation {
-            request::TweetReact::Like => {
+            common::PostReact::Like => {
                 metrics.like_count += 1;
-                tweet.public_metrics = Some(metrics.clone());
-                tweet.react_to_tweet().await
+                post.public_metrics = Some(metrics.clone());
+                post.react_to_post().await
             }
-            request::TweetReact::Love => {
+            common::PostReact::Love => {
                 metrics.love_count += 1;
-                tweet.public_metrics = Some(metrics.clone());
-                tweet.react_to_tweet().await
+                post.public_metrics = Some(metrics.clone());
+                post.react_to_post().await
             }
-            request::TweetReact::DisLike => {
+            common::PostReact::DisLike => {
                 metrics.dislike_count += 1;
-                tweet.public_metrics = Some(metrics.clone());
-                tweet.react_to_tweet().await
+                post.public_metrics = Some(metrics.clone());
+                post.react_to_post().await
             }
         };
         if resp.is_err() {
             return Some(
-                errors::form_response("ReactToTweet", response::Status::BackendError).await,
+                errors::form_response("ReactToPost", response::Status::BackendError).await,
             );
         }
         Some(response::Response {
-            operation: Some(response::response::Operation::ReactToTweet(
-                response::ReactToTweet {
+            operation: Some(response::response::Operation::ReactToPost(
+                response::ReactToPost {
                     status: response::Status::Success as i32,
                     message: None,
                 },
@@ -585,48 +566,48 @@ impl request::ReactToTweet {
     }
 }
 
-impl request::UndoReactToTweet {
+impl request::UndoReactToPost {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
             return Some(
-                errors::form_response("UndoReactToTweet", response::Status::BackendError).await,
+                errors::form_response("UndoReactToPost", response::Status::BackendError).await,
             );
         }
-        let tweet = service_request::Tweet::from_uuid(self.tweet_id.clone()).await;
-        if tweet.is_err() {
+        let post = service_request::Post::from_uuid(self.post_id.clone()).await;
+        if post.is_err() {
             return Some(
-                errors::form_response("UndoReactToTweet", response::Status::BackendError).await,
+                errors::form_response("UndoReactToPost", response::Status::BackendError).await,
             );
         }
-        let mut tweet = tweet.unwrap();
-        let metrics = tweet.public_metrics.clone();
+        let mut post = post.unwrap();
+        let metrics = post.public_metrics.clone();
         let mut metrics = metrics.unwrap();
-        let operation = request::UndoTweetReact::from(self.tweet_react);
+        let operation = common::UndoPostReact::from(self.post_react);
         let resp = match operation {
-            request::UndoTweetReact::UndoDisLike => {
+            common::UndoPostReact::UndoDisLike => {
                 metrics.dislike_count -= 1;
-                tweet.public_metrics = Some(metrics.clone());
-                tweet.react_to_tweet().await
+                post.public_metrics = Some(metrics.clone());
+                post.react_to_post().await
             }
-            request::UndoTweetReact::UndoLike => {
+            common::UndoPostReact::UndoLike => {
                 metrics.like_count -= 1;
-                tweet.public_metrics = Some(metrics.clone());
-                tweet.react_to_tweet().await
+                post.public_metrics = Some(metrics.clone());
+                post.react_to_post().await
             }
-            request::UndoTweetReact::UndoLove => {
+            common::UndoPostReact::UndoLove => {
                 metrics.love_count -= 1;
-                tweet.public_metrics = Some(metrics.clone());
-                tweet.react_to_tweet().await
+                post.public_metrics = Some(metrics.clone());
+                post.react_to_post().await
             }
         };
         if resp.is_err() {
             return Some(
-                errors::form_response("UndoReactToTweet", response::Status::BackendError).await,
+                errors::form_response("UndoReactToPost", response::Status::BackendError).await,
             );
         }
         Some(response::Response {
-            operation: Some(response::response::Operation::UndoReactToTweet(
-                response::UndoReactToTweet {
+            operation: Some(response::response::Operation::UndoReactToPost(
+                response::UndoReactToPost {
                     status: response::Status::Success as i32,
                     message: None,
                 },
@@ -635,34 +616,28 @@ impl request::UndoReactToTweet {
     }
 }
 
-impl request::RepostTweet {
+impl request::RepostPost {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
-            return Some(
-                errors::form_response("RepostTweet", response::Status::BackendError).await,
-            );
+            return Some(errors::form_response("RepostPost", response::Status::BackendError).await);
         }
-        let tweet = service_request::Tweet::from_uuid(self.tweet_id.clone()).await;
-        if tweet.is_err() {
-            return Some(
-                errors::form_response("RepostTweet", response::Status::BackendError).await,
-            );
+        let post = service_request::Post::from_uuid(self.post_id.clone()).await;
+        if post.is_err() {
+            return Some(errors::form_response("RepostPost", response::Status::BackendError).await);
         }
-        let mut tweet = tweet.unwrap();
-        if let Some(metrics) = tweet.public_metrics.as_mut() {
-            metrics.retweet_count += 1;
+        let mut post = post.unwrap();
+        if let Some(metrics) = post.public_metrics.as_mut() {
+            metrics.repost_count += 1;
         }
-        let resp = tweet
-            .new(service_request::TweetAdd::Repost, tweet.encode_to_vec())
+        let resp = post
+            .new(service_request::PostAdd::Repost, post.encode_to_vec())
             .await;
         if resp.is_err() {
-            return Some(
-                errors::form_response("RepostTweet", response::Status::BackendError).await,
-            );
+            return Some(errors::form_response("RepostPost", response::Status::BackendError).await);
         }
         Some(response::Response {
-            operation: Some(response::response::Operation::RepostTweet(
-                response::RepostTweet {
+            operation: Some(response::response::Operation::RepostPost(
+                response::RepostPost {
                     status: response::Status::Success as i32,
                     message: None,
                 },
@@ -671,16 +646,16 @@ impl request::RepostTweet {
     }
 }
 
-impl request::ReplyToTweet {
+impl request::ReplyToPost {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
             return Some(
-                errors::form_response("ReplyToTweet", response::Status::BackendError).await,
+                errors::form_response("ReplyToPost", response::Status::BackendError).await,
             );
         }
         if self.reply.clone().is_none() {
             return Some(
-                errors::form_response("ReplyToTweet", response::Status::BackendError).await,
+                errors::form_response("ReplyToPost", response::Status::BackendError).await,
             );
         }
         let reply = self.reply.clone().unwrap();
@@ -694,12 +669,12 @@ impl request::ReplyToTweet {
         let resp = reply.new().await;
         if resp.is_err() {
             return Some(
-                errors::form_response("ReplyToTweet", response::Status::BackendError).await,
+                errors::form_response("ReplyToPost", response::Status::BackendError).await,
             );
         }
         Some(response::Response {
-            operation: Some(response::response::Operation::ReplyToTweet(
-                response::ReplyToTweet {
+            operation: Some(response::response::Operation::ReplyToPost(
+                response::ReplyToPost {
                     status: response::Status::Success as i32,
                     message: None,
                     reply_id: bytes,
@@ -714,13 +689,13 @@ impl request::EditReply {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("EditReply", response::Status::BackendError).await);
         }
-        let tweet = service_request::Tweet::from_uuid(self.tweet_id.clone()).await;
-        if tweet.is_err() {
+        let post = service_request::Post::from_uuid(self.post_id.clone()).await;
+        if post.is_err() {
             return Some(errors::form_response("EditReply", response::Status::BackendError).await);
         }
-        let tweet = tweet.unwrap();
+        let post = post.unwrap();
         let reply = service_request::Reply::from_uuid(
-            tweet.tweet_id.clone(),
+            post.post_id.clone(),
             self.reply_id.clone(),
             self.parent_id.clone(),
         )
@@ -750,10 +725,10 @@ impl request::EditReply {
     }
 }
 
-impl response::Reply {
+impl common::Reply {
     pub fn from(reply: service_response::Reply) -> Self {
         Self {
-            tweet_id: reply.tweet_id.clone(),
+            post_id: reply.post_id.clone(),
             user_name: reply.user_name.clone(),
             text: reply.text.clone(),
             reply_id: reply.reply_id.clone(),
@@ -764,7 +739,7 @@ impl response::Reply {
     }
     pub fn from_request(reply: service_request::Reply) -> Self {
         Self {
-            tweet_id: reply.tweet_id.clone(),
+            post_id: reply.post_id.clone(),
             user_name: reply.user_name.clone(),
             text: reply.text.clone(),
             reply_id: reply.reply_id.clone(),
@@ -779,13 +754,13 @@ impl request::GetReply {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("GetReply", response::Status::BackendError).await);
         }
-        let tweet = service_request::Tweet::from_uuid(self.tweet_id.clone()).await;
-        if tweet.is_err() {
+        let post = service_request::Post::from_uuid(self.post_id.clone()).await;
+        if post.is_err() {
             return Some(errors::form_response("GetReply", response::Status::BackendError).await);
         }
-        let tweet = tweet.unwrap();
+        let post = post.unwrap();
         let reply = service_request::Reply::from_uuid(
-            tweet.tweet_id.clone(),
+            post.post_id.clone(),
             self.reply_id.clone(),
             self.parent_id.clone(),
         )
@@ -794,7 +769,7 @@ impl request::GetReply {
             return Some(errors::form_response("GetReply", response::Status::BackendError).await);
         }
         let reply = reply.unwrap();
-        let reply = response::Reply::from_request(reply);
+        let reply = common::Reply::from_request(reply);
         Some(response::Response {
             operation: Some(response::response::Operation::GetReply(
                 response::GetReply {
@@ -814,14 +789,14 @@ impl request::ListReplies {
                 errors::form_response("ListReplies", response::Status::BackendError).await,
             );
         }
-        let tweet = service_request::Tweet::from_uuid(self.tweet_id.clone()).await;
-        if tweet.is_err() {
+        let post = service_request::Post::from_uuid(self.post_id.clone()).await;
+        if post.is_err() {
             return Some(
                 errors::form_response("ListReplies", response::Status::BackendError).await,
             );
         }
-        let tweet = tweet.unwrap();
-        let replies = tweet.list_replies(self.parent_id.clone()).await;
+        let post = post.unwrap();
+        let replies = post.list_replies(self.parent_id.clone()).await;
         if replies.is_err() {
             return Some(
                 errors::form_response("ListReplies", response::Status::BackendError).await,
@@ -830,7 +805,7 @@ impl request::ListReplies {
         let replies = replies.unwrap();
         let mut objects = Vec::new();
         for reply in replies {
-            objects.push(response::Reply::from(reply));
+            objects.push(common::Reply::from(reply));
         }
         Some(response::Response {
             operation: Some(response::response::Operation::ListReplies(
@@ -851,15 +826,15 @@ impl request::RemoveReply {
                 errors::form_response("RemoveReply", response::Status::BackendError).await,
             );
         }
-        let tweet = service_request::Tweet::from_uuid(self.tweet_id.clone()).await;
-        if tweet.is_err() {
+        let post = service_request::Post::from_uuid(self.post_id.clone()).await;
+        if post.is_err() {
             return Some(
                 errors::form_response("RemoveReply", response::Status::BackendError).await,
             );
         }
-        let tweet = tweet.unwrap();
+        let post = post.unwrap();
         let reply = service_request::Reply::from_uuid(
-            tweet.tweet_id.clone(),
+            post.post_id.clone(),
             self.reply_id.clone(),
             self.parent_id.clone(),
         )

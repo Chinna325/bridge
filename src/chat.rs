@@ -1,9 +1,12 @@
 use crate::{
-    Context, backend, request,
-    response::{self, Response},
-    service_request::ServiceRequest,
+    Context, backend,
+    protos::{
+        common, request,
+        response::{self, Response},
+        service_request::ServiceRequest,
+    },
 };
-use crate::{errors, service_request, service_response};
+use crate::{errors, protos::service_request, protos::service_response};
 use chrono::Utc;
 // use futures::sink::Feed;
 use uuid::Uuid;
@@ -30,11 +33,11 @@ impl service_request::Message {
         Ok(())
     }
 
-    pub async fn get(chat_id: Vec<u8>, message_id: u64) -> Result<Self, ()> {
+    pub async fn get(conversation_id: Vec<u8>, message_id: u64) -> Result<Self, ()> {
         let req = service_request::ServiceRequest {
             operation: Some(service_request::service_request::Operation::GetMessage(
                 service_request::GetMessage {
-                    chat_id: chat_id.clone(),
+                    conversation_id: conversation_id.clone(),
                     message_id: message_id,
                 },
             )),
@@ -58,7 +61,7 @@ impl service_request::Message {
                 content: message.content.clone(),
                 created_at: message.created_at,
                 message_id: message_id,
-                chat_id: chat_id.clone(),
+                conversation_id: conversation_id.clone(),
             });
         }
         Err(())
@@ -67,7 +70,7 @@ impl service_request::Message {
         let req = service_request::ServiceRequest {
             operation: Some(service_request::service_request::Operation::EditMessage(
                 service_request::EditMessage {
-                    chat_id: self.chat_id.clone(),
+                    conversation_id: self.conversation_id.clone(),
                     content: self.content.clone(),
                     message_id: self.message_id.clone(),
                 },
@@ -90,7 +93,7 @@ impl service_request::Message {
         let req = service_request::ServiceRequest {
             operation: Some(service_request::service_request::Operation::RemoveMessage(
                 service_request::RemoveMessage {
-                    chat_id: self.chat_id.clone(),
+                    conversation_id: self.conversation_id.clone(),
                     user_name: self.owner.clone(),
                     message_id: self.message_id.clone(),
                     message_remove: remove as i32,
@@ -114,7 +117,7 @@ impl service_request::Message {
         let req = service_request::ServiceRequest {
             operation: Some(service_request::service_request::Operation::ReadMessage(
                 service_request::ReadMessage {
-                    chat_id: self.chat_id.clone(),
+                    conversation_id: self.conversation_id.clone(),
                     message_id: self.message_id.clone(),
                     user_name: user_name.clone(),
                 },
@@ -134,13 +137,13 @@ impl service_request::Message {
     }
 }
 
-impl service_request::Chat {
+impl service_request::Conversation {
     pub async fn new(&self) -> Result<(), ()> {
         let req = service_request::ServiceRequest {
             operation: Some(
-                service_request::service_request::Operation::CreateOneToOneChat(
-                    service_request::CreateOneToOneChat {
-                        chat: Some(self.clone()),
+                service_request::service_request::Operation::CreateOneToOneConversation(
+                    service_request::CreateOneToOneConversation {
+                        conversation: Some(self.clone()),
                     },
                 ),
             ),
@@ -148,7 +151,8 @@ impl service_request::Chat {
         let conn = backend::ceate_grpc_connection().await;
         let resp = req.execute(conn).await.ok_or(())?;
         if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::CreateOneToOneChat(resp)),
+            operation:
+                Some(service_response::service_response::Operation::CreateOneToOneConversation(resp)),
         } = resp
         {
             if resp.status != service_response::Status::Success as i32 {
@@ -158,18 +162,20 @@ impl service_request::Chat {
         Ok(())
     }
 
-    pub async fn get(chat_id: Vec<u8>) -> Result<Self, ()> {
+    pub async fn get(conversation_id: Vec<u8>) -> Result<Self, ()> {
         let req = service_request::ServiceRequest {
-            operation: Some(service_request::service_request::Operation::GetChat(
-                service_request::GetChat {
-                    chat_id: chat_id.clone(),
-                },
-            )),
+            operation: Some(
+                service_request::service_request::Operation::GetConversation(
+                    service_request::GetConversation {
+                        conversation_id: conversation_id.clone(),
+                    },
+                ),
+            ),
         };
         let conn = backend::ceate_grpc_connection().await;
         let resp = req.execute(conn).await.ok_or(())?;
         if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::GetChat(resp)),
+            operation: Some(service_response::service_response::Operation::GetConversation(resp)),
         } = resp
         {
             if resp.status != service_response::Status::Success as i32 {
@@ -181,7 +187,7 @@ impl service_request::Chat {
             }
             let chat = chat.unwrap();
             return Ok(Self {
-                chat_id: chat_id.clone(),
+                conversation_id: conversation_id.clone(),
                 user_name: chat.user_name.clone(),
                 last_message_id: chat.last_message_id,
             });
@@ -195,19 +201,21 @@ impl service_request::Chat {
 
     pub async fn remove(&self, message_id: u64) -> Result<(), ()> {
         let req = ServiceRequest {
-            operation: Some(service_request::service_request::Operation::ClearChat(
-                service_request::ClearChat {
-                    chat_id: self.chat_id.clone(),
-                    user_name: self.user_name.clone(),
-                    message_id: message_id,
-                },
-            )),
+            operation: Some(
+                service_request::service_request::Operation::ClearConversation(
+                    service_request::ClearConversation {
+                        conversation_id: self.conversation_id.clone(),
+                        user_name: self.user_name.clone(),
+                        message_id: message_id,
+                    },
+                ),
+            ),
         };
 
         let conn = backend::ceate_grpc_connection().await;
         let resp = req.execute(conn).await.ok_or(())?;
         if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::ClearChat(resp)),
+            operation: Some(service_response::service_response::Operation::ClearConversation(resp)),
         } = resp
         {
             if resp.status != service_response::Status::Success as i32 {
@@ -363,40 +371,43 @@ impl service_request::Group {
     }
 }
 
-impl request::CreateOneToOneChat {
+impl request::CreateOneToOneConversation {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
             return Some(
-                errors::form_response("CreateOneToOneChat", response::Status::BackendError).await,
+                errors::form_response("CreateOneToOneConversation", response::Status::BackendError)
+                    .await,
             );
         }
         let user = service_response::User::get(self.user_name.clone()).await;
         if user.is_none() {
             return Some(
-                errors::form_response("CreateOneToOneChat", response::Status::BackendError).await,
+                errors::form_response("CreateOneToOneConversation", response::Status::BackendError)
+                    .await,
             );
         }
         let uuid = Uuid::new_v4();
-        let mut chat_id = uuid.as_bytes().to_vec();
+        let mut conversation_id = uuid.as_bytes().to_vec();
         let millis = chrono::Utc::now().timestamp_millis() as u64;
-        chat_id.extend_from_slice(&millis.to_be_bytes());
-        let chat = service_request::Chat {
-            chat_id: chat_id.clone(),
+        conversation_id.extend_from_slice(&millis.to_be_bytes());
+        let chat = service_request::Conversation {
+            conversation_id: conversation_id.clone(),
             last_message_id: 0_u64,
             user_name: self.user_name.clone(),
         };
         let resp = chat.new().await;
         if resp.is_err() {
             return Some(
-                errors::form_response("CreateOneToOneChat", response::Status::BackendError).await,
+                errors::form_response("CreateOneToOneConversation", response::Status::BackendError)
+                    .await,
             );
         }
         Some(response::Response {
-            operation: Some(response::response::Operation::CreateOneToOneChat(
-                response::CreateOneToOneChat {
+            operation: Some(response::response::Operation::CreateOneToOneConversation(
+                response::CreateOneToOneConversation {
                     status: response::Status::Success as i32,
                     message: None,
-                    chat_id: chat_id.clone(),
+                    conversation_id: conversation_id.clone(),
                 },
             )),
         })
@@ -421,7 +432,7 @@ impl request::CreateGroup {
                 errors::form_response("CreateGroup", response::Status::BackendError).await,
             );
         }
-        // let group = service_request::Chat::get(self.)
+        // let group = service_request::Conversation::get(self.)
         //check group with same name is already exists
         let uuid = Uuid::new_v4();
         let mut group_id = uuid.as_bytes().to_vec();
@@ -447,7 +458,7 @@ impl request::CreateGroup {
                 response::CreateGroup {
                     status: response::Status::Success as i32,
                     message: None,
-                    chat_id: group_id.clone(),
+                    conversation_id: group_id.clone(),
                 },
             )),
         })
@@ -507,7 +518,7 @@ impl request::AddUserToGroup {
                 errors::form_response("AddUserToGroup", response::Status::BackendError).await,
             );
         }
-        let group = service_request::Group::get(self.chat_id.clone()).await;
+        let group = service_request::Group::get(self.conversation_id.clone()).await;
         if group.is_err() {
             return Some(
                 errors::form_response("AddUserToGroup", response::Status::BackendError).await,
@@ -570,7 +581,7 @@ impl request::ExitFromGroup {
                 errors::form_response("ExitFromGroup", response::Status::BackendError).await,
             );
         }
-        let group = service_request::Group::get(self.chat_id.clone()).await;
+        let group = service_request::Group::get(self.conversation_id.clone()).await;
         if group.is_err() {
             return Some(
                 errors::form_response("ExitFromGroup", response::Status::BackendError).await,
@@ -606,7 +617,7 @@ impl request::ExitFromGroup {
     }
 }
 
-impl request::GetChat {
+impl request::GetConversation {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("UnFollow", response::Status::BackendError).await);
@@ -622,7 +633,7 @@ impl request::RemoveUserFromGroup {
                 errors::form_response("RemoveUserFromGroup", response::Status::BackendError).await,
             );
         }
-        let group = service_request::Group::get(self.chat_id.clone()).await;
+        let group = service_request::Group::get(self.conversation_id.clone()).await;
         if group.is_err() {
             return Some(
                 errors::form_response("RemoveUserFromGroup", response::Status::BackendError).await,
@@ -658,24 +669,30 @@ impl request::RemoveUserFromGroup {
     }
 }
 
-impl request::ClearChat {
+impl request::ClearConversation {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
-            return Some(errors::form_response("ClearChat", response::Status::BackendError).await);
+            return Some(
+                errors::form_response("ClearConversation", response::Status::BackendError).await,
+            );
         }
 
-        let chat = service_request::Chat::get(self.chat_id.clone()).await;
+        let chat = service_request::Conversation::get(self.conversation_id.clone()).await;
         if chat.is_err() {
-            return Some(errors::form_response("ClearChat", response::Status::BackendError).await);
+            return Some(
+                errors::form_response("ClearConversation", response::Status::BackendError).await,
+            );
         }
         let chat = chat.unwrap();
         let resp = chat.remove(chat.last_message_id).await;
         if resp.is_err() {
-            return Some(errors::form_response("ClearChat", response::Status::BackendError).await);
+            return Some(
+                errors::form_response("ClearConversation", response::Status::BackendError).await,
+            );
         }
         Some(response::Response {
-            operation: Some(response::response::Operation::ClearChat(
-                response::ClearChat {
+            operation: Some(response::response::Operation::ClearConversation(
+                response::ClearConversation {
                     status: response::Status::Success as i32,
                     message: None,
                 },
@@ -699,7 +716,7 @@ impl request::SendMessage {
         let message = service_request::Message {
             owner: ctx.user_name.clone(),
             content: self.content.clone(),
-            chat_id: self.chat_id.clone(),
+            conversation_id: self.conversation_id.clone(),
             created_at: chrono::Utc::now().timestamp() as u64,
             message_id: 0_u64,
         };
@@ -727,14 +744,15 @@ impl request::RemoveMessage {
                 errors::form_response("RemoveMessage", response::Status::BackendError).await,
             );
         }
-        let message = service_request::Message::get(self.chat_id.clone(), self.message_id).await;
+        let message =
+            service_request::Message::get(self.conversation_id.clone(), self.message_id).await;
         if message.is_err() {
             return Some(
                 errors::form_response("RemoveMessage", response::Status::BackendError).await,
             );
         }
         let message = message.unwrap();
-        if self.message_remove == request::MessageRemove::RemoveForAll as i32
+        if self.message_remove == common::MessageRemove::RemoveForAll as i32
             && message.owner != ctx.user_name.clone()
         {
             return Some(
@@ -742,7 +760,7 @@ impl request::RemoveMessage {
             );
         }
         let mut remove = service_request::MessageRemove::DeleteForMe;
-        if self.message_remove == request::MessageRemove::RemoveForAll as i32 {
+        if self.message_remove == common::MessageRemove::RemoveForAll as i32 {
             remove = service_request::MessageRemove::DeleteForEveryOne;
         }
         let resp = message.remove(remove).await;
@@ -769,7 +787,8 @@ impl request::EditMessage {
                 errors::form_response("EditMessage", response::Status::BackendError).await,
             );
         }
-        let message = service_request::Message::get(self.chat_id.clone(), self.message_id).await;
+        let message =
+            service_request::Message::get(self.conversation_id.clone(), self.message_id).await;
         if message.is_err() {
             return Some(
                 errors::form_response("EditMessage", response::Status::BackendError).await,
@@ -804,14 +823,14 @@ impl request::EditMessage {
     }
 }
 
-impl request::ListChat {
+impl request::ListConversation {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("UnFollow", response::Status::BackendError).await);
         }
         Some(response::Response {
-            operation: Some(response::response::Operation::ListChat(
-                response::ListChat {
+            operation: Some(response::response::Operation::ListConversation(
+                response::ListConversation {
                     status: response::Status::Success as i32,
                     message: None,
                     messages: Vec::new(),
@@ -829,7 +848,8 @@ impl request::ReadMessage {
             );
         }
 
-        let message = service_request::Message::get(self.chat_id.clone(), self.message_id).await;
+        let message =
+            service_request::Message::get(self.conversation_id.clone(), self.message_id).await;
         if message.is_err() {
             return Some(
                 errors::form_response("ReadMessage", response::Status::BackendError).await,

@@ -85,9 +85,9 @@ pub struct RemoveProfilePicture {
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Tweet {
+pub struct Post {
     #[prost(bytes="vec", tag="1")]
-    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    pub post_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag="2")]
     pub text: ::prost::alloc::string::String,
     #[prost(string, tag="3")]
@@ -104,7 +104,7 @@ pub struct Tweet {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PublicMetrics {
     #[prost(int32, tag="1")]
-    pub retweet_count: i32,
+    pub repost_count: i32,
     #[prost(int32, tag="2")]
     pub reply_count: i32,
     #[prost(int32, tag="3")]
@@ -123,7 +123,7 @@ pub struct PublicMetrics {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Reply {
     #[prost(bytes="vec", tag="1")]
-    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    pub post_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag="2")]
     pub user_name: ::prost::alloc::string::String,
     #[prost(string, tag="3")]
@@ -144,36 +144,36 @@ pub struct Reply {
     pub created_at: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddTweet {
+pub struct AddPost {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetTweet {
+pub struct GetPost {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(bytes="vec", tag="2")]
-    pub tweet_data: ::prost::alloc::vec::Vec<u8>,
+    pub post_data: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ListTweets {
+pub struct ListPosts {
     #[prost(bytes="vec", repeated, tag="1")]
-    pub tweet_ids: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
+    pub post_ids: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
     #[prost(enumeration="Status", tag="2")]
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RemoveTweet {
+pub struct RemovePost {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateTweet {
+pub struct UpdatePost {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct TweetReact {
+pub struct PostReact {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
 }
@@ -207,7 +207,7 @@ pub struct GetReply {
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateOneToOneChat {
+pub struct CreateOneToOneConversation {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
 }
@@ -260,18 +260,18 @@ pub struct ExitFromGroup {
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Chat {
+pub struct Conversation {
     #[prost(string, tag="2")]
     pub user_name: ::prost::alloc::string::String,
     #[prost(uint64, tag="3")]
     pub last_message_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetChat {
+pub struct GetConversation {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(message, optional, tag="2")]
-    pub chat: ::core::option::Option<Chat>,
+    pub chat: ::core::option::Option<Conversation>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SendMessage {
@@ -279,7 +279,7 @@ pub struct SendMessage {
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ClearChat {
+pub struct ClearConversation {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
 }
@@ -294,7 +294,7 @@ pub struct EditMessage {
     pub status: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ListChat {
+pub struct ListConversation {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(message, repeated, tag="2")]
@@ -387,17 +387,17 @@ pub mod service_response {
         #[prost(message, tag="11")]
         RemoveProfilePicture(super::RemoveProfilePicture),
         #[prost(message, tag="12")]
-        AddTweet(super::AddTweet),
+        AddPost(super::AddPost),
         #[prost(message, tag="13")]
-        GetTweet(super::GetTweet),
+        GetPost(super::GetPost),
         #[prost(message, tag="14")]
-        RemoveTweet(super::RemoveTweet),
+        RemovePost(super::RemovePost),
         #[prost(message, tag="15")]
-        ListTweets(super::ListTweets),
+        ListPosts(super::ListPosts),
         #[prost(message, tag="16")]
-        UpdateTweet(super::UpdateTweet),
+        UpdatePost(super::UpdatePost),
         #[prost(message, tag="17")]
-        TweetReact(super::TweetReact),
+        PostReact(super::PostReact),
         #[prost(message, tag="18")]
         AddReply(super::AddReply),
         #[prost(message, tag="19")]
@@ -409,7 +409,7 @@ pub mod service_response {
         #[prost(message, tag="22")]
         ListReplies(super::ListReplies),
         #[prost(message, tag="29")]
-        CreateOneToOneChat(super::CreateOneToOneChat),
+        CreateOneToOneConversation(super::CreateOneToOneConversation),
         #[prost(message, tag="30")]
         CreateGroup(super::CreateGroup),
         #[prost(message, tag="31")]
@@ -425,9 +425,9 @@ pub mod service_response {
         #[prost(message, tag="36")]
         ExitFromGroup(super::ExitFromGroup),
         #[prost(message, tag="37")]
-        GetChat(super::GetChat),
+        GetConversation(super::GetConversation),
         #[prost(message, tag="38")]
-        ClearChat(super::ClearChat),
+        ClearConversation(super::ClearConversation),
         #[prost(message, tag="39")]
         SendMessage(super::SendMessage),
         #[prost(message, tag="40")]
@@ -435,7 +435,7 @@ pub mod service_response {
         #[prost(message, tag="41")]
         EditMessage(super::EditMessage),
         #[prost(message, tag="42")]
-        ListChat(super::ListChat),
+        ListConversation(super::ListConversation),
         #[prost(message, tag="43")]
         ReadMessage(super::ReadMessage),
         #[prost(message, tag="44")]

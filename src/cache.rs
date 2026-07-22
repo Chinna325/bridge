@@ -1,4 +1,7 @@
-use crate::{backend, service_request, service_response};
+use crate::{
+    backend,
+    protos::{service_request, service_response},
+};
 
 pub struct Cache {}
 
@@ -60,7 +63,6 @@ impl Cache {
             if resp.status != service_response::Status::Success as i32 {
                 return None;
             }
-
         }
         Some(())
     }

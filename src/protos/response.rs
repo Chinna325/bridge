@@ -87,41 +87,41 @@ pub struct ListFollowers {
     pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct AddTweet {
+pub struct AddPost {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(bytes="vec", tag="3")]
-    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
+    pub post_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RemoveTweet {
+pub struct RemovePost {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ListTweets {
+pub struct ListPosts {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(bytes="vec", repeated, tag="3")]
-    pub tweets: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
+    pub posts: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetTweet {
+pub struct GetPost {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(message, optional, tag="3")]
-    pub tweet: ::core::option::Option<Tweet>,
+    pub post: ::core::option::Option<super::common::Post>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UpdateTweet {
+pub struct UpdatePost {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(string, optional, tag="2")]
@@ -151,14 +151,14 @@ pub struct GetProfilePicture {
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RepostTweet {
+pub struct RepostPost {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ReplyToTweet {
+pub struct ReplyToPost {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(string, optional, tag="2")]
@@ -187,7 +187,7 @@ pub struct GetReply {
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(message, optional, tag="3")]
-    pub reply: ::core::option::Option<Reply>,
+    pub reply: ::core::option::Option<super::common::Reply>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListReplies {
@@ -196,17 +196,17 @@ pub struct ListReplies {
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(message, repeated, tag="3")]
-    pub replies: ::prost::alloc::vec::Vec<Reply>,
+    pub replies: ::prost::alloc::vec::Vec<super::common::Reply>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ReactToTweet {
+pub struct ReactToPost {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct UndoReactToTweet {
+pub struct UndoReactToPost {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(string, optional, tag="2")]
@@ -220,71 +220,9 @@ pub struct User {
     pub create_at: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Tweet {
+pub struct CreateOneToOneConversation {
     #[prost(bytes="vec", tag="1")]
-    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
-    #[prost(string, tag="2")]
-    pub text: ::prost::alloc::string::String,
-    #[prost(uint64, tag="3")]
-    pub created_at: u64,
-    #[prost(string, tag="4")]
-    pub owner: ::prost::alloc::string::String,
-    #[prost(message, optional, tag="5")]
-    pub public_metrics: ::core::option::Option<PublicMetrics>,
-    #[prost(string, repeated, tag="6")]
-    pub hashtags: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(string, repeated, tag="7")]
-    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct PublicMetrics {
-    #[prost(int32, tag="1")]
-    pub retweet_count: i32,
-    #[prost(int32, tag="2")]
-    pub reply_count: i32,
-    #[prost(int32, tag="3")]
-    pub like_count: i32,
-    #[prost(int32, tag="4")]
-    pub quote_count: i32,
-    #[prost(int32, tag="5")]
-    pub bookmark_count: i32,
-    #[prost(int32, tag="6")]
-    pub impression_count: i32,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Reply {
-    #[prost(bytes="vec", tag="1")]
-    pub tweet_id: ::prost::alloc::vec::Vec<u8>,
-    #[prost(string, tag="2")]
-    pub user_name: ::prost::alloc::string::String,
-    #[prost(string, tag="3")]
-    pub text: ::prost::alloc::string::String,
-    #[prost(bytes="vec", tag="4")]
-    pub reply_id: ::prost::alloc::vec::Vec<u8>,
-    #[prost(bytes="vec", tag="5")]
-    pub parent_id: ::prost::alloc::vec::Vec<u8>,
-    #[prost(int32, tag="6")]
-    pub likes: i32,
-    #[prost(int32, tag="7")]
-    pub dislikes: i32,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Message {
-    #[prost(string, tag="1")]
-    pub owner: ::prost::alloc::string::String,
-    #[prost(string, tag="2")]
-    pub content: ::prost::alloc::string::String,
-    #[prost(uint64, tag="3")]
-    pub created_at: u64,
-    #[prost(uint64, tag="4")]
-    pub message_id: u64,
-    #[prost(bytes="vec", tag="5")]
-    pub chat_id: ::prost::alloc::vec::Vec<u8>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateOneToOneChat {
-    #[prost(bytes="vec", tag="1")]
-    pub chat_id: ::prost::alloc::vec::Vec<u8>,
+    pub conversation_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(enumeration="Status", tag="2")]
     pub status: i32,
     #[prost(string, optional, tag="3")]
@@ -297,7 +235,7 @@ pub struct CreateGroup {
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(bytes="vec", tag="3")]
-    pub chat_id: ::prost::alloc::vec::Vec<u8>,
+    pub conversation_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveGroup {
@@ -344,13 +282,13 @@ pub struct ExitFromGroup {
     pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetChat {
+pub struct GetConversation {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(message, optional, tag="3")]
-    pub chat: ::core::option::Option<Chat>,
+    pub conversation: ::core::option::Option<Conversation>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetGroup {
@@ -362,7 +300,7 @@ pub struct GetGroup {
     pub group: ::core::option::Option<Group>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ClearChat {
+pub struct ClearConversation {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(string, optional, tag="2")]
@@ -390,13 +328,13 @@ pub struct EditMessage {
     pub message: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ListChat {
+pub struct ListConversation {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(message, repeated, tag="3")]
-    pub messages: ::prost::alloc::vec::Vec<Message>,
+    pub messages: ::prost::alloc::vec::Vec<super::common::Message>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Group {
@@ -416,13 +354,13 @@ pub struct Group {
     pub last_message_at: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Chat {
+pub struct Conversation {
     #[prost(string, tag="2")]
     pub user_name: ::prost::alloc::string::String,
     #[prost(uint64, tag="3")]
     pub last_message_id: u64,
     #[prost(bytes="vec", tag="1")]
-    pub chat_id: ::prost::alloc::vec::Vec<u8>,
+    pub conversation_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReadMessage {
@@ -437,7 +375,7 @@ pub struct GetMessage {
     pub status: i32,
     /// optional string message=2;
     #[prost(message, optional, tag="3")]
-    pub message: ::core::option::Option<Message>,
+    pub message: ::core::option::Option<super::common::Message>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Response {
@@ -479,19 +417,19 @@ pub mod response {
         #[prost(message, tag="15")]
         ListFollowers(super::ListFollowers),
         #[prost(message, tag="16")]
-        AddTweet(super::AddTweet),
+        AddPost(super::AddPost),
         #[prost(message, tag="17")]
-        RemoveTweet(super::RemoveTweet),
+        RemovePost(super::RemovePost),
         #[prost(message, tag="18")]
-        ListTweets(super::ListTweets),
+        ListPosts(super::ListPosts),
         #[prost(message, tag="19")]
-        GetTweet(super::GetTweet),
+        GetPost(super::GetPost),
         #[prost(message, tag="20")]
-        UpdateTweet(super::UpdateTweet),
+        UpdatePost(super::UpdatePost),
         #[prost(message, tag="21")]
-        RepostTweet(super::RepostTweet),
+        RepostPost(super::RepostPost),
         #[prost(message, tag="22")]
-        ReplyToTweet(super::ReplyToTweet),
+        ReplyToPost(super::ReplyToPost),
         #[prost(message, tag="23")]
         EditReply(super::EditReply),
         #[prost(message, tag="24")]
@@ -501,11 +439,11 @@ pub mod response {
         #[prost(message, tag="26")]
         ListReplies(super::ListReplies),
         #[prost(message, tag="27")]
-        ReactToTweet(super::ReactToTweet),
+        ReactToPost(super::ReactToPost),
         #[prost(message, tag="28")]
-        UndoReactToTweet(super::UndoReactToTweet),
+        UndoReactToPost(super::UndoReactToPost),
         #[prost(message, tag="29")]
-        CreateOneToOneChat(super::CreateOneToOneChat),
+        CreateOneToOneConversation(super::CreateOneToOneConversation),
         #[prost(message, tag="30")]
         CreateGroup(super::CreateGroup),
         #[prost(message, tag="31")]
@@ -521,9 +459,9 @@ pub mod response {
         #[prost(message, tag="36")]
         ExitFromGroup(super::ExitFromGroup),
         #[prost(message, tag="37")]
-        GetChat(super::GetChat),
+        GetConversation(super::GetConversation),
         #[prost(message, tag="38")]
-        ClearChat(super::ClearChat),
+        ClearConversation(super::ClearConversation),
         #[prost(message, tag="39")]
         SendMessage(super::SendMessage),
         #[prost(message, tag="40")]
@@ -531,7 +469,7 @@ pub mod response {
         #[prost(message, tag="41")]
         EditMessage(super::EditMessage),
         #[prost(message, tag="42")]
-        ListChat(super::ListChat),
+        ListConversation(super::ListConversation),
         #[prost(message, tag="43")]
         ReadMessage(super::ReadMessage),
         #[prost(message, tag="44")]

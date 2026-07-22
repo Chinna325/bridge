@@ -310,11 +310,11 @@ pub mod service_server_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn add_tweet(
+        pub async fn add_post(
             &mut self,
-            request: impl tonic::IntoRequest<super::super::service_request::AddTweet>,
+            request: impl tonic::IntoRequest<super::super::service_request::AddPost>,
         ) -> Result<
-            tonic::Response<super::super::service_response::AddTweet>,
+            tonic::Response<super::super::service_response::AddPost>,
             tonic::Status,
         > {
             self.inner
@@ -328,15 +328,15 @@ pub mod service_server_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/AddTweet",
+                "/service_grpc.ServiceServer/AddPost",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn get_tweet(
+        pub async fn get_post(
             &mut self,
-            request: impl tonic::IntoRequest<super::super::service_request::GetTweet>,
+            request: impl tonic::IntoRequest<super::super::service_request::GetPost>,
         ) -> Result<
-            tonic::Response<super::super::service_response::GetTweet>,
+            tonic::Response<super::super::service_response::GetPost>,
             tonic::Status,
         > {
             self.inner
@@ -350,15 +350,15 @@ pub mod service_server_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/GetTweet",
+                "/service_grpc.ServiceServer/GetPost",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn remove_tweet(
+        pub async fn remove_post(
             &mut self,
-            request: impl tonic::IntoRequest<super::super::service_request::RemoveTweet>,
+            request: impl tonic::IntoRequest<super::super::service_request::RemovePost>,
         ) -> Result<
-            tonic::Response<super::super::service_response::RemoveTweet>,
+            tonic::Response<super::super::service_response::RemovePost>,
             tonic::Status,
         > {
             self.inner
@@ -372,15 +372,15 @@ pub mod service_server_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/RemoveTweet",
+                "/service_grpc.ServiceServer/RemovePost",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn update_tweet(
+        pub async fn update_post(
             &mut self,
-            request: impl tonic::IntoRequest<super::super::service_request::UpdateTweet>,
+            request: impl tonic::IntoRequest<super::super::service_request::UpdatePost>,
         ) -> Result<
-            tonic::Response<super::super::service_response::UpdateTweet>,
+            tonic::Response<super::super::service_response::UpdatePost>,
             tonic::Status,
         > {
             self.inner
@@ -394,15 +394,15 @@ pub mod service_server_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/UpdateTweet",
+                "/service_grpc.ServiceServer/UpdatePost",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn list_tweets(
+        pub async fn list_posts(
             &mut self,
-            request: impl tonic::IntoRequest<super::super::service_request::ListTweets>,
+            request: impl tonic::IntoRequest<super::super::service_request::ListPosts>,
         ) -> Result<
-            tonic::Response<super::super::service_response::ListTweets>,
+            tonic::Response<super::super::service_response::ListPosts>,
             tonic::Status,
         > {
             self.inner
@@ -416,15 +416,15 @@ pub mod service_server_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/ListTweets",
+                "/service_grpc.ServiceServer/ListPosts",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn tweet_react(
+        pub async fn post_react(
             &mut self,
-            request: impl tonic::IntoRequest<super::super::service_request::TweetReact>,
+            request: impl tonic::IntoRequest<super::super::service_request::PostReact>,
         ) -> Result<
-            tonic::Response<super::super::service_response::TweetReact>,
+            tonic::Response<super::super::service_response::PostReact>,
             tonic::Status,
         > {
             self.inner
@@ -438,7 +438,7 @@ pub mod service_server_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/TweetReact",
+                "/service_grpc.ServiceServer/PostReact",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -574,11 +574,13 @@ pub mod service_server_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn clear_chat(
+        pub async fn clear_conversation(
             &mut self,
-            request: impl tonic::IntoRequest<super::super::service_request::ClearChat>,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::ClearConversation,
+            >,
         ) -> Result<
-            tonic::Response<super::super::service_response::ClearChat>,
+            tonic::Response<super::super::service_response::ClearConversation>,
             tonic::Status,
         > {
             self.inner
@@ -592,15 +594,17 @@ pub mod service_server_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/ClearChat",
+                "/service_grpc.ServiceServer/ClearConversation",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn get_chat(
+        pub async fn get_conversation(
             &mut self,
-            request: impl tonic::IntoRequest<super::super::service_request::GetChat>,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::GetConversation,
+            >,
         ) -> Result<
-            tonic::Response<super::super::service_response::GetChat>,
+            tonic::Response<super::super::service_response::GetConversation>,
             tonic::Status,
         > {
             self.inner
@@ -614,7 +618,7 @@ pub mod service_server_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/GetChat",
+                "/service_grpc.ServiceServer/GetConversation",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -778,13 +782,13 @@ pub mod service_server_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn create_one_to_one_chat(
+        pub async fn create_one_to_one_conversation(
             &mut self,
             request: impl tonic::IntoRequest<
-                super::super::service_request::CreateOneToOneChat,
+                super::super::service_request::CreateOneToOneConversation,
             >,
         ) -> Result<
-            tonic::Response<super::super::service_response::CreateOneToOneChat>,
+            tonic::Response<super::super::service_response::CreateOneToOneConversation>,
             tonic::Status,
         > {
             self.inner
@@ -798,7 +802,7 @@ pub mod service_server_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/CreateOneToOneChat",
+                "/service_grpc.ServiceServer/CreateOneToOneConversation",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -848,11 +852,13 @@ pub mod service_server_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn list_chat(
+        pub async fn list_conversation(
             &mut self,
-            request: impl tonic::IntoRequest<super::super::service_request::ListChat>,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::ListConversation,
+            >,
         ) -> Result<
-            tonic::Response<super::super::service_response::ListChat>,
+            tonic::Response<super::super::service_response::ListConversation>,
             tonic::Status,
         > {
             self.inner
@@ -866,7 +872,7 @@ pub mod service_server_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/service_grpc.ServiceServer/ListChat",
+                "/service_grpc.ServiceServer/ListConversation",
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
@@ -1090,46 +1096,46 @@ pub mod service_server_server {
             tonic::Response<super::super::service_response::RemoveProfilePicture>,
             tonic::Status,
         >;
-        async fn add_tweet(
+        async fn add_post(
             &self,
-            request: tonic::Request<super::super::service_request::AddTweet>,
+            request: tonic::Request<super::super::service_request::AddPost>,
         ) -> Result<
-            tonic::Response<super::super::service_response::AddTweet>,
+            tonic::Response<super::super::service_response::AddPost>,
             tonic::Status,
         >;
-        async fn get_tweet(
+        async fn get_post(
             &self,
-            request: tonic::Request<super::super::service_request::GetTweet>,
+            request: tonic::Request<super::super::service_request::GetPost>,
         ) -> Result<
-            tonic::Response<super::super::service_response::GetTweet>,
+            tonic::Response<super::super::service_response::GetPost>,
             tonic::Status,
         >;
-        async fn remove_tweet(
+        async fn remove_post(
             &self,
-            request: tonic::Request<super::super::service_request::RemoveTweet>,
+            request: tonic::Request<super::super::service_request::RemovePost>,
         ) -> Result<
-            tonic::Response<super::super::service_response::RemoveTweet>,
+            tonic::Response<super::super::service_response::RemovePost>,
             tonic::Status,
         >;
-        async fn update_tweet(
+        async fn update_post(
             &self,
-            request: tonic::Request<super::super::service_request::UpdateTweet>,
+            request: tonic::Request<super::super::service_request::UpdatePost>,
         ) -> Result<
-            tonic::Response<super::super::service_response::UpdateTweet>,
+            tonic::Response<super::super::service_response::UpdatePost>,
             tonic::Status,
         >;
-        async fn list_tweets(
+        async fn list_posts(
             &self,
-            request: tonic::Request<super::super::service_request::ListTweets>,
+            request: tonic::Request<super::super::service_request::ListPosts>,
         ) -> Result<
-            tonic::Response<super::super::service_response::ListTweets>,
+            tonic::Response<super::super::service_response::ListPosts>,
             tonic::Status,
         >;
-        async fn tweet_react(
+        async fn post_react(
             &self,
-            request: tonic::Request<super::super::service_request::TweetReact>,
+            request: tonic::Request<super::super::service_request::PostReact>,
         ) -> Result<
-            tonic::Response<super::super::service_response::TweetReact>,
+            tonic::Response<super::super::service_response::PostReact>,
             tonic::Status,
         >;
         async fn add_reply(
@@ -1174,18 +1180,18 @@ pub mod service_server_server {
             tonic::Response<super::super::service_response::SendMessage>,
             tonic::Status,
         >;
-        async fn clear_chat(
+        async fn clear_conversation(
             &self,
-            request: tonic::Request<super::super::service_request::ClearChat>,
+            request: tonic::Request<super::super::service_request::ClearConversation>,
         ) -> Result<
-            tonic::Response<super::super::service_response::ClearChat>,
+            tonic::Response<super::super::service_response::ClearConversation>,
             tonic::Status,
         >;
-        async fn get_chat(
+        async fn get_conversation(
             &self,
-            request: tonic::Request<super::super::service_request::GetChat>,
+            request: tonic::Request<super::super::service_request::GetConversation>,
         ) -> Result<
-            tonic::Response<super::super::service_response::GetChat>,
+            tonic::Response<super::super::service_response::GetConversation>,
             tonic::Status,
         >;
         async fn exit_from_group(
@@ -1237,11 +1243,13 @@ pub mod service_server_server {
             tonic::Response<super::super::service_response::CreateGroup>,
             tonic::Status,
         >;
-        async fn create_one_to_one_chat(
+        async fn create_one_to_one_conversation(
             &self,
-            request: tonic::Request<super::super::service_request::CreateOneToOneChat>,
+            request: tonic::Request<
+                super::super::service_request::CreateOneToOneConversation,
+            >,
         ) -> Result<
-            tonic::Response<super::super::service_response::CreateOneToOneChat>,
+            tonic::Response<super::super::service_response::CreateOneToOneConversation>,
             tonic::Status,
         >;
         async fn edit_message(
@@ -1258,11 +1266,11 @@ pub mod service_server_server {
             tonic::Response<super::super::service_response::RemoveMessage>,
             tonic::Status,
         >;
-        async fn list_chat(
+        async fn list_conversation(
             &self,
-            request: tonic::Request<super::super::service_request::ListChat>,
+            request: tonic::Request<super::super::service_request::ListConversation>,
         ) -> Result<
-            tonic::Response<super::super::service_response::ListChat>,
+            tonic::Response<super::super::service_response::ListConversation>,
             tonic::Status,
         >;
         async fn read_message(
@@ -1811,15 +1819,14 @@ pub mod service_server_server {
                     };
                     Box::pin(fut)
                 }
-                "/service_grpc.ServiceServer/AddTweet" => {
+                "/service_grpc.ServiceServer/AddPost" => {
                     #[allow(non_camel_case_types)]
-                    struct AddTweetSvc<T: ServiceServer>(pub Arc<T>);
+                    struct AddPostSvc<T: ServiceServer>(pub Arc<T>);
                     impl<
                         T: ServiceServer,
-                    > tonic::server::UnaryService<
-                        super::super::service_request::AddTweet,
-                    > for AddTweetSvc<T> {
-                        type Response = super::super::service_response::AddTweet;
+                    > tonic::server::UnaryService<super::super::service_request::AddPost>
+                    for AddPostSvc<T> {
+                        type Response = super::super::service_response::AddPost;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -1827,11 +1834,11 @@ pub mod service_server_server {
                         fn call(
                             &mut self,
                             request: tonic::Request<
-                                super::super::service_request::AddTweet,
+                                super::super::service_request::AddPost,
                             >,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move { (*inner).add_tweet(request).await };
+                            let fut = async move { (*inner).add_post(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -1840,7 +1847,7 @@ pub mod service_server_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = AddTweetSvc(inner);
+                        let method = AddPostSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1852,15 +1859,14 @@ pub mod service_server_server {
                     };
                     Box::pin(fut)
                 }
-                "/service_grpc.ServiceServer/GetTweet" => {
+                "/service_grpc.ServiceServer/GetPost" => {
                     #[allow(non_camel_case_types)]
-                    struct GetTweetSvc<T: ServiceServer>(pub Arc<T>);
+                    struct GetPostSvc<T: ServiceServer>(pub Arc<T>);
                     impl<
                         T: ServiceServer,
-                    > tonic::server::UnaryService<
-                        super::super::service_request::GetTweet,
-                    > for GetTweetSvc<T> {
-                        type Response = super::super::service_response::GetTweet;
+                    > tonic::server::UnaryService<super::super::service_request::GetPost>
+                    for GetPostSvc<T> {
+                        type Response = super::super::service_response::GetPost;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -1868,11 +1874,11 @@ pub mod service_server_server {
                         fn call(
                             &mut self,
                             request: tonic::Request<
-                                super::super::service_request::GetTweet,
+                                super::super::service_request::GetPost,
                             >,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move { (*inner).get_tweet(request).await };
+                            let fut = async move { (*inner).get_post(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -1881,7 +1887,7 @@ pub mod service_server_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetTweetSvc(inner);
+                        let method = GetPostSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1893,15 +1899,15 @@ pub mod service_server_server {
                     };
                     Box::pin(fut)
                 }
-                "/service_grpc.ServiceServer/RemoveTweet" => {
+                "/service_grpc.ServiceServer/RemovePost" => {
                     #[allow(non_camel_case_types)]
-                    struct RemoveTweetSvc<T: ServiceServer>(pub Arc<T>);
+                    struct RemovePostSvc<T: ServiceServer>(pub Arc<T>);
                     impl<
                         T: ServiceServer,
                     > tonic::server::UnaryService<
-                        super::super::service_request::RemoveTweet,
-                    > for RemoveTweetSvc<T> {
-                        type Response = super::super::service_response::RemoveTweet;
+                        super::super::service_request::RemovePost,
+                    > for RemovePostSvc<T> {
+                        type Response = super::super::service_response::RemovePost;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -1909,13 +1915,11 @@ pub mod service_server_server {
                         fn call(
                             &mut self,
                             request: tonic::Request<
-                                super::super::service_request::RemoveTweet,
+                                super::super::service_request::RemovePost,
                             >,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move {
-                                (*inner).remove_tweet(request).await
-                            };
+                            let fut = async move { (*inner).remove_post(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -1924,7 +1928,7 @@ pub mod service_server_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = RemoveTweetSvc(inner);
+                        let method = RemovePostSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1936,15 +1940,15 @@ pub mod service_server_server {
                     };
                     Box::pin(fut)
                 }
-                "/service_grpc.ServiceServer/UpdateTweet" => {
+                "/service_grpc.ServiceServer/UpdatePost" => {
                     #[allow(non_camel_case_types)]
-                    struct UpdateTweetSvc<T: ServiceServer>(pub Arc<T>);
+                    struct UpdatePostSvc<T: ServiceServer>(pub Arc<T>);
                     impl<
                         T: ServiceServer,
                     > tonic::server::UnaryService<
-                        super::super::service_request::UpdateTweet,
-                    > for UpdateTweetSvc<T> {
-                        type Response = super::super::service_response::UpdateTweet;
+                        super::super::service_request::UpdatePost,
+                    > for UpdatePostSvc<T> {
+                        type Response = super::super::service_response::UpdatePost;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -1952,13 +1956,11 @@ pub mod service_server_server {
                         fn call(
                             &mut self,
                             request: tonic::Request<
-                                super::super::service_request::UpdateTweet,
+                                super::super::service_request::UpdatePost,
                             >,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move {
-                                (*inner).update_tweet(request).await
-                            };
+                            let fut = async move { (*inner).update_post(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -1967,7 +1969,7 @@ pub mod service_server_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = UpdateTweetSvc(inner);
+                        let method = UpdatePostSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -1979,15 +1981,15 @@ pub mod service_server_server {
                     };
                     Box::pin(fut)
                 }
-                "/service_grpc.ServiceServer/ListTweets" => {
+                "/service_grpc.ServiceServer/ListPosts" => {
                     #[allow(non_camel_case_types)]
-                    struct ListTweetsSvc<T: ServiceServer>(pub Arc<T>);
+                    struct ListPostsSvc<T: ServiceServer>(pub Arc<T>);
                     impl<
                         T: ServiceServer,
                     > tonic::server::UnaryService<
-                        super::super::service_request::ListTweets,
-                    > for ListTweetsSvc<T> {
-                        type Response = super::super::service_response::ListTweets;
+                        super::super::service_request::ListPosts,
+                    > for ListPostsSvc<T> {
+                        type Response = super::super::service_response::ListPosts;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -1995,11 +1997,11 @@ pub mod service_server_server {
                         fn call(
                             &mut self,
                             request: tonic::Request<
-                                super::super::service_request::ListTweets,
+                                super::super::service_request::ListPosts,
                             >,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move { (*inner).list_tweets(request).await };
+                            let fut = async move { (*inner).list_posts(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -2008,7 +2010,7 @@ pub mod service_server_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = ListTweetsSvc(inner);
+                        let method = ListPostsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -2020,15 +2022,15 @@ pub mod service_server_server {
                     };
                     Box::pin(fut)
                 }
-                "/service_grpc.ServiceServer/TweetReact" => {
+                "/service_grpc.ServiceServer/PostReact" => {
                     #[allow(non_camel_case_types)]
-                    struct TweetReactSvc<T: ServiceServer>(pub Arc<T>);
+                    struct PostReactSvc<T: ServiceServer>(pub Arc<T>);
                     impl<
                         T: ServiceServer,
                     > tonic::server::UnaryService<
-                        super::super::service_request::TweetReact,
-                    > for TweetReactSvc<T> {
-                        type Response = super::super::service_response::TweetReact;
+                        super::super::service_request::PostReact,
+                    > for PostReactSvc<T> {
+                        type Response = super::super::service_response::PostReact;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -2036,11 +2038,11 @@ pub mod service_server_server {
                         fn call(
                             &mut self,
                             request: tonic::Request<
-                                super::super::service_request::TweetReact,
+                                super::super::service_request::PostReact,
                             >,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move { (*inner).tweet_react(request).await };
+                            let fut = async move { (*inner).post_react(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -2049,7 +2051,7 @@ pub mod service_server_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = TweetReactSvc(inner);
+                        let method = PostReactSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -2315,15 +2317,15 @@ pub mod service_server_server {
                     };
                     Box::pin(fut)
                 }
-                "/service_grpc.ServiceServer/ClearChat" => {
+                "/service_grpc.ServiceServer/ClearConversation" => {
                     #[allow(non_camel_case_types)]
-                    struct ClearChatSvc<T: ServiceServer>(pub Arc<T>);
+                    struct ClearConversationSvc<T: ServiceServer>(pub Arc<T>);
                     impl<
                         T: ServiceServer,
                     > tonic::server::UnaryService<
-                        super::super::service_request::ClearChat,
-                    > for ClearChatSvc<T> {
-                        type Response = super::super::service_response::ClearChat;
+                        super::super::service_request::ClearConversation,
+                    > for ClearConversationSvc<T> {
+                        type Response = super::super::service_response::ClearConversation;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -2331,11 +2333,13 @@ pub mod service_server_server {
                         fn call(
                             &mut self,
                             request: tonic::Request<
-                                super::super::service_request::ClearChat,
+                                super::super::service_request::ClearConversation,
                             >,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move { (*inner).clear_chat(request).await };
+                            let fut = async move {
+                                (*inner).clear_conversation(request).await
+                            };
                             Box::pin(fut)
                         }
                     }
@@ -2344,7 +2348,7 @@ pub mod service_server_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = ClearChatSvc(inner);
+                        let method = ClearConversationSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -2356,14 +2360,15 @@ pub mod service_server_server {
                     };
                     Box::pin(fut)
                 }
-                "/service_grpc.ServiceServer/GetChat" => {
+                "/service_grpc.ServiceServer/GetConversation" => {
                     #[allow(non_camel_case_types)]
-                    struct GetChatSvc<T: ServiceServer>(pub Arc<T>);
+                    struct GetConversationSvc<T: ServiceServer>(pub Arc<T>);
                     impl<
                         T: ServiceServer,
-                    > tonic::server::UnaryService<super::super::service_request::GetChat>
-                    for GetChatSvc<T> {
-                        type Response = super::super::service_response::GetChat;
+                    > tonic::server::UnaryService<
+                        super::super::service_request::GetConversation,
+                    > for GetConversationSvc<T> {
+                        type Response = super::super::service_response::GetConversation;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -2371,11 +2376,13 @@ pub mod service_server_server {
                         fn call(
                             &mut self,
                             request: tonic::Request<
-                                super::super::service_request::GetChat,
+                                super::super::service_request::GetConversation,
                             >,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move { (*inner).get_chat(request).await };
+                            let fut = async move {
+                                (*inner).get_conversation(request).await
+                            };
                             Box::pin(fut)
                         }
                     }
@@ -2384,7 +2391,7 @@ pub mod service_server_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = GetChatSvc(inner);
+                        let method = GetConversationSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -2695,15 +2702,15 @@ pub mod service_server_server {
                     };
                     Box::pin(fut)
                 }
-                "/service_grpc.ServiceServer/CreateOneToOneChat" => {
+                "/service_grpc.ServiceServer/CreateOneToOneConversation" => {
                     #[allow(non_camel_case_types)]
-                    struct CreateOneToOneChatSvc<T: ServiceServer>(pub Arc<T>);
+                    struct CreateOneToOneConversationSvc<T: ServiceServer>(pub Arc<T>);
                     impl<
                         T: ServiceServer,
                     > tonic::server::UnaryService<
-                        super::super::service_request::CreateOneToOneChat,
-                    > for CreateOneToOneChatSvc<T> {
-                        type Response = super::super::service_response::CreateOneToOneChat;
+                        super::super::service_request::CreateOneToOneConversation,
+                    > for CreateOneToOneConversationSvc<T> {
+                        type Response = super::super::service_response::CreateOneToOneConversation;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -2711,12 +2718,12 @@ pub mod service_server_server {
                         fn call(
                             &mut self,
                             request: tonic::Request<
-                                super::super::service_request::CreateOneToOneChat,
+                                super::super::service_request::CreateOneToOneConversation,
                             >,
                         ) -> Self::Future {
                             let inner = self.0.clone();
                             let fut = async move {
-                                (*inner).create_one_to_one_chat(request).await
+                                (*inner).create_one_to_one_conversation(request).await
                             };
                             Box::pin(fut)
                         }
@@ -2726,7 +2733,7 @@ pub mod service_server_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = CreateOneToOneChatSvc(inner);
+                        let method = CreateOneToOneConversationSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -2824,15 +2831,15 @@ pub mod service_server_server {
                     };
                     Box::pin(fut)
                 }
-                "/service_grpc.ServiceServer/ListChat" => {
+                "/service_grpc.ServiceServer/ListConversation" => {
                     #[allow(non_camel_case_types)]
-                    struct ListChatSvc<T: ServiceServer>(pub Arc<T>);
+                    struct ListConversationSvc<T: ServiceServer>(pub Arc<T>);
                     impl<
                         T: ServiceServer,
                     > tonic::server::UnaryService<
-                        super::super::service_request::ListChat,
-                    > for ListChatSvc<T> {
-                        type Response = super::super::service_response::ListChat;
+                        super::super::service_request::ListConversation,
+                    > for ListConversationSvc<T> {
+                        type Response = super::super::service_response::ListConversation;
                         type Future = BoxFuture<
                             tonic::Response<Self::Response>,
                             tonic::Status,
@@ -2840,11 +2847,13 @@ pub mod service_server_server {
                         fn call(
                             &mut self,
                             request: tonic::Request<
-                                super::super::service_request::ListChat,
+                                super::super::service_request::ListConversation,
                             >,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move { (*inner).list_chat(request).await };
+                            let fut = async move {
+                                (*inner).list_conversation(request).await
+                            };
                             Box::pin(fut)
                         }
                     }
@@ -2853,7 +2862,7 @@ pub mod service_server_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let inner = inner.0;
-                        let method = ListChatSvc(inner);
+                        let method = ListConversationSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

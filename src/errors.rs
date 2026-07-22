@@ -1,4 +1,4 @@
-use crate::response::{self, Response};
+use crate::protos::response::{self, Response};
 
 pub async fn form_response(operation: &str, status: response::Status) -> Response {
     match operation {
@@ -38,65 +38,54 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
                 )),
             };
         }
-        "AddTweet" => {
+        "AddPost" => {
             return response::Response {
-                operation: Some(response::response::Operation::AddTweet(
-                    response::AddTweet {
+                operation: Some(response::response::Operation::AddPost(
+                    response::AddPost {
                         status: status as i32,
                         message: None,
-                        tweet_id: Vec::new(),
+                        post_id: Vec::new(),
                     },
                 )),
             };
         }
-        "RemoveTweet" => {
+        "RemovePost" => {
             return response::Response {
-                operation: Some(response::response::Operation::RemoveTweet(
-                    response::RemoveTweet {
+                operation: Some(response::response::Operation::RemovePost(
+                    response::RemovePost {
                         status: status as i32,
                         message: None,
                     },
                 )),
             };
         }
-        "GetTweet" => {
+        "GetPost" => {
             return response::Response {
-                operation: Some(response::response::Operation::GetTweet(
-                    response::GetTweet {
+                operation: Some(response::response::Operation::GetPost(
+                    response::GetPost {
                         status: status as i32,
                         message: None,
-                        tweet: None,
+                        post: None,
                     },
                 )),
             };
         }
-        "ListTweets" => {
+        "ListPosts" => {
             return response::Response {
-                operation: Some(response::response::Operation::ListTweets(
-                    response::ListTweets {
+                operation: Some(response::response::Operation::ListPosts(
+                    response::ListPosts {
                         status: status as i32,
                         message: None,
-                        tweets: Vec::new(),
-                    },
-                )),
-            };
-        }
-
-        "UpdateTweet" => {
-            return response::Response {
-                operation: Some(response::response::Operation::UpdateTweet(
-                    response::UpdateTweet {
-                        status: status as i32,
-                        message: None,
+                        posts: Vec::new(),
                     },
                 )),
             };
         }
 
-        "ReactToTweet" => {
+        "UpdatePost" => {
             return response::Response {
-                operation: Some(response::response::Operation::ReactToTweet(
-                    response::ReactToTweet {
+                operation: Some(response::response::Operation::UpdatePost(
+                    response::UpdatePost {
                         status: status as i32,
                         message: None,
                     },
@@ -104,10 +93,21 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
             };
         }
 
-        "UndoTweetReact" => {
+        "ReactToPost" => {
             return response::Response {
-                operation: Some(response::response::Operation::UndoReactToTweet(
-                    response::UndoReactToTweet {
+                operation: Some(response::response::Operation::ReactToPost(
+                    response::ReactToPost {
+                        status: status as i32,
+                        message: None,
+                    },
+                )),
+            };
+        }
+
+        "UndoPostReact" => {
+            return response::Response {
+                operation: Some(response::response::Operation::UndoReactToPost(
+                    response::UndoReactToPost {
                         status: status as i32,
                         message: None,
                     },
@@ -126,10 +126,10 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
                 )),
             };
         }
-        "RepostTweet" => {
+        "RepostPost" => {
             return response::Response {
-                operation: Some(response::response::Operation::RepostTweet(
-                    response::RepostTweet {
+                operation: Some(response::response::Operation::RepostPost(
+                    response::RepostPost {
                         status: status as i32,
                         message: None,
                     },
@@ -137,10 +137,10 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
             };
         }
 
-        "ReplyToTweet" => {
+        "ReplyToPost" => {
             return response::Response {
-                operation: Some(response::response::Operation::ReplyToTweet(
-                    response::ReplyToTweet {
+                operation: Some(response::response::Operation::ReplyToPost(
+                    response::ReplyToPost {
                         status: status as i32,
                         message: None,
                         reply_id: Vec::new(),
@@ -195,13 +195,13 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
             };
         }
 
-        "CreateOneToOneChat" => {
+        "CreateOneToOneConversation" => {
             return response::Response {
-                operation: Some(response::response::Operation::CreateOneToOneChat(
-                    response::CreateOneToOneChat {
+                operation: Some(response::response::Operation::CreateOneToOneConversation(
+                    response::CreateOneToOneConversation {
                         status: status as i32,
                         message: None,
-                        chat_id: Vec::new(),
+                        conversation_id: Vec::new(),
                     },
                 )),
             };
@@ -213,7 +213,7 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
                     response::CreateGroup {
                         status: status as i32,
                         message: None,
-                        chat_id: Vec::new(),
+                        conversation_id: Vec::new(),
                     },
                 )),
             };
@@ -273,12 +273,12 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
             };
         }
 
-        "GetChat" => {
+        "GetConversation" => {
             return response::Response {
-                operation: Some(response::response::Operation::GetChat(response::GetChat {
+                operation: Some(response::response::Operation::GetConversation(response::GetConversation {
                     status: status as i32,
                     message: None,
-                    chat: None,
+                    conversation: None,
                 })),
             };
         }
@@ -293,10 +293,10 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
                 )),
             };
         }
-        "ClearChat" => {
+        "ClearConversation" => {
             return response::Response {
-                operation: Some(response::response::Operation::ClearChat(
-                    response::ClearChat {
+                operation: Some(response::response::Operation::ClearConversation(
+                    response::ClearConversation {
                         status: status as i32,
                         message: None,
                     },
@@ -336,10 +336,10 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
             };
         }
 
-        "ListChat" => {
+        "ListConversation" => {
             return response::Response {
-                operation: Some(response::response::Operation::ListChat(
-                    response::ListChat {
+                operation: Some(response::response::Operation::ListConversation(
+                    response::ListConversation {
                         status: status as i32,
                         message: None,
                         messages: Vec::new(),

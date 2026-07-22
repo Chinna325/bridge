@@ -1,10 +1,10 @@
 // use std::clone;
 
 use crate::{
-    Context, backend, errors, request,
-    response::{self, Response},
-    service_request::{self},
-    service_response::{self},
+    Context, backend, errors, protos::request,
+    protos::response::{self, Response},
+    protos::service_request::{self},
+    protos::service_response::{self},
 };
 use futures::{SinkExt, StreamExt};
 use prost::Message;
@@ -66,7 +66,7 @@ impl request::Request {
             Some(request::request::Operation::RemoveUser(req)) => {
                 return req.handle(ctx).await;
             }
-            Some(request::request::Operation::AddTweet(req)) => {
+            Some(request::request::Operation::AddPost(req)) => {
                 return req.handle(ctx).await;
             }
             Some(request::request::Operation::ChangePassword(req)) => {
@@ -87,10 +87,10 @@ impl request::Request {
             Some(request::request::Operation::RemoveReply(req)) => {
                 return req.handle(ctx).await;
             }
-            Some(request::request::Operation::RemoveTweet(req)) => {
+            Some(request::request::Operation::RemovePost(req)) => {
                 return req.handle(ctx).await;
             }
-            Some(request::request::Operation::GetTweet(req)) => {
+            Some(request::request::Operation::GetPost(req)) => {
                 return req.handle(ctx).await;
             }
             Some(request::request::Operation::SignIn(req)) => {
@@ -111,22 +111,22 @@ impl request::Request {
             Some(request::request::Operation::ListReplies(req)) => {
                 return req.handle(ctx).await;
             }
-            Some(request::request::Operation::RepostTweet(req)) => {
+            Some(request::request::Operation::RepostPost(req)) => {
                 return req.handle(ctx).await;
             }
-            Some(request::request::Operation::ListTweets(req)) => {
+            Some(request::request::Operation::ListPosts(req)) => {
                 return req.handle(ctx).await;
             }
-            Some(request::request::Operation::ReplyToTweet(req)) => {
+            Some(request::request::Operation::ReplyToPost(req)) => {
                 return req.handle(ctx).await;
             }
-            Some(request::request::Operation::ReactToTweet(req)) => {
+            Some(request::request::Operation::ReactToPost(req)) => {
                 return req.handle(ctx).await;
             }
-            Some(request::request::Operation::UndoReactToTweet(req)) => {
+            Some(request::request::Operation::UndoReactToPost(req)) => {
                 return req.handle(ctx).await;
             }
-            Some(request::request::Operation::UpdateTweet(req)) => {
+            Some(request::request::Operation::UpdatePost(req)) => {
                 return req.handle(ctx).await;
             }
             Some(request::request::Operation::EditReply(req)) => {
@@ -142,7 +142,7 @@ impl request::Request {
                 return req.handle(ctx).await;
             }
 
-            Some(request::request::Operation::CreateOneToOneChat(req)) => {
+            Some(request::request::Operation::CreateOneToOneConversation(req)) => {
                 return req.handle(ctx).await;
             }
             Some(request::request::Operation::CreateGroup(req)) => {
@@ -164,10 +164,10 @@ impl request::Request {
             Some(request::request::Operation::ExitFromGroup(req)) => {
                 return req.handle(ctx).await;
             }
-            Some(request::request::Operation::GetChat(req)) => {
+            Some(request::request::Operation::GetConversation(req)) => {
                 return req.handle(ctx).await;
             }
-            Some(request::request::Operation::ClearChat(req)) => {
+            Some(request::request::Operation::ClearConversation(req)) => {
                 return req.handle(ctx).await;
             }
             Some(request::request::Operation::SendMessage(req)) => {
@@ -180,7 +180,7 @@ impl request::Request {
             Some(request::request::Operation::EditMessage(req)) => {
                 return req.handle(ctx).await;
             }
-            Some(request::request::Operation::ListChat(req)) => {
+            Some(request::request::Operation::ListConversation(req)) => {
                 return req.handle(ctx).await;
             }
             Some(request::request::Operation::ReadMessage(req)) => {

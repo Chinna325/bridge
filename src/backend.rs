@@ -1,6 +1,6 @@
 // use std::fs;
-use crate::service_response::{self, ServiceResponse};
-use crate::{service_grpc, service_request};
+use crate::protos::service_response::{self, ServiceResponse};
+use crate::protos::{service_grpc, service_request};
 use service_grpc::service_server_client::ServiceServerClient;
 use service_request::ServiceRequest;
 use tonic::transport::Channel;
@@ -114,45 +114,45 @@ impl ServiceRequest {
                 }
             }
 
-            Some(service_request::service_request::Operation::AddTweet(req)) => {
+            Some(service_request::service_request::Operation::AddPost(req)) => {
                 let request = tonic::Request::new(req);
-                match client.add_tweet(request).await {
+                match client.add_post(request).await {
                     Ok(resp) => Some(ServiceResponse {
-                        operation: Some(service_response::service_response::Operation::AddTweet(
+                        operation: Some(service_response::service_response::Operation::AddPost(
                             resp.into_inner(),
                         )),
                     }),
                     Err(_) => None,
                 }
             }
-            Some(service_request::service_request::Operation::GetTweet(req)) => {
+            Some(service_request::service_request::Operation::GetPost(req)) => {
                 let request = tonic::Request::new(req);
-                match client.get_tweet(request).await {
+                match client.get_post(request).await {
                     Ok(resp) => Some(ServiceResponse {
-                        operation: Some(service_response::service_response::Operation::GetTweet(
+                        operation: Some(service_response::service_response::Operation::GetPost(
                             resp.into_inner(),
                         )),
                     }),
                     Err(_) => None,
                 }
             }
-            Some(service_request::service_request::Operation::ListTweets(req)) => {
+            Some(service_request::service_request::Operation::ListPosts(req)) => {
                 let request = tonic::Request::new(req);
-                match client.list_tweets(request).await {
+                match client.list_posts(request).await {
                     Ok(resp) => Some(ServiceResponse {
-                        operation: Some(service_response::service_response::Operation::ListTweets(
+                        operation: Some(service_response::service_response::Operation::ListPosts(
                             resp.into_inner(),
                         )),
                     }),
                     Err(_) => None,
                 }
             }
-            Some(service_request::service_request::Operation::UpdateTweet(req)) => {
+            Some(service_request::service_request::Operation::UpdatePost(req)) => {
                 let request = tonic::Request::new(req);
-                match client.update_tweet(request).await {
+                match client.update_post(request).await {
                     Ok(resp) => Some(ServiceResponse {
                         operation: Some(
-                            service_response::service_response::Operation::UpdateTweet(
+                            service_response::service_response::Operation::UpdatePost(
                                 resp.into_inner(),
                             ),
                         ),
@@ -161,12 +161,12 @@ impl ServiceRequest {
                 }
             }
 
-            Some(service_request::service_request::Operation::RemoveTweet(req)) => {
+            Some(service_request::service_request::Operation::RemovePost(req)) => {
                 let request = tonic::Request::new(req);
-                match client.remove_tweet(request).await {
+                match client.remove_post(request).await {
                     Ok(resp) => Some(ServiceResponse {
                         operation: Some(
-                            service_response::service_response::Operation::RemoveTweet(
+                            service_response::service_response::Operation::RemovePost(
                                 resp.into_inner(),
                             ),
                         ),
@@ -174,11 +174,11 @@ impl ServiceRequest {
                     Err(_) => None,
                 }
             }
-            Some(service_request::service_request::Operation::TweetReact(req)) => {
+            Some(service_request::service_request::Operation::PostReact(req)) => {
                 let request = tonic::Request::new(req);
-                match client.tweet_react(request).await {
+                match client.post_react(request).await {
                     Ok(resp) => Some(ServiceResponse {
-                        operation: Some(service_response::service_response::Operation::TweetReact(
+                        operation: Some(service_response::service_response::Operation::PostReact(
                             resp.into_inner(),
                         )),
                     }),
@@ -248,12 +248,12 @@ impl ServiceRequest {
                 }
             }
 
-            Some(service_request::service_request::Operation::CreateOneToOneChat(req)) => {
+            Some(service_request::service_request::Operation::CreateOneToOneConversation(req)) => {
                 let request = tonic::Request::new(req);
-                match client.create_one_to_one_chat(request).await {
+                match client.create_one_to_one_conversation(request).await {
                     Ok(resp) => Some(ServiceResponse {
                         operation: Some(
-                            service_response::service_response::Operation::CreateOneToOneChat(
+                            service_response::service_response::Operation::CreateOneToOneConversation(
                                 resp.into_inner(),
                             ),
                         ),
@@ -350,22 +350,22 @@ impl ServiceRequest {
                     Err(_) => None,
                 }
             }
-            Some(service_request::service_request::Operation::GetChat(req)) => {
+            Some(service_request::service_request::Operation::GetConversation(req)) => {
                 let request = tonic::Request::new(req);
-                match client.get_chat(request).await {
+                match client.get_conversation(request).await {
                     Ok(resp) => Some(ServiceResponse {
-                        operation: Some(service_response::service_response::Operation::GetChat(
+                        operation: Some(service_response::service_response::Operation::GetConversation(
                             resp.into_inner(),
                         )),
                     }),
                     Err(_) => None,
                 }
             }
-            Some(service_request::service_request::Operation::ClearChat(req)) => {
+            Some(service_request::service_request::Operation::ClearConversation(req)) => {
                 let request = tonic::Request::new(req);
-                match client.clear_chat(request).await {
+                match client.clear_conversation(request).await {
                     Ok(resp) => Some(ServiceResponse {
-                        operation: Some(service_response::service_response::Operation::ClearChat(
+                        operation: Some(service_response::service_response::Operation::ClearConversation(
                             resp.into_inner(),
                         )),
                     }),
@@ -412,11 +412,11 @@ impl ServiceRequest {
                     Err(_) => None,
                 }
             }
-            Some(service_request::service_request::Operation::ListChat(req)) => {
+            Some(service_request::service_request::Operation::ListConversation(req)) => {
                 let request = tonic::Request::new(req);
-                match client.list_chat(request).await {
+                match client.list_conversation(request).await {
                     Ok(resp) => Some(ServiceResponse {
-                        operation: Some(service_response::service_response::Operation::ListChat(
+                        operation: Some(service_response::service_response::Operation::ListConversation(
                             resp.into_inner(),
                         )),
                     }),

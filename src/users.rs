@@ -1,7 +1,8 @@
 use crate::{
-    backend, response,
-    service_request::{self, ServiceRequest},
-    service_response::{self, User},
+    backend,
+    protos::response,
+    protos::service_request::{self, ServiceRequest},
+    protos::service_response::{self, User},
 };
 impl User {
     pub async fn new(email: String, password: Vec<u8>, user_name: String) -> Option<()> {
