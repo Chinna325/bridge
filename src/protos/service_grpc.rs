@@ -1010,6 +1010,102 @@ pub mod service_server_client {
             );
             self.inner.unary(request.into_request(), path, codec).await
         }
+        pub async fn add_attachment(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::AddAttachment,
+            >,
+        ) -> Result<
+            tonic::Response<super::super::service_response::AddAttachment>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/AddAttachment",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn read_attachment(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::ReadAttachment,
+            >,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ReadAttachment>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/ReadAttachment",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn remove_attachment(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::RemoveAttachment,
+            >,
+        ) -> Result<
+            tonic::Response<super::super::service_response::RemoveAttachment>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/RemoveAttachment",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
+        pub async fn list_attachments(
+            &mut self,
+            request: impl tonic::IntoRequest<
+                super::super::service_request::ListAttachments,
+            >,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ListAttachments>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/service_grpc.ServiceServer/ListAttachments",
+            );
+            self.inner.unary(request.into_request(), path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -1313,6 +1409,34 @@ pub mod service_server_server {
             request: tonic::Request<super::super::service_request::ListFollowers>,
         ) -> Result<
             tonic::Response<super::super::service_response::ListFollowers>,
+            tonic::Status,
+        >;
+        async fn add_attachment(
+            &self,
+            request: tonic::Request<super::super::service_request::AddAttachment>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::AddAttachment>,
+            tonic::Status,
+        >;
+        async fn read_attachment(
+            &self,
+            request: tonic::Request<super::super::service_request::ReadAttachment>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ReadAttachment>,
+            tonic::Status,
+        >;
+        async fn remove_attachment(
+            &self,
+            request: tonic::Request<super::super::service_request::RemoveAttachment>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::RemoveAttachment>,
+            tonic::Status,
+        >;
+        async fn list_attachments(
+            &self,
+            request: tonic::Request<super::super::service_request::ListAttachments>,
+        ) -> Result<
+            tonic::Response<super::super::service_response::ListAttachments>,
             tonic::Status,
         >;
     }
@@ -3112,6 +3236,178 @@ pub mod service_server_server {
                     let fut = async move {
                         let inner = inner.0;
                         let method = ListFollowersSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/AddAttachment" => {
+                    #[allow(non_camel_case_types)]
+                    struct AddAttachmentSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::AddAttachment,
+                    > for AddAttachmentSvc<T> {
+                        type Response = super::super::service_response::AddAttachment;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::AddAttachment,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).add_attachment(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = AddAttachmentSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/ReadAttachment" => {
+                    #[allow(non_camel_case_types)]
+                    struct ReadAttachmentSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::ReadAttachment,
+                    > for ReadAttachmentSvc<T> {
+                        type Response = super::super::service_response::ReadAttachment;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::ReadAttachment,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).read_attachment(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ReadAttachmentSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/RemoveAttachment" => {
+                    #[allow(non_camel_case_types)]
+                    struct RemoveAttachmentSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::RemoveAttachment,
+                    > for RemoveAttachmentSvc<T> {
+                        type Response = super::super::service_response::RemoveAttachment;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::RemoveAttachment,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).remove_attachment(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = RemoveAttachmentSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/service_grpc.ServiceServer/ListAttachments" => {
+                    #[allow(non_camel_case_types)]
+                    struct ListAttachmentsSvc<T: ServiceServer>(pub Arc<T>);
+                    impl<
+                        T: ServiceServer,
+                    > tonic::server::UnaryService<
+                        super::super::service_request::ListAttachments,
+                    > for ListAttachmentsSvc<T> {
+                        type Response = super::super::service_response::ListAttachments;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::service_request::ListAttachments,
+                            >,
+                        ) -> Self::Future {
+                            let inner = self.0.clone();
+                            let fut = async move {
+                                (*inner).list_attachments(request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = ListAttachmentsSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

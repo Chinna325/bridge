@@ -378,8 +378,34 @@ pub struct GetMessage {
     pub message: ::core::option::Option<super::common::Message>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddAttachment {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveAttachment {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListAttachments {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(bytes="vec", repeated, tag="2")]
+    pub attached_ids: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
+    #[prost(string, repeated, tag="3")]
+    pub names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReadAttchment {
+    #[prost(enumeration="Status", tag="1")]
+    pub status: i32,
+    #[prost(bytes="vec", tag="2")]
+    pub data: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Response {
-    #[prost(oneof="response::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45")]
+    #[prost(oneof="response::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49")]
     pub operation: ::core::option::Option<response::Operation>,
 }
 /// Nested message and enum types in `Response`.
@@ -476,6 +502,14 @@ pub mod response {
         GetGroup(super::GetGroup),
         #[prost(message, tag="45")]
         GetMessage(super::GetMessage),
+        #[prost(message, tag="46")]
+        AddAttachment(super::AddAttachment),
+        #[prost(message, tag="47")]
+        RemoveAttachement(super::RemoveAttachment),
+        #[prost(message, tag="48")]
+        ListAttachements(super::ListAttachments),
+        #[prost(message, tag="49")]
+        ReadAttchment(super::ReadAttchment),
     }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

@@ -12,6 +12,7 @@ impl User {
                     email,
                     user_name,
                     password_hash: password.clone(),
+                    phone_number: String::new(),
                 },
             )),
         };

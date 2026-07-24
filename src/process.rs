@@ -1,7 +1,8 @@
 // use std::clone;
 
 use crate::{
-    Context, backend, errors, protos::request,
+    Context, backend, errors,
+    protos::request,
     protos::response::{self, Response},
     protos::service_request::{self},
     protos::service_response::{self},
@@ -186,6 +187,19 @@ impl request::Request {
             Some(request::request::Operation::ReadMessage(req)) => {
                 return req.handle(ctx).await;
             }
+
+            Some(request::request::Operation::AddAttachment(req)) => {
+                return req.handle(ctx).await;
+            }
+            Some(request::request::Operation::ListAttachements(req)) => {
+                return req.handle(ctx).await;
+            }
+            Some(request::request::Operation::RemoveAttachement(req)) => {
+                return req.handle(ctx).await;
+            }
+            Some(request::request::Operation::ReadAttchment(req)) => {
+                return req.handle(ctx).await;
+            }
             _ => return None,
         }
     }
@@ -217,8 +231,9 @@ impl request::AddUser {
         let redis_object = service_request::RedisObject {
             email: email.clone(),
             user_name: user_name.clone(),
-            email_otp: Some("111111".to_string()),
+            email_otp: "111111".to_string(),
             password: password_hash,
+            phone_numner: String::new(),
         };
         let data = redis_object.encode_to_vec();
         let req = service_request::ServiceRequest {

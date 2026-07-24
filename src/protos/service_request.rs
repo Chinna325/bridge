@@ -6,8 +6,10 @@ pub struct RedisObject {
     pub user_name: ::prost::alloc::string::String,
     #[prost(bytes="vec", tag="3")]
     pub password: ::prost::alloc::vec::Vec<u8>,
-    #[prost(string, optional, tag="4")]
-    pub email_otp: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, tag="4")]
+    pub email_otp: ::prost::alloc::string::String,
+    #[prost(string, tag="5")]
+    pub phone_numner: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddUser {
@@ -45,6 +47,8 @@ pub struct AddToDb {
     pub user_name: ::prost::alloc::string::String,
     #[prost(bytes="vec", tag="3")]
     pub password_hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag="4")]
+    pub phone_number: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct User {
@@ -415,8 +419,36 @@ pub struct ListFollowers {
     pub ltype: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddAttachment {
+    #[prost(enumeration="AttachmentType", tag="1")]
+    pub attachment_type: i32,
+    #[prost(bytes="vec", tag="2")]
+    pub data: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="3")]
+    pub conversation_or_post_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag="4")]
+    pub shared_by: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveAttachment {
+    #[prost(enumeration="AttachmentType", tag="1")]
+    pub attachment_type: i32,
+    #[prost(bytes="vec", tag="2")]
+    pub conversation_or_post_id: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListAttachments {
+    #[prost(bytes="vec", tag="2")]
+    pub conversation_or_post_id: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ReadAttachment {
+    #[prost(bytes="vec", tag="1")]
+    pub uuid: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceRequest {
-    #[prost(oneof="service_request::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48")]
+    #[prost(oneof="service_request::Operation", tags="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52")]
     pub operation: ::core::option::Option<service_request::Operation>,
 }
 /// Nested message and enum types in `ServiceRequest`.
@@ -507,6 +539,14 @@ pub mod service_request {
         UnFollow(super::UnFollow),
         #[prost(message, tag="48")]
         ListFollowers(super::ListFollowers),
+        #[prost(message, tag="49")]
+        AddAttachment(super::AddAttachment),
+        #[prost(message, tag="50")]
+        RemoveAttachment(super::RemoveAttachment),
+        #[prost(message, tag="51")]
+        ListAttachments(super::ListAttachments),
+        #[prost(message, tag="52")]
+        ReadAttchment(super::ReadAttachment),
     }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -533,4 +573,10 @@ pub enum LType {
     Followers = 0,
     Followings = 1,
     All = 2,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum AttachmentType {
+    AttachmentPost = 0,
+    AttachmentConversation = 1,
 }

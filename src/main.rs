@@ -7,6 +7,7 @@ pub mod process;
 pub mod protos;
 pub mod posts;
 pub mod users;
+pub mod attachments;
 use tokio::net::TcpListener;
 use tokio_tungstenite::accept_async;
 
