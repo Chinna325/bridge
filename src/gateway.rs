@@ -574,7 +574,7 @@ impl request::UnFollow {
             return Some(errors::form_response("UnFollow", response::Status::BackendError).await);
         }
         let user = user.unwrap();
-        let resp = user.unfollow(self.user_email.clone()).await;
+        let resp = user.unfollow(self.user_email.clone(), ctx).await;
         if resp.is_none() {
             return Some(errors::form_response("UnFollow", response::Status::BackendError).await);
         }

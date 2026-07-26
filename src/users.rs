@@ -1,8 +1,10 @@
 use crate::{
-    backend,
-    protos::response,
-    protos::service_request::{self, ServiceRequest},
-    protos::service_response::{self, User},
+    Context, backend,
+    protos::{
+        response,
+        service_request::{self, ServiceRequest},
+        service_response::{self, User},
+    },
 };
 impl User {
     pub async fn new(email: String, password: Vec<u8>, user_name: String) -> Option<()> {
@@ -186,12 +188,12 @@ impl User {
         Some(())
     }
 
-    pub async fn unfollow(&self, follower: String) -> Option<()> {
+    pub async fn unfollow(&self, follower: String, ctx: &mut Context) -> Option<()> {
         let req = ServiceRequest {
             operation: Some(service_request::service_request::Operation::UnFollow(
                 service_request::UnFollow {
-                    user_email: self.user_email.clone(),
-                    follower: follower,
+                    user_email: follower.clone(),
+                    follower: ctx.email.clone(),
                 },
             )),
         };
