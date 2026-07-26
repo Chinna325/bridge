@@ -38,9 +38,9 @@ pub struct AddToDb {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct User {
     #[prost(string, tag="1")]
-    pub email: ::prost::alloc::string::String,
-    #[prost(string, tag="2")]
     pub user_name: ::prost::alloc::string::String,
+    #[prost(string, tag="2")]
+    pub user_email: ::prost::alloc::string::String,
     #[prost(bytes="vec", tag="3")]
     pub password: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, repeated, tag="4")]
@@ -99,7 +99,7 @@ pub struct Post {
     #[prost(string, repeated, tag="6")]
     pub hashtags: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, repeated, tag="7")]
-    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub user_emails: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PublicMetrics {
@@ -125,7 +125,7 @@ pub struct Reply {
     #[prost(bytes="vec", tag="1")]
     pub post_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag="2")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
     #[prost(string, tag="3")]
     pub text: ::prost::alloc::string::String,
     #[prost(bytes="vec", tag="4")]
@@ -139,7 +139,7 @@ pub struct Reply {
     #[prost(string, repeated, tag="8")]
     pub hash_tags: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, repeated, tag="9")]
-    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub user_emails: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(uint64, tag="10")]
     pub created_at: u64,
 }
@@ -262,7 +262,7 @@ pub struct ExitFromGroup {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Conversation {
     #[prost(string, tag="2")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
     #[prost(uint64, tag="3")]
     pub last_message_id: u64,
 }
@@ -353,7 +353,7 @@ pub struct ListFollowers {
     #[prost(enumeration="Status", tag="1")]
     pub status: i32,
     #[prost(string, repeated, tag="2")]
-    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub user_emails: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddAttachment {

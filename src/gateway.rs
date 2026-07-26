@@ -9,7 +9,6 @@ use crate::{
 };
 use futures::{SinkExt, StreamExt};
 use prost::Message;
-use sha2::Digest;
 use uuid::Uuid;
 use vortex_otp_lib::{OtpCharSet, generate_otp};
 
@@ -35,7 +34,21 @@ impl WsClient {
                     return Ok(());
                 }
             };
-
+            match data {
+                tokio_tungstenite::tungstenite::Message::Text(_)
+                | tokio_tungstenite::tungstenite::Message::Frame(_)
+                | tokio_tungstenite::tungstenite::Message::Pong(_) => {
+                    return Err(());
+                }
+                tokio_tungstenite::tungstenite::Message::Close(_) => return Ok(()),
+                tokio_tungstenite::tungstenite::Message::Ping(_) => {
+                    let msg = tokio_tungstenite::tungstenite::Message::Pong(vec![].into());
+                    if self.stream.send(msg.into()).await.is_err() {
+                        return Err(());
+                    }
+                }
+                tokio_tungstenite::tungstenite::Message::Binary(_) => {}
+            }
             let data = data.into_data().to_vec();
 
             let req = match request::Request::decode(data.as_slice()) {
@@ -53,6 +66,12 @@ impl WsClient {
                 return Err(());
             }
         }
+    }
+    pub async fn close(&mut self) {
+        let _ = self
+            .stream
+            .send(tokio_tungstenite::tungstenite::Message::Close(None).into())
+            .await;
     }
 }
 impl request::Request {
@@ -204,16 +223,15 @@ impl request::Request {
         }
     }
 }
-
+use crate::crypto::calculate_hash;
 impl request::AddUser {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        let email = self.email.clone();
-        let user_name = self.user_name.clone();
+        let user_email = self.user_email.clone();
         let password = self.password.clone();
-        if email.is_empty() || user_name.is_empty() || password.is_empty() {
+        if user_email.is_empty() || user_email.is_empty() || password.is_empty() {
             return Some(errors::form_response("AddUser", response::Status::BackendError).await);
         }
-        let email_otp = match generate_otp(6, OtpCharSet::Numeric) {
+        let user_email_otp = match generate_otp(6, OtpCharSet::Numeric) {
             Ok(otp) => otp,
             Err(_) => {
                 return Some(
@@ -221,16 +239,11 @@ impl request::AddUser {
                 );
             }
         };
-        println!("Email otp :{}", email_otp);
-        let mut hasher = sha2::Sha256::new();
-        hasher.update(password);
-        let password_hash = hasher.finalize().to_vec();
-        let mut hasher = sha2::Sha256::new();
-        hasher.update(self.email.clone());
-        let key = hasher.finalize().to_vec();
+        let password_hash = calculate_hash(&self.password);
+        let key = calculate_hash(&self.user_email);
         let redis_object = service_request::RedisObject {
-            email: email.clone(),
-            user_name: user_name.clone(),
+            user_email: user_email.clone(),
+            user_name: self.user_name.clone(),
             email_otp: "111111".to_string(),
             password: password_hash,
             phone_numner: String::new(),
@@ -239,8 +252,8 @@ impl request::AddUser {
         let req = service_request::ServiceRequest {
             operation: Some(service_request::service_request::Operation::AddUser(
                 service_request::AddUser {
-                    email,
-                    user_name,
+                    user_email,
+                    user_name: self.user_name.clone(),
                     data,
                     key,
                 },
@@ -262,11 +275,12 @@ impl request::AddUser {
                 );
             }
         }
-        ctx.email = self.email.clone();
+        ctx.email = self.user_email.clone();
         Some(response::Response {
             operation: Some(response::response::Operation::AddUser(response::AddUser {
                 status: response::Status::Success as i32,
                 message: None,
+                otp: user_email_otp,
             })),
         })
     }
@@ -274,9 +288,7 @@ impl request::AddUser {
 
 impl request::VerifyUser {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        let mut hasher = sha2::Sha256::new();
-        hasher.update(self.email.clone());
-        let key = hasher.finalize().to_vec();
+        let key = calculate_hash(&self.user_email);
         let data = ctx.cache.get(key.clone()).await;
         if data.is_none() {
             return Some(errors::form_response("VerifyUser", response::Status::BackendError).await);
@@ -287,24 +299,24 @@ impl request::VerifyUser {
             return Some(errors::form_response("VerifyUser", response::Status::BackendError).await);
         }
         let object = object.unwrap();
-        if object.email != self.email.clone() {
+        if object.user_email != self.user_email.clone() {
             return Some(errors::form_response("VerifyUser", response::Status::BackendError).await);
         }
-        // if object.email_otp.unwrap_or_default() != self.email_otp.clone() {
+        // if object.user_email_otp.unwrap_or_default() != self.user_email_otp.clone() {
         //     return Some(errors::form_response("VerifyUser", response::Status::BackendError).await);
         // }
         let res = service_response::User::new(
-            object.email.clone(),
+            object.user_email.clone(),
             object.password.clone(),
-            object.user_name.clone(),
+            object.user_email.clone(),
         )
         .await;
         if res.is_some() {
             return Some(errors::form_response("VerifyUser", response::Status::BackendError).await);
         }
         ctx.is_acuthenticated = true;
-        ctx.email = self.email.clone();
-        ctx.user_name = object.user_name.clone();
+        ctx.email = self.user_email.clone();
+        ctx.user_name = object.user_email.clone();
         Some(response::Response {
             operation: Some(response::response::Operation::VerifyUser(
                 response::VerifyUser {
@@ -321,14 +333,12 @@ impl request::RemoveUser {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("RemoveUser", response::Status::BackendError).await);
         }
-        let user = service_response::User::get(self.user_name.clone()).await;
+        let user = service_response::User::get(self.user_email.clone()).await;
         if user.is_none() {
             return Some(errors::form_response("RemoveUser", response::Status::BackendError).await);
         }
         let user = user.unwrap();
-        let mut hasher = sha2::Sha256::new();
-        hasher.update(self.password.clone());
-        let hash = hasher.finalize().to_vec();
+        let hash = calculate_hash(&self.password);
         if hash != user.password {
             return Some(errors::form_response("RemoveUser", response::Status::BackendError).await);
         }
@@ -359,24 +369,20 @@ impl request::ChangePassword {
                 errors::form_response("ChangePassword", response::Status::BackendError).await,
             );
         }
-        let user = service_response::User::get(self.user_name.clone()).await;
+        let user = service_response::User::get(self.user_email.clone()).await;
         if user.is_none() {
             return Some(
                 errors::form_response("ChangePassword", response::Status::BackendError).await,
             );
         }
         let mut user = user.unwrap();
-        let mut hasher = sha2::Sha256::new();
-        hasher.update(self.old_password.clone());
-        let hash = hasher.finalize().to_vec();
+        let hash = calculate_hash(&self.old_password);
         if user.password != hash {
             return Some(
                 errors::form_response("ChangePassword", response::Status::BackendError).await,
             );
         }
-        let mut hasher = sha2::Sha256::new();
-        hasher.update(self.new_password.clone());
-        let hash = hasher.finalize().to_vec();
+        let hash = calculate_hash(&self.new_password);
         user.password = hash;
         let res = user.update().await;
         if res.is_none() {
@@ -402,7 +408,7 @@ impl request::GetProfilePicture {
                 errors::form_response("GetProfilePicture", response::Status::BackendError).await,
             );
         }
-        let user = service_response::User::get(self.user_name.clone()).await;
+        let user = service_response::User::get(self.user_email.clone()).await;
         if user.is_none() {
             return Some(
                 errors::form_response("GetProfilePicture", response::Status::BackendError).await,
@@ -432,7 +438,7 @@ impl request::GetUser {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("GetUser", response::Status::BackendError).await);
         }
-        let user = service_response::User::get(self.user_name.clone()).await;
+        let user = service_response::User::get(self.user_email.clone()).await;
         if user.is_none() {
             return Some(errors::form_response("GetUser", response::Status::BackendError).await);
         }
@@ -442,7 +448,7 @@ impl request::GetUser {
                 status: response::Status::Success as i32,
                 message: None,
                 user: Some(response::User {
-                    email: user.email.clone(),
+                    email: user.user_email.clone(),
                     create_at: 0_u64,
                 }),
             })),
@@ -468,28 +474,26 @@ impl request::UpdateUser {
 
 impl request::SignIn {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
-        if self.user_name.is_some() {
+        if self.user_email.is_some() {
             if self.password.is_none() {
                 return Some(errors::form_response("SignIn", response::Status::BackendError).await);
             }
-            let user_name = self.user_name.clone().unwrap();
-            let user = service_response::User::get(user_name.clone()).await;
+            let user_email = self.user_email.clone().unwrap();
+            let user = service_response::User::get(user_email.clone()).await;
             if user.is_none() {
                 println!("user is not found");
                 return Some(errors::form_response("SignIn", response::Status::BackendError).await);
             }
             let user = user.unwrap();
-            let passowrd = self.password.clone().unwrap();
-            let mut hasher = sha2::Sha256::new();
-            hasher.update(passowrd);
-            let hash = hasher.finalize().to_vec();
+            let passowrd = self.password.clone().unwrap_or_default();
+            let hash = calculate_hash(&passowrd);
             if user.password != hash {
                 println!("password is not matched");
                 return Some(errors::form_response("SignIn", response::Status::BackendError).await);
             }
             ctx.is_acuthenticated = true;
-            ctx.email = user.email.clone();
-            ctx.user_name = self.user_name.clone().unwrap();
+            ctx.email = user.user_email.clone();
+            // ctx.user_name= self.user_email.clone().unwrap();
         } else {
             return Some(response::Response {
                 operation: Some(response::response::Operation::SignIn(response::SignIn {
@@ -528,22 +532,22 @@ impl request::SignOut {
 impl request::Follow {
     pub async fn handle(&self, ctx: &mut Context) -> Option<Response> {
         println!("Self {:?}", self.clone());
-        println!("login context  {}", ctx.user_name.clone());
+        // println!("login context  {}", ctx.email.clone());
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("Follow", response::Status::BackendError).await);
         }
-        let user = service_response::User::get(ctx.user_name.clone()).await;
+        let user = service_response::User::get(ctx.email.clone()).await;
         if user.is_none() {
             return Some(errors::form_response("Follow", response::Status::BackendError).await);
         }
-        let user = service_response::User::get(self.user_name.clone()).await;
+        let user = service_response::User::get(self.user_email.clone()).await;
         if user.is_none() {
             return Some(errors::form_response("Follow", response::Status::BackendError).await);
         }
         let mut user = user.unwrap();
-        user.user_name = self.user_name.clone();
+        user.user_email = self.user_email.clone();
         println!("User  {:?}", user);
-        let resp = user.follow(ctx.user_name.clone()).await;
+        let resp = user.follow(ctx.email.clone()).await;
         if resp.is_none() {
             return Some(errors::form_response("Follow", response::Status::BackendError).await);
         }
@@ -561,16 +565,16 @@ impl request::UnFollow {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("UnFollow", response::Status::BackendError).await);
         }
-        let user = service_response::User::get(ctx.user_name.clone()).await;
+        let user = service_response::User::get(ctx.email.clone()).await;
         if user.is_none() {
             return Some(errors::form_response("UnFollow", response::Status::BackendError).await);
         }
-        let user = service_response::User::get(self.user_name.clone()).await;
+        let user = service_response::User::get(self.user_email.clone()).await;
         if user.is_none() {
             return Some(errors::form_response("UnFollow", response::Status::BackendError).await);
         }
         let user = user.unwrap();
-        let resp = user.unfollow(self.user_name.clone()).await;
+        let resp = user.unfollow(self.user_email.clone()).await;
         if resp.is_none() {
             return Some(errors::form_response("UnFollow", response::Status::BackendError).await);
         }
@@ -592,7 +596,7 @@ impl request::ListFollowers {
                 errors::form_response("ListFollowers", response::Status::BackendError).await,
             );
         }
-        let user = service_response::User::get(ctx.user_name.clone()).await;
+        let user = service_response::User::get(ctx.email.clone()).await;
         if user.is_none() {
             return Some(
                 errors::form_response("ListFollowers", response::Status::BackendError).await,
@@ -611,7 +615,7 @@ impl request::ListFollowers {
                 response::ListFollowers {
                     status: response::Status::Success as i32,
                     message: None,
-                    user_names: followers,
+                    user_emails: followers,
                 },
             )),
         })
@@ -625,7 +629,7 @@ impl request::UploadProfilePicture {
                 errors::form_response("UploadProfilePicture", response::Status::BackendError).await,
             );
         }
-        let user = service_response::User::get(self.user_name.clone()).await;
+        let user = service_response::User::get(self.user_email.clone()).await;
         if user.is_none() {
             return Some(
                 errors::form_response("UploadProfilePicture", response::Status::BackendError).await,
@@ -681,14 +685,14 @@ impl request::RemoveProfilePicture {
                 errors::form_response("RemoveProfilePicture", response::Status::BackendError).await,
             );
         }
-        let user = service_response::User::get(self.user_name.clone()).await;
+        let user = service_response::User::get(self.user_email.clone()).await;
         if user.is_none() {
             return Some(
                 errors::form_response("RemoveProfilePicture", response::Status::BackendError).await,
             );
         }
         let user = user.unwrap();
-        if user.email != ctx.email {
+        if user.user_email != ctx.email {
             return Some(
                 errors::form_response("RemoveProfilePicture", response::Status::BackendError).await,
             );

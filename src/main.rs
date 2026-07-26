@@ -1,17 +1,18 @@
 #![deny(unused)]
+pub mod attachments;
 pub mod backend;
 pub mod cache;
 pub mod chat;
 pub mod errors;
-pub mod process;
-pub mod protos;
+pub mod gateway;
 pub mod posts;
+pub mod protos;
 pub mod users;
-pub mod attachments;
+pub mod crypto;
 use tokio::net::TcpListener;
 use tokio_tungstenite::accept_async;
 
-use crate::{cache::Cache, process::WsClient};
+use crate::{cache::Cache, gateway::WsClient};
 
 pub struct Context {
     pub email: String,
@@ -59,7 +60,14 @@ async fn main() {
                     Ok(ws_stream) => {
                         let mut client = WsClient::new(ws_stream);
                         let mut ctx = Context::new();
-                        let _ = client.serve(&mut ctx).await;
+                        match client.serve(&mut ctx).await {
+                            Ok(_) => {
+                                let _ = client.close().await;
+                            }
+                            Err(_) => {
+                                let _ = client.close().await;
+                            }
+                        }
                     }
                     Err(e) => {
                         eprintln!("Failed to accept web socket connections:{}", e);

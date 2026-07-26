@@ -1,9 +1,9 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RedisObject {
     #[prost(string, tag="1")]
-    pub email: ::prost::alloc::string::String,
-    #[prost(string, tag="2")]
     pub user_name: ::prost::alloc::string::String,
+    #[prost(string, tag="2")]
+    pub user_email: ::prost::alloc::string::String,
     #[prost(bytes="vec", tag="3")]
     pub password: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag="4")]
@@ -14,9 +14,9 @@ pub struct RedisObject {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddUser {
     #[prost(string, tag="1")]
-    pub email: ::prost::alloc::string::String,
-    #[prost(string, tag="2")]
     pub user_name: ::prost::alloc::string::String,
+    #[prost(string, tag="2")]
+    pub user_email: ::prost::alloc::string::String,
     #[prost(bytes="vec", tag="3")]
     pub data: ::prost::alloc::vec::Vec<u8>,
     #[prost(bytes="vec", tag="4")]
@@ -42,9 +42,9 @@ pub struct ClearCache {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddToDb {
     #[prost(string, tag="1")]
-    pub email: ::prost::alloc::string::String,
-    #[prost(string, tag="2")]
     pub user_name: ::prost::alloc::string::String,
+    #[prost(string, tag="2")]
+    pub user_email: ::prost::alloc::string::String,
     #[prost(bytes="vec", tag="3")]
     pub password_hash: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag="4")]
@@ -53,9 +53,9 @@ pub struct AddToDb {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct User {
     #[prost(string, tag="1")]
-    pub email: ::prost::alloc::string::String,
-    #[prost(string, tag="2")]
     pub user_name: ::prost::alloc::string::String,
+    #[prost(string, tag="2")]
+    pub user_email: ::prost::alloc::string::String,
     #[prost(bytes="vec", tag="3")]
     pub password: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, repeated, tag="4")]
@@ -66,12 +66,12 @@ pub struct User {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUser {
     #[prost(string, tag="1")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveUser {
     #[prost(string, tag="1")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateUser {
@@ -81,7 +81,7 @@ pub struct UpdateUser {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SetProfilePicture {
     #[prost(string, tag="1")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
     #[prost(bytes="vec", tag="2")]
     pub blob_name: ::prost::alloc::vec::Vec<u8>,
     #[prost(bytes="vec", tag="3")]
@@ -95,7 +95,7 @@ pub struct GetProfilePicture {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveProfilePicture {
     #[prost(string, tag="1")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
     #[prost(bytes="vec", tag="2")]
     pub blob_name: ::prost::alloc::vec::Vec<u8>,
 }
@@ -114,7 +114,7 @@ pub struct Post {
     #[prost(string, repeated, tag="6")]
     pub hashtags: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, repeated, tag="7")]
-    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub emails: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PublicMetrics {
@@ -140,7 +140,7 @@ pub struct Reply {
     #[prost(bytes="vec", tag="1")]
     pub post_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag="2")]
-    pub user_name: ::prost::alloc::string::String,
+    pub email: ::prost::alloc::string::String,
     #[prost(string, tag="3")]
     pub text: ::prost::alloc::string::String,
     #[prost(bytes="vec", tag="4")]
@@ -156,12 +156,12 @@ pub struct Reply {
     #[prost(string, repeated, tag="9")]
     pub hash_tags: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, repeated, tag="10")]
-    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub user_emails: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddPost {
     #[prost(string, tag="1")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
     #[prost(enumeration="PostAdd", tag="2")]
     pub post_add: i32,
     #[prost(bytes="vec", tag="3")]
@@ -177,7 +177,7 @@ pub struct GetPost {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListPosts {
     #[prost(string, tag="1")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdatePost {
@@ -218,7 +218,7 @@ pub struct UpdateReply {
     #[prost(string, repeated, tag="4")]
     pub hash_tags: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, repeated, tag="5")]
-    pub user_name: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub user_email: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(bytes="vec", tag="6")]
     pub post_id: ::prost::alloc::vec::Vec<u8>,
 }
@@ -250,7 +250,7 @@ pub struct Conversation {
     #[prost(bytes="vec", tag="1")]
     pub conversation_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag="2")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
     #[prost(uint64, tag="3")]
     pub last_message_id: u64,
 }
@@ -305,28 +305,28 @@ pub struct RemoveGroup {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListGroups {
     #[prost(string, tag="1")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddUserToGroup {
     #[prost(bytes="vec", tag="1")]
     pub groupd_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, repeated, tag="2")]
-    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub user_emails: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveUserFromGroup {
     #[prost(bytes="vec", tag="1")]
     pub group_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, repeated, tag="2")]
-    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub user_emails: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ExitFromGroup {
     #[prost(bytes="vec", tag="1")]
     pub group_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag="2")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetConversation {
@@ -343,7 +343,7 @@ pub struct ClearConversation {
     #[prost(bytes="vec", tag="1")]
     pub conversation_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag="2")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
     #[prost(uint64, tag="3")]
     pub message_id: u64,
 }
@@ -352,7 +352,7 @@ pub struct RemoveMessage {
     #[prost(bytes="vec", tag="1")]
     pub conversation_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag="2")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
     #[prost(uint64, tag="3")]
     pub message_id: u64,
     #[prost(enumeration="MessageRemove", tag="4")]
@@ -393,26 +393,26 @@ pub struct ReadMessage {
     #[prost(uint64, tag="2")]
     pub message_id: u64,
     #[prost(string, tag="3")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Follow {
     #[prost(string, tag="1")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
     #[prost(string, tag="2")]
     pub follower: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UnFollow {
     #[prost(string, tag="1")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
     #[prost(string, tag="2")]
     pub follower: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListFollowers {
     #[prost(string, tag="1")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
     #[prost(int32, tag="2")]
     pub page: i32,
     #[prost(enumeration="LType", tag="3")]
@@ -428,23 +428,31 @@ pub struct AddAttachment {
     pub conversation_or_post_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag="4")]
     pub shared_by: ::prost::alloc::string::String,
+    #[prost(string, tag="5")]
+    pub attachment_name: ::prost::alloc::string::String,
+    #[prost(bytes="vec", tag="6")]
+    pub attachment_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RemoveAttachment {
     #[prost(enumeration="AttachmentType", tag="1")]
     pub attachment_type: i32,
     #[prost(bytes="vec", tag="2")]
-    pub conversation_or_post_id: ::prost::alloc::vec::Vec<u8>,
+    pub attachment_id: ::prost::alloc::vec::Vec<u8>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListAttachments {
     #[prost(bytes="vec", tag="2")]
     pub conversation_or_post_id: ::prost::alloc::vec::Vec<u8>,
+    #[prost(enumeration="AttachmentType", tag="1")]
+    pub attachment_type: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ReadAttachment {
     #[prost(bytes="vec", tag="1")]
     pub uuid: ::prost::alloc::vec::Vec<u8>,
+    #[prost(enumeration="AttachmentType", tag="2")]
+    pub attachment_type: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ServiceRequest {

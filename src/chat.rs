@@ -94,7 +94,7 @@ impl service_request::Message {
             operation: Some(service_request::service_request::Operation::RemoveMessage(
                 service_request::RemoveMessage {
                     conversation_id: self.conversation_id.clone(),
-                    user_name: self.owner.clone(),
+                    user_email: self.owner.clone(),
                     message_id: self.message_id.clone(),
                     message_remove: remove as i32,
                 },
@@ -113,13 +113,13 @@ impl service_request::Message {
         Ok(())
     }
 
-    pub async fn read(&self, user_name: String) -> Result<(), ()> {
+    pub async fn read(&self, user_email: String) -> Result<(), ()> {
         let req = service_request::ServiceRequest {
             operation: Some(service_request::service_request::Operation::ReadMessage(
                 service_request::ReadMessage {
                     conversation_id: self.conversation_id.clone(),
                     message_id: self.message_id.clone(),
-                    user_name: user_name.clone(),
+                    user_email: user_email.clone(),
                 },
             )),
         };
@@ -188,7 +188,7 @@ impl service_request::Conversation {
             let chat = chat.unwrap();
             return Ok(Self {
                 conversation_id: conversation_id.clone(),
-                user_name: chat.user_name.clone(),
+                user_email: chat.user_email.clone(),
                 last_message_id: chat.last_message_id,
             });
         }
@@ -205,7 +205,7 @@ impl service_request::Conversation {
                 service_request::service_request::Operation::ClearConversation(
                     service_request::ClearConversation {
                         conversation_id: self.conversation_id.clone(),
-                        user_name: self.user_name.clone(),
+                        user_email: self.user_email.clone(),
                         message_id: message_id,
                     },
                 ),
@@ -276,7 +276,7 @@ impl service_request::Group {
             operation: Some(service_request::service_request::Operation::UpdateGroup(
                 service_request::UpdateGroup {
                     // groupd_id: self.group_id.clone(),
-                    // user_names: self.users.clone(),
+                    // user_emails: self.users.clone(),
                 },
             )),
         };
@@ -326,11 +326,11 @@ impl service_request::Group {
         }
         Err(())
     }
-    pub async fn list(user_name: String) -> Result<Vec<service_response::Group>, ()> {
+    pub async fn list(user_email: String) -> Result<Vec<service_response::Group>, ()> {
         let req = ServiceRequest {
             operation: Some(service_request::service_request::Operation::ListGroups(
                 service_request::ListGroups {
-                    user_name: user_name,
+                    user_email: user_email,
                 },
             )),
         };
@@ -353,7 +353,7 @@ impl service_request::Group {
             operation: Some(service_request::service_request::Operation::AddUserToGroup(
                 service_request::AddUserToGroup {
                     groupd_id: self.group_id.clone(),
-                    user_names: self.users.clone(),
+                    user_emails: self.users.clone(),
                 },
             )),
         };
@@ -379,7 +379,7 @@ impl request::CreateOneToOneConversation {
                     .await,
             );
         }
-        let user = service_response::User::get(self.user_name.clone()).await;
+        let user = service_response::User::get(self.user_email.clone()).await;
         if user.is_none() {
             return Some(
                 errors::form_response("CreateOneToOneConversation", response::Status::BackendError)
@@ -393,7 +393,7 @@ impl request::CreateOneToOneConversation {
         let chat = service_request::Conversation {
             conversation_id: conversation_id.clone(),
             last_message_id: 0_u64,
-            user_name: self.user_name.clone(),
+            user_email: self.user_email.clone(),
         };
         let resp = chat.new().await;
         if resp.is_err() {
@@ -441,7 +441,7 @@ impl request::CreateGroup {
         let group = service_request::Group {
             group_id: group_id.clone(),
             users: self.users.clone(),
-            created_by: ctx.user_name.clone(),
+            created_by: ctx.email.clone(),
             created_at: Utc::now().timestamp() as u64,
             group_name: self.name.clone(),
             last_message_at: 0,
@@ -479,10 +479,10 @@ impl request::ListGroups {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("ListGroups", response::Status::BackendError).await);
         }
-        if self.user_name.is_empty() {
+        if self.user_email.is_empty() {
             return Some(errors::form_response("ListGroups", response::Status::BackendError).await);
         }
-        let groups = service_request::Group::list(self.user_name.clone()).await;
+        let groups = service_request::Group::list(self.user_email.clone()).await;
         if groups.is_err() {
             return Some(errors::form_response("ListGroups", response::Status::BackendError).await);
         }
@@ -525,7 +525,7 @@ impl request::AddUserToGroup {
             );
         }
         let mut group = group.unwrap();
-        group.users.push(self.user_name.clone());
+        group.users.push(self.user_email.clone());
         let resp = group.add_or_remove_user().await;
         if resp.is_err() {
             return Some(
@@ -589,13 +589,13 @@ impl request::ExitFromGroup {
         }
         let mut group = group.unwrap();
         let mut users = group.users.clone();
-        if !users.contains(&ctx.user_name) {
+        if !users.contains(&ctx.email) {
             return Some(
                 errors::form_response("ExitFromGroup", response::Status::BackendError).await,
             );
         }
         for i in 0..users.len() {
-            if users[i] == ctx.user_name.clone() {
+            if users[i] == ctx.email.clone() {
                 users.remove(i);
             }
         }
@@ -641,13 +641,13 @@ impl request::RemoveUserFromGroup {
         }
         let mut group = group.unwrap();
         let mut users = group.users.clone();
-        if !users.contains(&self.user_name) {
+        if !users.contains(&self.user_email) {
             return Some(
                 errors::form_response("RemoveUserFromGroup", response::Status::BackendError).await,
             );
         }
         for i in 0..users.len() {
-            if users[i] == self.user_name.clone() {
+            if users[i] == self.user_email.clone() {
                 users.remove(i);
             }
         }
@@ -714,7 +714,7 @@ impl request::SendMessage {
             );
         }
         let message = service_request::Message {
-            owner: ctx.user_name.clone(),
+            owner: ctx.email.clone(),
             content: self.content.clone(),
             conversation_id: self.conversation_id.clone(),
             created_at: chrono::Utc::now().timestamp() as u64,
@@ -753,7 +753,7 @@ impl request::RemoveMessage {
         }
         let message = message.unwrap();
         if self.message_remove == common::MessageRemove::RemoveForAll as i32
-            && message.owner != ctx.user_name.clone()
+            && message.owner != ctx.email.clone()
         {
             return Some(
                 errors::form_response("RemoveMessage", response::Status::BackendError).await,
@@ -795,7 +795,7 @@ impl request::EditMessage {
             );
         }
         let mut message = message.unwrap();
-        if message.owner != ctx.user_name.clone() {
+        if message.owner != ctx.email.clone() {
             return Some(
                 errors::form_response("EditMessage", response::Status::BackendError).await,
             );
@@ -856,12 +856,12 @@ impl request::ReadMessage {
             );
         }
         let message = message.unwrap();
-        if message.owner == ctx.user_name.clone() {
+        if message.owner == ctx.email.clone() {
             return Some(
                 errors::form_response("ReadMessage", response::Status::BackendError).await,
             );
         }
-        let resp = message.read(ctx.user_name.clone()).await;
+        let resp = message.read(ctx.email.clone()).await;
         if resp.is_err() {
             return Some(
                 errors::form_response("ReadMessage", response::Status::BackendError).await,

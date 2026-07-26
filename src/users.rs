@@ -9,8 +9,8 @@ impl User {
         let req = ServiceRequest {
             operation: Some(service_request::service_request::Operation::AddToDb(
                 service_request::AddToDb {
-                    email,
-                    user_name,
+                    user_email: email,
+                    user_name: user_name,
                     password_hash: password.clone(),
                     phone_number: String::new(),
                 },
@@ -28,10 +28,10 @@ impl User {
         }
         Some(())
     }
-    pub async fn get(user_name: String) -> Option<Self> {
+    pub async fn get(user_email: String) -> Option<Self> {
         let req = ServiceRequest {
             operation: Some(service_request::service_request::Operation::GetUser(
-                service_request::GetUser { user_name },
+                service_request::GetUser { user_email },
             )),
         };
         let client = backend::ceate_grpc_connection().await;
@@ -52,11 +52,11 @@ impl User {
             operation: Some(service_request::service_request::Operation::UpdateUser(
                 service_request::UpdateUser {
                     user: Some(service_request::User {
-                        email: self.email.clone(),
-                        user_name: self.user_name.clone(),
+                        user_email: self.user_email.clone(),
                         password: self.password.clone(),
                         followers: Vec::new(),
                         profile_picture: Vec::new(),
+                        user_name: self.user_name.clone(),
                     }),
                 },
             )),
@@ -77,7 +77,7 @@ impl User {
         let req = ServiceRequest {
             operation: Some(service_request::service_request::Operation::RemoveUser(
                 service_request::RemoveUser {
-                    user_name: self.user_name.clone(),
+                    user_email: self.user_email.clone(),
                 },
             )),
         };
@@ -99,7 +99,7 @@ impl User {
             operation: Some(
                 service_request::service_request::Operation::SetProfilePicture(
                     service_request::SetProfilePicture {
-                        user_name: self.user_name.clone(),
+                        user_email: self.user_email.clone(),
                         blob_name: self.profile_picture.clone(),
                         data: blob,
                     },
@@ -123,7 +123,7 @@ impl User {
             operation: Some(
                 service_request::service_request::Operation::RemoveProfilePicture(
                     service_request::RemoveProfilePicture {
-                        user_name: self.user_name.clone(),
+                        user_email: self.user_email.clone(),
                         blob_name: self.profile_picture.clone(),
                     },
                 ),
@@ -168,7 +168,7 @@ impl User {
         let req = ServiceRequest {
             operation: Some(service_request::service_request::Operation::Follow(
                 service_request::Follow {
-                    user_name: self.user_name.clone(),
+                    user_email: self.user_email.clone(),
                     follower: follower,
                 },
             )),
@@ -190,7 +190,7 @@ impl User {
         let req = ServiceRequest {
             operation: Some(service_request::service_request::Operation::UnFollow(
                 service_request::UnFollow {
-                    user_name: self.user_name.clone(),
+                    user_email: self.user_email.clone(),
                     follower: follower,
                 },
             )),
@@ -212,7 +212,7 @@ impl User {
         let req = ServiceRequest {
             operation: Some(service_request::service_request::Operation::ListFollowers(
                 service_request::ListFollowers {
-                    user_name: self.user_name.clone(),
+                    user_email: self.user_email.clone(),
                     page: page,
                     ltype: ltype,
                 },
@@ -227,7 +227,7 @@ impl User {
             if resp.status != service_response::Status::Success as i32 {
                 return None;
             }
-            return Some(resp.user_names);
+            return Some(resp.user_emails);
         }
         None
     }

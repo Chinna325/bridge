@@ -4,6 +4,8 @@ pub struct AddUser {
     pub status: i32,
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, tag="3")]
+    pub otp: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct VerifyUser {
@@ -84,7 +86,7 @@ pub struct ListFollowers {
     #[prost(string, optional, tag="2")]
     pub message: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, repeated, tag="3")]
-    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub user_emails: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddPost {
@@ -356,7 +358,7 @@ pub struct Group {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Conversation {
     #[prost(string, tag="2")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
     #[prost(uint64, tag="3")]
     pub last_message_id: u64,
     #[prost(bytes="vec", tag="1")]

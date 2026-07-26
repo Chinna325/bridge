@@ -7,6 +7,7 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
                 operation: Some(response::response::Operation::AddUser(response::AddUser {
                     status: status as i32,
                     message: None,
+                    otp: String::new(),
                 })),
             };
         }
@@ -40,13 +41,11 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
         }
         "AddPost" => {
             return response::Response {
-                operation: Some(response::response::Operation::AddPost(
-                    response::AddPost {
-                        status: status as i32,
-                        message: None,
-                        post_id: Vec::new(),
-                    },
-                )),
+                operation: Some(response::response::Operation::AddPost(response::AddPost {
+                    status: status as i32,
+                    message: None,
+                    post_id: Vec::new(),
+                })),
             };
         }
         "RemovePost" => {
@@ -61,13 +60,11 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
         }
         "GetPost" => {
             return response::Response {
-                operation: Some(response::response::Operation::GetPost(
-                    response::GetPost {
-                        status: status as i32,
-                        message: None,
-                        post: None,
-                    },
-                )),
+                operation: Some(response::response::Operation::GetPost(response::GetPost {
+                    status: status as i32,
+                    message: None,
+                    post: None,
+                })),
             };
         }
         "ListPosts" => {
@@ -121,7 +118,7 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
                     response::ListFollowers {
                         status: status as i32,
                         message: None,
-                        user_names: Vec::new(),
+                        user_emails: Vec::new(),
                     },
                 )),
             };
@@ -275,11 +272,13 @@ pub async fn form_response(operation: &str, status: response::Status) -> Respons
 
         "GetConversation" => {
             return response::Response {
-                operation: Some(response::response::Operation::GetConversation(response::GetConversation {
-                    status: status as i32,
-                    message: None,
-                    conversation: None,
-                })),
+                operation: Some(response::response::Operation::GetConversation(
+                    response::GetConversation {
+                        status: status as i32,
+                        message: None,
+                        conversation: None,
+                    },
+                )),
             };
         }
 

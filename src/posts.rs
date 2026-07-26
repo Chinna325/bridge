@@ -22,7 +22,7 @@ impl service_request::Post {
         let req = ServiceRequest {
             operation: Some(service_request::service_request::Operation::AddPost(
                 service_request::AddPost {
-                    user_name: self.owner.clone(),
+                    user_email: self.owner.clone(),
                     post_data: post_data,
                     post_add: type_of_add as i32,
                     post_id: self.post_id.clone(),
@@ -107,10 +107,10 @@ impl service_request::Post {
         }
         Ok(())
     }
-    pub async fn list(user_name: String) -> Result<Vec<Vec<u8>>, ()> {
+    pub async fn list(user_email: String) -> Result<Vec<Vec<u8>>, ()> {
         let req = ServiceRequest {
             operation: Some(service_request::service_request::Operation::ListPosts(
-                service_request::ListPosts { user_name },
+                service_request::ListPosts { user_email },
             )),
         };
         let conn = backend::ceate_grpc_connection().await;
@@ -183,7 +183,7 @@ impl service_request::Post {
             owner: post.owner.clone(),
             public_metrics: Some(service_request::PublicMetrics::default()),
             hashtags: post.hashtags.clone(),
-            user_names: post.user_names.clone(),
+            emails: post.user_emails.clone(),
         }
     }
 }
@@ -241,7 +241,7 @@ impl service_request::Reply {
                     parent_id: self.parent_id.clone(),
                     text: self.text.clone(),
                     hash_tags: self.hash_tags.clone(),
-                    user_name: self.user_names.clone(),
+                    user_email: self.user_emails.clone(),
                     post_id: self.post_id.clone(),
                 },
             )),
@@ -289,7 +289,7 @@ impl service_request::Reply {
             let reply = reply.unwrap();
             return Ok(Self {
                 post_id,
-                user_name: reply.user_name.clone(),
+                email: reply.user_email.clone(),
                 text: reply.text.clone(),
                 reply_id,
                 parent_id,
@@ -297,7 +297,7 @@ impl service_request::Reply {
                 dislikes: reply.dislikes,
                 created_at: reply.created_at,
                 hash_tags: reply.hash_tags.clone(),
-                user_names: reply.user_names.clone(),
+                user_emails: reply.user_emails.clone(),
             });
         }
         Err(())
@@ -309,7 +309,7 @@ impl service_request::Reply {
     pub fn from(reply: request::Reply) -> Self {
         Self {
             post_id: reply.post_id.clone(),
-            user_name: reply.user_name.clone(),
+            email: reply.user_email.clone(),
             text: reply.text.clone(),
             reply_id: reply.reply_id.clone(),
             parent_id: reply.parent_id.clone(),
@@ -317,7 +317,7 @@ impl service_request::Reply {
             dislikes: reply.dislikes,
             created_at: 0_u64,
             hash_tags: Vec::new(),
-            user_names: Vec::new(),
+            user_emails: Vec::new(),
         }
     }
 }
@@ -342,7 +342,7 @@ impl request::AddPost {
             post_id = bytes;
             let mut post = service_request::Post::form(post.clone());
             post.post_id = post_id.clone();
-            post.owner = ctx.user_name.clone();
+            post.owner = ctx.email.clone();
             let resp = post.new(post_add, post.encode_to_vec()).await;
             if resp.is_err() {
                 return Some(
@@ -429,7 +429,7 @@ impl request::GetPost {
             created_at: post.created_at,
             owner: post.owner.clone(),
             hashtags: post.hashtags.clone(),
-            user_names: post.user_names.clone(),
+            user_emails: post.emails.clone(),
             public_metrics: Some(public_metrics),
         };
         Some(response::Response {
@@ -447,7 +447,7 @@ impl request::ListPosts {
         if !ctx.is_acuthenticated {
             return Some(errors::form_response("ListPosts", response::Status::BackendError).await);
         }
-        let posts = service_request::Post::list(self.user_name.clone()).await;
+        let posts = service_request::Post::list(self.user_email.clone()).await;
         if posts.is_err() {
             return Some(errors::form_response("ListPosts", response::Status::BackendError).await);
         }
@@ -478,7 +478,7 @@ impl request::UpdatePost {
             return Some(errors::form_response("UpdatePost", response::Status::BackendError).await);
         }
         post.hashtags = self.hash_tags.clone();
-        post.user_names = self.user_names.clone();
+        post.emails = self.user_emails.clone();
         post.text = self.text.clone();
         let resp = post.update().await;
         if resp.is_err() {
@@ -704,12 +704,12 @@ impl request::EditReply {
             return Some(errors::form_response("EditReply", response::Status::BackendError).await);
         }
         let mut reply = reply.unwrap();
-        if reply.user_name != ctx.user_name {
+        if reply.email != ctx.email {
             return Some(errors::form_response("EditReply", response::Status::BackendError).await);
         }
         reply.text = self.text.clone();
         reply.hash_tags = self.hash_tags.clone();
-        reply.user_names = self.user_names.clone();
+        reply.user_emails = self.user_emails.clone();
         let resp = reply.update().await;
         if resp.is_err() {
             return Some(errors::form_response("EditReply", response::Status::BackendError).await);
@@ -729,7 +729,7 @@ impl common::Reply {
     pub fn from(reply: service_response::Reply) -> Self {
         Self {
             post_id: reply.post_id.clone(),
-            user_name: reply.user_name.clone(),
+            user_email: reply.user_email.clone(),
             text: reply.text.clone(),
             reply_id: reply.reply_id.clone(),
             parent_id: reply.parent_id.clone(),
@@ -740,7 +740,7 @@ impl common::Reply {
     pub fn from_request(reply: service_request::Reply) -> Self {
         Self {
             post_id: reply.post_id.clone(),
-            user_name: reply.user_name.clone(),
+            user_email: reply.email.clone(),
             text: reply.text.clone(),
             reply_id: reply.reply_id.clone(),
             parent_id: reply.parent_id.clone(),
@@ -845,7 +845,7 @@ impl request::RemoveReply {
             );
         }
         let reply = reply.unwrap();
-        if reply.user_name != ctx.user_name.clone() {
+        if reply.email != ctx.email.clone() {
             return Some(
                 errors::form_response("RemoveReply", response::Status::BackendError).await,
             );

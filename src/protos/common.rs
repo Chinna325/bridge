@@ -18,7 +18,7 @@ pub struct Reply {
     #[prost(bytes="vec", tag="1")]
     pub post_id: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag="2")]
-    pub user_name: ::prost::alloc::string::String,
+    pub user_email: ::prost::alloc::string::String,
     #[prost(string, tag="3")]
     pub text: ::prost::alloc::string::String,
     #[prost(bytes="vec", tag="4")]
@@ -58,7 +58,7 @@ pub struct Post {
     #[prost(string, repeated, tag="6")]
     pub hashtags: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, repeated, tag="7")]
-    pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub user_emails: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
