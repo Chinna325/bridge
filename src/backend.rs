@@ -15,7 +15,7 @@ impl ServiceRequest {
         &self,
         mut client: ServiceServerClient<Channel>,
     ) -> Option<ServiceResponse> {
-        println!("Service Request :{:?}", self.clone());
+        // println!("Service Request :{:?}", self.clone());
         let resp = match self.operation.clone() {
             Some(service_request::service_request::Operation::AddUser(req)) => {
                 let request = tonic::Request::new(req);
@@ -151,11 +151,9 @@ impl ServiceRequest {
                 let request = tonic::Request::new(req);
                 match client.update_post(request).await {
                     Ok(resp) => Some(ServiceResponse {
-                        operation: Some(
-                            service_response::service_response::Operation::UpdatePost(
-                                resp.into_inner(),
-                            ),
-                        ),
+                        operation: Some(service_response::service_response::Operation::UpdatePost(
+                            resp.into_inner(),
+                        )),
                     }),
                     Err(_) => None,
                 }
@@ -165,11 +163,9 @@ impl ServiceRequest {
                 let request = tonic::Request::new(req);
                 match client.remove_post(request).await {
                     Ok(resp) => Some(ServiceResponse {
-                        operation: Some(
-                            service_response::service_response::Operation::RemovePost(
-                                resp.into_inner(),
-                            ),
-                        ),
+                        operation: Some(service_response::service_response::Operation::RemovePost(
+                            resp.into_inner(),
+                        )),
                     }),
                     Err(_) => None,
                 }
@@ -354,9 +350,11 @@ impl ServiceRequest {
                 let request = tonic::Request::new(req);
                 match client.get_conversation(request).await {
                     Ok(resp) => Some(ServiceResponse {
-                        operation: Some(service_response::service_response::Operation::GetConversation(
-                            resp.into_inner(),
-                        )),
+                        operation: Some(
+                            service_response::service_response::Operation::GetConversation(
+                                resp.into_inner(),
+                            ),
+                        ),
                     }),
                     Err(_) => None,
                 }
@@ -365,9 +363,11 @@ impl ServiceRequest {
                 let request = tonic::Request::new(req);
                 match client.clear_conversation(request).await {
                     Ok(resp) => Some(ServiceResponse {
-                        operation: Some(service_response::service_response::Operation::ClearConversation(
-                            resp.into_inner(),
-                        )),
+                        operation: Some(
+                            service_response::service_response::Operation::ClearConversation(
+                                resp.into_inner(),
+                            ),
+                        ),
                     }),
                     Err(_) => None,
                 }
@@ -416,9 +416,11 @@ impl ServiceRequest {
                 let request = tonic::Request::new(req);
                 match client.list_conversation(request).await {
                     Ok(resp) => Some(ServiceResponse {
-                        operation: Some(service_response::service_response::Operation::ListConversation(
-                            resp.into_inner(),
-                        )),
+                        operation: Some(
+                            service_response::service_response::Operation::ListConversation(
+                                resp.into_inner(),
+                            ),
+                        ),
                     }),
                     Err(_) => None,
                 }
@@ -508,13 +510,25 @@ impl ServiceRequest {
                     Err(_) => None,
                 }
             }
+
+            Some(service_request::service_request::Operation::RemoveUser(req)) => {
+                let request = tonic::Request::new(req);
+                match client.remove_user(request).await {
+                    Ok(resp) => Some(ServiceResponse {
+                        operation: Some(service_response::service_response::Operation::RemoveUser(
+                            resp.into_inner(),
+                        )),
+                    }),
+                    Err(_) => None,
+                }
+            }
             _ => {
                 panic!("Invalid request :{:?}", &self.operation);
             }
         };
         // let re
         let resp = resp.unwrap();
-        println!("Service Response :{:?}", resp);
+        // println!("Service Response :{:?}", resp);
         Some(resp)
     }
 }

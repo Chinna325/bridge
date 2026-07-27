@@ -3,12 +3,12 @@ pub mod attachments;
 pub mod backend;
 pub mod cache;
 pub mod chat;
+pub mod crypto;
 pub mod errors;
 pub mod gateway;
 pub mod posts;
 pub mod protos;
 pub mod users;
-pub mod crypto;
 use tokio::net::TcpListener;
 use tokio_tungstenite::accept_async;
 
@@ -54,7 +54,6 @@ async fn main() {
         println!("New connection from: {}", addr);
         let acceptor = tls_acceptor.clone();
         tokio::spawn(async move {
-            // Perform TLS handshake
             match acceptor.accept(stream).await {
                 Ok(tls_stream) => match accept_async(tls_stream).await {
                     Ok(ws_stream) => {
@@ -68,6 +67,7 @@ async fn main() {
                                 let _ = client.close().await;
                             }
                         }
+                        println!("clinet is closed {:?}", addr);
                     }
                     Err(e) => {
                         eprintln!("Failed to accept web socket connections:{}", e);
