@@ -9,6 +9,7 @@ pub mod gateway;
 pub mod posts;
 pub mod protos;
 pub mod users;
+pub mod fmt;
 use tokio::net::TcpListener;
 use tokio_tungstenite::accept_async;
 

@@ -56,11 +56,11 @@ impl WsClient {
                 Err(_) => return Err(()),
             };
 
-            // println!("Req {:?}", req);
+            println!("Req {}", req);
 
             let resp = req.handle(ctx).await.ok_or(())?;
 
-            // println!("Resp {:?}", resp);
+            println!("Resp {}", resp);
 
             if self.stream.send(resp.encode_to_vec().into()).await.is_err() {
                 return Err(());
