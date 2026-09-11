@@ -1,24 +1,20 @@
-#![deny(unused)]
+// #![deny(unused)]
 pub mod attachments;
-pub mod backend;
-pub mod cache;
-pub mod chat;
-pub mod crypto;
-pub mod errors;
-pub mod gateway;
-pub mod posts;
-pub mod protos;
-pub mod users;
-pub mod fmt;
+mod chat;
+mod fmt;
+mod gateway;
+mod posts;
+mod protos;
 use tokio::net::TcpListener;
+pub mod traits;
 use tokio_tungstenite::accept_async;
 
-use crate::{cache::Cache, gateway::WsClient};
+use crate::gateway::WsClient;
+pub mod users;
 
 pub struct Context {
     pub email: String,
     pub is_acuthenticated: bool,
-    pub cache: Cache,
     pub user_name: String,
 }
 
@@ -27,13 +23,15 @@ impl Context {
         Self {
             email: String::new(),
             is_acuthenticated: false,
-            cache: Cache::new(),
             user_name: String::new(),
         }
     }
 }
+
+use jbackend_runtime::TWServer;
 use native_tls::Identity;
 use std::fs;
+use std::sync::Arc;
 #[tokio::main]
 async fn main() {
     let cert = fs::read("./pem.crt").expect("Failed to read server certificate");
@@ -42,6 +40,10 @@ async fn main() {
     let native_tls_acceptor = native_tls::TlsAcceptor::builder(identity).build().unwrap();
     let tls_acceptor = tokio_native_tls::TlsAcceptor::from(native_tls_acceptor);
     let listener = TcpListener::bind("0.0.0.0:6677").await.unwrap();
+
+    let backend = TWServer::new().await.unwrap();
+
+    let backend = Arc::new(backend);
     println!("Web socket server start listening at 6677");
     loop {
         let res = listener.accept().await;
@@ -54,13 +56,14 @@ async fn main() {
         };
         println!("New connection from: {}", addr);
         let acceptor = tls_acceptor.clone();
+        let backend_clone = backend.clone();
         tokio::spawn(async move {
             match acceptor.accept(stream).await {
                 Ok(tls_stream) => match accept_async(tls_stream).await {
                     Ok(ws_stream) => {
                         let mut client = WsClient::new(ws_stream);
                         let mut ctx = Context::new();
-                        match client.serve(&mut ctx).await {
+                        match client.serve(&backend_clone, &mut ctx).await {
                             Ok(_) => {
                                 let _ = client.close().await;
                             }

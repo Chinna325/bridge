@@ -1,236 +1,250 @@
 use crate::{
-    Context, backend,
+    Context,
     protos::{
-        response,
-        service_request::{self, ServiceRequest},
-        service_response::{self, User},
+        request,
+        response::{Response, Status},
     },
+    traits::RequestHandler,
 };
-impl User {
-    pub async fn new(email: String, password: Vec<u8>, user_name: String) -> Option<()> {
-        let req = ServiceRequest {
-            operation: Some(service_request::service_request::Operation::AddToDb(
-                service_request::AddToDb {
-                    user_email: email,
-                    user_name: user_name,
-                    password_hash: password.clone(),
-                    phone_number: String::new(),
-                },
-            )),
-        };
-        let client = backend::ceate_grpc_connection().await;
-        let resp = req.execute(client).await?;
-        if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::AddToDb(resp)),
-        } = resp
-        {
-            if resp.status != response::Status::BackendError as i32 {
-                return None;
-            }
-        }
-        Some(())
-    }
-    pub async fn get(user_email: String) -> Option<Self> {
-        let req = ServiceRequest {
-            operation: Some(service_request::service_request::Operation::GetUser(
-                service_request::GetUser { user_email },
-            )),
-        };
-        let client = backend::ceate_grpc_connection().await;
-        let resp = req.execute(client).await?;
-        if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::GetUser(resp)),
-        } = resp
-        {
-            if resp.status != response::Status::Success as i32 {
-                return None;
-            }
-            return Some(resp.user?);
-        }
-        None
-    }
-    pub async fn update(&mut self) -> Option<()> {
-        let req = ServiceRequest {
-            operation: Some(service_request::service_request::Operation::UpdateUser(
-                service_request::UpdateUser {
-                    user: Some(service_request::User {
-                        user_email: self.user_email.clone(),
-                        password: self.password.clone(),
-                        followers: Vec::new(),
-                        profile_picture: Vec::new(),
-                        user_name: self.user_name.clone(),
-                    }),
-                },
-            )),
-        };
-        let client = backend::ceate_grpc_connection().await;
-        let resp = req.execute(client).await?;
-        if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::UpdateUser(resp)),
-        } = resp
-        {
-            if resp.status != response::Status::Success as i32 {
-                return None;
-            }
-        }
-        Some(())
-    }
-    pub async fn remove(&self) -> Option<()> {
-        let req = ServiceRequest {
-            operation: Some(service_request::service_request::Operation::RemoveUser(
-                service_request::RemoveUser {
-                    user_email: self.user_email.clone(),
-                },
-            )),
-        };
-        let client = backend::ceate_grpc_connection().await;
-        let resp = req.execute(client).await?;
-        if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::RemoveUser(resp)),
-        } = resp
-        {
-            if resp.status != response::Status::Success as i32 {
-                return None;
-            }
-        }
-        Some(())
+use async_trait::async_trait;
+use jbackend_runtime::TWServer;
+
+#[async_trait]
+impl RequestHandler for request::AddUser {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
     }
 
-    pub async fn set_profile_picture(&mut self, blob: Vec<u8>) -> Option<()> {
-        let req = ServiceRequest {
-            operation: Some(
-                service_request::service_request::Operation::SetProfilePicture(
-                    service_request::SetProfilePicture {
-                        user_email: self.user_email.clone(),
-                        blob_name: self.profile_picture.clone(),
-                        data: blob,
-                    },
-                ),
-            ),
-        };
-        let client = backend::ceate_grpc_connection().await;
-        let resp = req.execute(client).await?;
-        if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::SetProfilePicture(resp)),
-        } = resp
-        {
-            if resp.status != service_response::Status::Success as i32 {
-                return None;
-            }
-        }
-        Some(())
-    }
-    pub async fn remove_profile_picture(&self) -> Option<()> {
-        let req = ServiceRequest {
-            operation: Some(
-                service_request::service_request::Operation::RemoveProfilePicture(
-                    service_request::RemoveProfilePicture {
-                        user_email: self.user_email.clone(),
-                        blob_name: self.profile_picture.clone(),
-                    },
-                ),
-            ),
-        };
-        let client = backend::ceate_grpc_connection().await;
-        let resp = req.execute(client).await?;
-        if let service_response::ServiceResponse {
-            operation:
-                Some(service_response::service_response::Operation::RemoveProfilePicture(resp)),
-        } = resp
-        {
-            if resp.status != service_response::Status::Success as i32 {
-                return None;
-            }
-        }
-        Some(())
-    }
-    pub async fn get_profile_picture(&self) -> Option<Vec<u8>> {
-        let req = ServiceRequest {
-            operation: Some(
-                service_request::service_request::Operation::GetProfilePicture(
-                    service_request::GetProfilePicture {
-                        blob_name: self.profile_picture.clone(),
-                    },
-                ),
-            ),
-        };
-        let client = backend::ceate_grpc_connection().await;
-        let resp = req.execute(client).await?;
-        if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::GetProfilePicture(resp)),
-        } = resp
-        {
-            if resp.status != service_response::Status::Success as i32 {
-                return Some(resp.blob);
-            }
-        }
-        None
-    }
-    pub async fn follow(&self, follower: String) -> Option<()> {
-        let req = ServiceRequest {
-            operation: Some(service_request::service_request::Operation::Follow(
-                service_request::Follow {
-                    user_email: self.user_email.clone(),
-                    follower: follower,
-                },
-            )),
-        };
-        let client = backend::ceate_grpc_connection().await;
-        let resp = req.execute(client).await?;
-        if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::Follow(resp)),
-        } = resp
-        {
-            if resp.status != service_response::Status::Success as i32 {
-                return None;
-            }
-        }
-        Some(())
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
     }
 
-    pub async fn unfollow(&self, follower: String, ctx: &mut Context) -> Option<()> {
-        let req = ServiceRequest {
-            operation: Some(service_request::service_request::Operation::UnFollow(
-                service_request::UnFollow {
-                    user_email: follower.clone(),
-                    follower: ctx.email.clone(),
-                },
-            )),
-        };
-        let client = backend::ceate_grpc_connection().await;
-        let resp = req.execute(client).await?;
-        if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::UnFollow(resp)),
-        } = resp
-        {
-            if resp.status != service_response::Status::Success as i32 {
-                return None;
-            }
-        }
-        Some(())
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::VerifyUser {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
     }
 
-    pub async fn list_followers(&self, page: i32, ltype: i32) -> Option<Vec<String>> {
-        let req = ServiceRequest {
-            operation: Some(service_request::service_request::Operation::ListFollowers(
-                service_request::ListFollowers {
-                    user_email: self.user_email.clone(),
-                    page: page,
-                    ltype: ltype,
-                },
-            )),
-        };
-        let client = backend::ceate_grpc_connection().await;
-        let resp = req.execute(client).await?;
-        if let service_response::ServiceResponse {
-            operation: Some(service_response::service_response::Operation::ListFollowers(resp)),
-        } = resp
-        {
-            if resp.status != service_response::Status::Success as i32 {
-                return None;
-            }
-            return Some(resp.user_emails);
-        }
-        None
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::RemoveUser {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::ChangePassword {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::GetProfilePicture {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::GetUser {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::UpdateUser {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::SignIn {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::SignOut {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::Follow {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::UnFollow {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::ListFollowers {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::UploadProfilePicture {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::ResetPassword {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::RemoveProfilePicture {
+    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: Option<String>) -> Response {
+        // construct your Response here
+        todo!()
     }
 }

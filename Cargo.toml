@@ -18,3 +18,5 @@ tokio-native-tls = "0.3"
 futures-util = "0.3"
 futures = "0.3.32"
 hex = "0.4.3"
+async-trait = "0.1.92"
+jbackend_runtime = { path = "../jbackend_runtime" }
