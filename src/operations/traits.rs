@@ -6,9 +6,9 @@ use jbackend_runtime::TWServer;
 
 #[async_trait]
 pub trait RequestHandler {
-    fn validate(&self, ctx: &Context) -> Result<(), ()>;
+    fn validate(&self, ctx: &Context) -> Result<(), String>;
 
     async fn handle(&self, backend: &TWServer, ctx: &mut Context) -> Result<Response, ()>;
 
-    fn build_response(status: Status, message: Option<String>) -> Response;
+    fn build_response(status: Status, message: String) -> Response;
 }

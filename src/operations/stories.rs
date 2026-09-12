@@ -1,8 +1,8 @@
-use crate::traits::RequestHandler;
 use crate::{
     Context,
+    operations::traits::RequestHandler,
     protos::{
-        self,
+        request,
         response::{Response, Status},
     },
 };
@@ -10,8 +10,8 @@ use async_trait::async_trait;
 use jbackend_runtime::TWServer;
 
 #[async_trait]
-impl RequestHandler for protos::request::AddAttachment {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::AddStory {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -19,15 +19,15 @@ impl RequestHandler for protos::request::AddAttachment {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for protos::request::RemoveAttachement {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::RemoveStory {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -35,15 +35,15 @@ impl RequestHandler for protos::request::RemoveAttachement {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for protos::request::ReadAttachment {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::GetStory {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -51,23 +51,22 @@ impl RequestHandler for protos::request::ReadAttachment {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for protos::request::ListAttachements {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::ListStories {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
-
     async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }

@@ -1,17 +1,17 @@
 use crate::{
     Context,
+    operations::traits::RequestHandler,
     protos::{
         request,
         response::{Response, Status},
     },
-    traits::RequestHandler,
 };
 use async_trait::async_trait;
 use jbackend_runtime::TWServer;
 
 #[async_trait]
 impl RequestHandler for request::AddPost {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -19,7 +19,7 @@ impl RequestHandler for request::AddPost {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
@@ -27,7 +27,7 @@ impl RequestHandler for request::AddPost {
 
 #[async_trait]
 impl RequestHandler for request::RemovePost {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -35,7 +35,7 @@ impl RequestHandler for request::RemovePost {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
@@ -43,7 +43,7 @@ impl RequestHandler for request::RemovePost {
 
 #[async_trait]
 impl RequestHandler for request::GetPost {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -51,7 +51,7 @@ impl RequestHandler for request::GetPost {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
@@ -59,7 +59,7 @@ impl RequestHandler for request::GetPost {
 
 #[async_trait]
 impl RequestHandler for request::ListPosts {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -67,7 +67,7 @@ impl RequestHandler for request::ListPosts {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
@@ -75,7 +75,7 @@ impl RequestHandler for request::ListPosts {
 
 #[async_trait]
 impl RequestHandler for request::UpdatePost {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -83,7 +83,7 @@ impl RequestHandler for request::UpdatePost {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
@@ -91,7 +91,7 @@ impl RequestHandler for request::UpdatePost {
 
 #[async_trait]
 impl RequestHandler for request::ReactToPost {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -99,7 +99,7 @@ impl RequestHandler for request::ReactToPost {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
@@ -107,7 +107,7 @@ impl RequestHandler for request::ReactToPost {
 
 #[async_trait]
 impl RequestHandler for request::UndoReactToPost {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -115,7 +115,7 @@ impl RequestHandler for request::UndoReactToPost {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
@@ -123,7 +123,7 @@ impl RequestHandler for request::UndoReactToPost {
 
 #[async_trait]
 impl RequestHandler for request::RepostPost {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -131,7 +131,7 @@ impl RequestHandler for request::RepostPost {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
@@ -139,7 +139,7 @@ impl RequestHandler for request::RepostPost {
 
 #[async_trait]
 impl RequestHandler for request::ReplyToPost {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -147,7 +147,7 @@ impl RequestHandler for request::ReplyToPost {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
@@ -155,7 +155,7 @@ impl RequestHandler for request::ReplyToPost {
 
 #[async_trait]
 impl RequestHandler for request::EditReply {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -163,7 +163,7 @@ impl RequestHandler for request::EditReply {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
@@ -171,7 +171,7 @@ impl RequestHandler for request::EditReply {
 
 #[async_trait]
 impl RequestHandler for request::GetReply {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -179,7 +179,7 @@ impl RequestHandler for request::GetReply {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
@@ -187,7 +187,7 @@ impl RequestHandler for request::GetReply {
 
 #[async_trait]
 impl RequestHandler for request::ListReplies {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -195,7 +195,7 @@ impl RequestHandler for request::ListReplies {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
@@ -203,7 +203,7 @@ impl RequestHandler for request::ListReplies {
 
 #[async_trait]
 impl RequestHandler for request::RemoveReply {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -211,7 +211,7 @@ impl RequestHandler for request::RemoveReply {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }

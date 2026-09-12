@@ -60,6 +60,26 @@ pub struct Post {
     #[prost(string, repeated, tag="7")]
     pub user_emails: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Story {
+    #[prost(bytes="vec", tag="1")]
+    pub post_uuid: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes="vec", tag="2")]
+    pub data: ::prost::alloc::vec::Vec<u8>,
+    #[prost(enumeration="StoryType", tag="3")]
+    pub story_type: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RedisObject {
+    #[prost(string, tag="1")]
+    pub email: ::prost::alloc::string::String,
+    #[prost(string, tag="2")]
+    pub opt: ::prost::alloc::string::String,
+    #[prost(string, tag="3")]
+    pub password: ::prost::alloc::string::String,
+    #[prost(string, tag="4")]
+    pub user_name: ::prost::alloc::string::String,
+}
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum LType {
@@ -92,4 +112,11 @@ pub enum MessageRemove {
 pub enum AttachmentType {
     AttachementPost = 0,
     AttachmentConversation = 1,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum StoryType {
+    StoryPost = 0,
+    StoryImageOrVideo = 1,
+    StoryText = 2,
 }

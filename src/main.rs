@@ -1,16 +1,16 @@
 // #![deny(unused)]
-pub mod attachments;
-mod chat;
 mod fmt;
 mod gateway;
-mod posts;
 mod protos;
 use tokio::net::TcpListener;
-pub mod traits;
 use tokio_tungstenite::accept_async;
-
-use crate::gateway::WsClient;
-pub mod users;
+pub mod operations;
+mod ws;
+use jbackend_runtime::TWServer;
+use native_tls::Identity;
+use std::fs;
+mod crypto;
+use std::sync::OnceLock;
 
 pub struct Context {
     pub email: String,
@@ -28,10 +28,8 @@ impl Context {
     }
 }
 
-use jbackend_runtime::TWServer;
-use native_tls::Identity;
-use std::fs;
-use std::sync::Arc;
+static BACKEND: OnceLock<TWServer> = OnceLock::new();
+
 #[tokio::main]
 async fn main() {
     let cert = fs::read("./pem.crt").expect("Failed to read server certificate");
@@ -43,8 +41,10 @@ async fn main() {
 
     let backend = TWServer::new().await.unwrap();
 
-    let backend = Arc::new(backend);
+    let _ = BACKEND.get_or_init(|| backend);
+
     println!("Web socket server start listening at 6677");
+
     loop {
         let res = listener.accept().await;
         let (stream, addr) = match res {
@@ -55,15 +55,22 @@ async fn main() {
             }
         };
         println!("New connection from: {}", addr);
+
         let acceptor = tls_acceptor.clone();
-        let backend_clone = backend.clone();
+        let backend = match BACKEND.get() {
+            Some(backend) => backend,
+            None => {
+                continue;
+            }
+        };
+
         tokio::spawn(async move {
             match acceptor.accept(stream).await {
                 Ok(tls_stream) => match accept_async(tls_stream).await {
                     Ok(ws_stream) => {
-                        let mut client = WsClient::new(ws_stream);
+                        let mut client = ws::WsClient::new(ws_stream);
                         let mut ctx = Context::new();
-                        match client.serve(&backend_clone, &mut ctx).await {
+                        match client.serve(backend, &mut ctx).await {
                             Ok(_) => {
                                 let _ = client.close().await;
                             }

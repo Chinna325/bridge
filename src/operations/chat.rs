@@ -1,17 +1,18 @@
 use crate::{
     Context,
+    operations::traits::RequestHandler,
     protos::{
         request,
         response::{Response, Status},
     },
-    traits::RequestHandler,
 };
+
 use async_trait::async_trait;
 use jbackend_runtime::TWServer;
 
 #[async_trait]
-impl RequestHandler for request::AddUser {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::CreateOneToOneConversation {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -19,15 +20,15 @@ impl RequestHandler for request::AddUser {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for request::VerifyUser {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::CreateGroup {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -35,15 +36,15 @@ impl RequestHandler for request::VerifyUser {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for request::RemoveUser {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::UpdateGroup {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -51,15 +52,15 @@ impl RequestHandler for request::RemoveUser {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for request::ChangePassword {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::ListGroups {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -67,15 +68,15 @@ impl RequestHandler for request::ChangePassword {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for request::GetProfilePicture {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::AddUserToGroup {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -83,15 +84,15 @@ impl RequestHandler for request::GetProfilePicture {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for request::GetUser {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::RemoveGroup {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -99,15 +100,15 @@ impl RequestHandler for request::GetUser {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for request::UpdateUser {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::ExitFromGroup {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -115,15 +116,15 @@ impl RequestHandler for request::UpdateUser {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for request::SignIn {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::GetConversation {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -131,15 +132,15 @@ impl RequestHandler for request::SignIn {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for request::SignOut {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::RemoveUserFromGroup {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -147,15 +148,15 @@ impl RequestHandler for request::SignOut {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for request::Follow {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::ClearConversation {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -163,15 +164,15 @@ impl RequestHandler for request::Follow {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for request::UnFollow {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::SendMessage {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -179,15 +180,15 @@ impl RequestHandler for request::UnFollow {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for request::ListFollowers {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::RemoveMessage {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -195,15 +196,15 @@ impl RequestHandler for request::ListFollowers {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for request::UploadProfilePicture {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::EditMessage {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -211,15 +212,15 @@ impl RequestHandler for request::UploadProfilePicture {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for request::ResetPassword {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::ListConversation {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -227,15 +228,15 @@ impl RequestHandler for request::ResetPassword {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
 }
 
 #[async_trait]
-impl RequestHandler for request::RemoveProfilePicture {
-    fn validate(&self, _ctx: &Context) -> Result<(), ()> {
+impl RequestHandler for request::ReadMessage {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -243,7 +244,7 @@ impl RequestHandler for request::RemoveProfilePicture {
         todo!()
     }
 
-    fn build_response(status: Status, message: Option<String>) -> Response {
+    fn build_response(status: Status, message: String) -> Response {
         // construct your Response here
         todo!()
     }
