@@ -1,6 +1,10 @@
 use crate::{
     Context,
     crypto::{self, sha_256},
+    helper::{
+        ALREADY_AUTHENTICATED, BACKEND_ERROR, INVALID_EMAIL, INVALID_OTP, PASSWORD_CANNOT_BE_EMPTY,
+        USER_NAME_CANNOT_BE_EMPTY,
+    },
     operations::traits::RequestHandler,
     protos::{
         self, common, request,
@@ -16,18 +20,18 @@ use prost::Message;
 impl RequestHandler for request::AddUser {
     fn validate(&self, ctx: &Context) -> Result<(), String> {
         if ctx.is_acuthenticated {
-            return Err(String::from(""));
+            return Err(String::from(ALREADY_AUTHENTICATED));
         }
         if self.user_email.is_empty() {
-            return Err(String::from(""));
+            return Err(String::from(INVALID_EMAIL));
         }
 
         if self.user_name.is_empty() {
-            return Err(String::from(""));
+            return Err(String::from(USER_NAME_CANNOT_BE_EMPTY));
         }
 
         if self.password.is_empty() {
-            return Err(String::from(""));
+            return Err(String::from(PASSWORD_CANNOT_BE_EMPTY));
         }
         Ok(())
     }
@@ -39,8 +43,14 @@ impl RequestHandler for request::AddUser {
         };
 
         match error.status {
-            StatusCode::StatusErrorUserNameAlreadyExists
-            | StatusCode::StatusErrorDBQueryFailure => {
+            StatusCode::StatusErrorUserNameAlreadyExists => {
+                return Ok(Self::build_response(
+                    Status::UserNameAlreadyExists,
+                    error.message,
+                ));
+            }
+
+            StatusCode::StatusErrorDBQueryFailure => {
                 return Ok(Self::build_response(Status::BackendError, error.message));
             }
             _ => {}
@@ -85,14 +95,14 @@ impl RequestHandler for request::AddUser {
 impl RequestHandler for request::VerifyUser {
     fn validate(&self, ctx: &Context) -> Result<(), String> {
         if ctx.is_acuthenticated {
-            return Err(String::new());
+            return Err(String::from(ALREADY_AUTHENTICATED));
         }
         if self.user_email.is_empty() {
-            return Err(String::new());
+            return Err(String::from(INVALID_EMAIL));
         }
 
         if self.email_otp.is_empty() {
-            return Err(String::new());
+            return Err(String::from(INVALID_OTP));
         }
 
         Ok(())
@@ -110,15 +120,43 @@ impl RequestHandler for request::VerifyUser {
         let redis_object = match common::RedisObject::decode(data.as_slice()) {
             Ok(obect) => obect,
             Err(_) => {
-                return Ok(Self::build_response(Status::BackendError, String::new()));
+                return Ok(Self::build_response(
+                    Status::BackendError,
+                    String::from(BACKEND_ERROR),
+                ));
             }
         };
 
-        if redis_object.email != self.user_email || redis_object.opt != self.email_otp {
-            return Ok(Self::build_response(Status::BackendError, String::new()));
+        if redis_object.email != self.user_email {
+            return Ok(Self::build_response(
+                Status::BackendError,
+                String::from(INVALID_EMAIL),
+            ));
         }
 
-        todo!()
+        if redis_object.opt != self.email_otp {
+            return Ok(Self::build_response(
+                Status::InvalidOtp,
+                String::from(INVALID_OTP),
+            ));
+        }
+
+        let password = sha_256(&redis_object.password);
+        match backend
+            .db()
+            .add_user(&redis_object.user_name, &self.user_email, &password)
+            .await
+        {
+            Ok(_) => {}
+            Err(_) => {
+                return Ok(Self::build_response(
+                    Status::BackendError,
+                    String::from(BACKEND_ERROR),
+                ));
+            }
+        }
+
+        Ok(Self::build_response(Status::Success, String::new()))
     }
 
     fn build_response(status: Status, message: String) -> Response {
@@ -248,48 +286,143 @@ impl RequestHandler for request::SignOut {
 #[async_trait]
 impl RequestHandler for request::Follow {
     fn validate(&self, _ctx: &Context) -> Result<(), String> {
-        todo!()
+        if self.user_name.is_empty() {
+            return Err(String::from(USER_NAME_CANNOT_BE_EMPTY));
+        }
+        Ok(())
     }
 
-    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
-        todo!()
+    async fn handle(&self, backend: &TWServer, ctx: &mut Context) -> Result<Response, ()> {
+        match backend.db().follow(&self.user_name, &ctx.user_name).await {
+            Ok(_) => {}
+            Err(e) => {
+                return Ok(Self::build_response(Status::BackendError, e.message));
+            }
+        }
+
+        match backend.db().follow(&self.user_name, &ctx.user_name).await {
+            Ok(_) => {}
+            Err(e) => {
+                return Ok(Self::build_response(Status::BackendError, e.message));
+            }
+        }
+        Ok(Self::build_response(Status::Success, String::new()))
     }
 
     fn build_response(status: Status, message: String) -> Response {
-        // construct your Response here
-        todo!()
+        Response {
+            operation: Some(response::response::Operation::Follow(response::Follow {
+                status: status as i32,
+                message,
+            })),
+        }
     }
 }
 
 #[async_trait]
 impl RequestHandler for request::UnFollow {
     fn validate(&self, _ctx: &Context) -> Result<(), String> {
-        todo!()
+        if self.user_name.is_empty() {
+            return Err(String::from(USER_NAME_CANNOT_BE_EMPTY));
+        }
+        Ok(())
     }
 
-    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
-        todo!()
+    async fn handle(&self, backend: &TWServer, ctx: &mut Context) -> Result<Response, ()> {
+        match backend.db().read_user(&self.user_name).await {
+            Ok(_) => {}
+            Err(e) => {
+                return Ok(Self::build_response(Status::BackendError, e.message));
+            }
+        }
+
+        match backend
+            .db()
+            .un_follow(&self.user_name, &ctx.user_name)
+            .await
+        {
+            Ok(_) => {}
+            Err(e) => {
+                return Ok(Self::build_response(Status::BackendError, e.message));
+            }
+        }
+
+        Ok(Self::build_response(Status::Success, String::new()))
     }
 
     fn build_response(status: Status, message: String) -> Response {
-        // construct your Response here
-        todo!()
+        Response {
+            operation: Some(response::response::Operation::UnFollow(
+                response::UnFollow {
+                    status: status as i32,
+                    message,
+                },
+            )),
+        }
     }
 }
 
 #[async_trait]
 impl RequestHandler for request::ListFollowers {
     fn validate(&self, _ctx: &Context) -> Result<(), String> {
-        todo!()
+        Ok(())
     }
 
     async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
-        todo!()
+        let result = match self.ltype() {
+            protos::common::LType::Followers => {
+                backend
+                    .db()
+                    .list_followers(&self.user_name, self.last_serial, 100)
+                    .await
+            }
+            protos::common::LType::Followings => {
+                backend
+                    .db()
+                    .list_followings(&self.user_name, self.last_serial, 100)
+                    .await
+            }
+            _ => {
+                return Ok(Self::build_response(
+                    Status::BackendError,
+                    BACKEND_ERROR.to_string(),
+                ));
+            }
+        };
+
+        let (users, last_serial) = match result {
+            Ok(info) => info,
+            Err(_) => {
+                return Ok(Self::build_response(
+                    Status::BackendError,
+                    BACKEND_ERROR.to_string(),
+                ));
+            }
+        };
+
+        Ok(response::Response {
+            operation: Some(response::response::Operation::ListFollowers(
+                response::ListFollowers {
+                    status: Status::Success as i32,
+                    message: String::new(),
+                    user_names: users,
+                    last_serial,
+                },
+            )),
+        })
     }
 
     fn build_response(status: Status, message: String) -> Response {
-        // construct your Response here
-        todo!()
+        Response {
+            operation: Some(response::response::Operation::ListFollowers(
+                response::ListFollowers {
+                    status: status as i32,
+                    message,
+                    user_names: Vec::new(),
+                    last_serial: 0,
+                },
+            )),
+        }
     }
 }
 
@@ -304,7 +437,6 @@ impl RequestHandler for request::UploadProfilePicture {
     }
 
     fn build_response(status: Status, message: String) -> Response {
-        // construct your Response here
         todo!()
     }
 }

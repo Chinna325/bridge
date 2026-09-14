@@ -67,6 +67,8 @@ pub struct ListFollowers {
     pub page: i32,
     #[prost(enumeration="super::common::LType", tag="3")]
     pub ltype: i32,
+    #[prost(int64, tag="4")]
+    pub last_serial: i64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddPost {

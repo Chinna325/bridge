@@ -87,6 +87,8 @@ pub struct ListFollowers {
     pub message: ::prost::alloc::string::String,
     #[prost(string, repeated, tag="3")]
     pub user_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(int64, tag="4")]
+    pub last_serial: i64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AddPost {
@@ -358,7 +360,7 @@ pub struct Group {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Conversation {
     #[prost(string, tag="2")]
-    pub user_email: ::prost::alloc::string::String,
+    pub user_name: ::prost::alloc::string::String,
     #[prost(uint64, tag="3")]
     pub last_message_id: u64,
     #[prost(bytes="vec", tag="1")]
@@ -550,4 +552,6 @@ pub mod response {
 pub enum Status {
     Success = 0,
     BackendError = 1,
+    UserNameAlreadyExists = 2,
+    InvalidOtp = 3,
 }

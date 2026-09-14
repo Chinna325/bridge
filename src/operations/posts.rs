@@ -1,5 +1,6 @@
 use crate::{
     Context,
+    helper::POST_CANNOT_BE_EMPTY,
     operations::traits::RequestHandler,
     protos::{
         request,
@@ -12,7 +13,10 @@ use jbackend_runtime::TWServer;
 #[async_trait]
 impl RequestHandler for request::AddPost {
     fn validate(&self, _ctx: &Context) -> Result<(), String> {
-        todo!()
+        if self.post.is_none() {
+            return Err(String::from(POST_CANNOT_BE_EMPTY));
+        }
+        Ok(())
     }
 
     async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
@@ -20,7 +24,6 @@ impl RequestHandler for request::AddPost {
     }
 
     fn build_response(status: Status, message: String) -> Response {
-        // construct your Response here
         todo!()
     }
 }
