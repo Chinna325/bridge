@@ -17,6 +17,7 @@ pub struct Context {
     pub email: String,
     pub is_acuthenticated: bool,
     pub user_name: String,
+    pub user_id: Vec<u8>,
 }
 
 impl Context {
@@ -25,6 +26,7 @@ impl Context {
             email: String::new(),
             is_acuthenticated: false,
             user_name: String::new(),
+            user_id: Vec::new(),
         }
     }
 }

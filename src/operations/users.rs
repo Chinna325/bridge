@@ -2,13 +2,16 @@ use crate::{
     Context,
     crypto::{self, sha_256},
     helper::{
-        ALREADY_AUTHENTICATED, BACKEND_ERROR, INVALID_EMAIL, INVALID_OTP, PASSWORD_CANNOT_BE_EMPTY,
-        USER_NAME_CANNOT_BE_EMPTY,
+        ALREADY_AUTHENTICATED, BACKEND_ERROR, DATA_CANNOT_BE_EMPTY, INVALID_EMAIL, INVALID_OTP,
+        MAXIMUM_SIZE_EXCEDED, PASSWORD_CANNOT_BE_EMPTY, USER_NAME_CANNOT_BE_EMPTY,
     },
-    operations::traits::RequestHandler,
+    operations::{constants, traits::RequestHandler},
     protos::{
         self, common, request,
-        response::{self, Response, Status},
+        response::{
+            self, Response,
+            Status::{self},
+        },
     },
 };
 use async_trait::async_trait;
@@ -142,18 +145,16 @@ impl RequestHandler for request::VerifyUser {
         }
 
         let password = sha_256(&redis_object.password);
-        match backend
+        if backend
             .db()
             .add_user(&redis_object.user_name, &self.user_email, &password)
             .await
+            .is_err()
         {
-            Ok(_) => {}
-            Err(_) => {
-                return Ok(Self::build_response(
-                    Status::BackendError,
-                    String::from(BACKEND_ERROR),
-                ));
-            }
+            return Ok(Self::build_response(
+                Status::BackendError,
+                String::from(BACKEND_ERROR),
+            ));
         }
 
         Ok(Self::build_response(Status::Success, String::new()))
@@ -172,82 +173,47 @@ impl RequestHandler for request::VerifyUser {
 }
 
 #[async_trait]
-impl RequestHandler for request::RemoveUser {
-    fn validate(&self, _ctx: &Context) -> Result<(), String> {
-        todo!()
-    }
-
-    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
-        todo!()
-    }
-
-    fn build_response(status: Status, message: String) -> Response {
-        // construct your Response here
-        todo!()
-    }
-}
-
-#[async_trait]
-impl RequestHandler for request::ChangePassword {
-    fn validate(&self, _ctx: &Context) -> Result<(), String> {
-        todo!()
-    }
-
-    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
-        todo!()
-    }
-
-    fn build_response(status: Status, message: String) -> Response {
-        // construct your Response here
-        todo!()
-    }
-}
-
-#[async_trait]
 impl RequestHandler for request::GetProfilePicture {
     fn validate(&self, _ctx: &Context) -> Result<(), String> {
-        todo!()
+        if self.user_name.is_empty() {
+            return Err(USER_NAME_CANNOT_BE_EMPTY.to_string());
+        }
+        Ok(())
     }
 
-    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
-        todo!()
-    }
-
-    fn build_response(status: Status, message: String) -> Response {
-        // construct your Response here
-        todo!()
-    }
-}
-
-#[async_trait]
-impl RequestHandler for request::GetUser {
-    fn validate(&self, _ctx: &Context) -> Result<(), String> {
-        todo!()
-    }
-
-    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
-        todo!()
-    }
-
-    fn build_response(status: Status, message: String) -> Response {
-        // construct your Response here
-        todo!()
-    }
-}
-
-#[async_trait]
-impl RequestHandler for request::UpdateUser {
-    fn validate(&self, _ctx: &Context) -> Result<(), String> {
-        todo!()
-    }
-
-    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
-        todo!()
+    async fn handle(&self, backend: &TWServer, ctx: &mut Context) -> Result<Response, ()> {
+        //Later change to user specific
+        let key = hex::encode(&ctx.user_id);
+        let data = match backend.bucket().read_object(key).await {
+            Ok(data) => data,
+            Err(_) => {
+                return Ok(Self::build_response(
+                    Status::BackendError,
+                    BACKEND_ERROR.to_string(),
+                ));
+            }
+        };
+        Ok(response::Response {
+            operation: Some(response::response::Operation::GetProfilePicture(
+                response::GetProfilePicture {
+                    status: Status::Success as i32,
+                    message: String::new(),
+                    data,
+                },
+            )),
+        })
     }
 
     fn build_response(status: Status, message: String) -> Response {
-        // construct your Response here
-        todo!()
+        Response {
+            operation: Some(response::response::Operation::GetProfilePicture(
+                response::GetProfilePicture {
+                    data: Vec::new(),
+                    status: status as i32,
+                    message,
+                },
+            )),
+        }
     }
 }
 
@@ -270,16 +236,21 @@ impl RequestHandler for request::SignIn {
 #[async_trait]
 impl RequestHandler for request::SignOut {
     fn validate(&self, _ctx: &Context) -> Result<(), String> {
-        todo!()
+        Ok(())
     }
 
-    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
-        todo!()
+    async fn handle(&self, _backend: &TWServer, ctx: &mut Context) -> Result<Response, ()> {
+        *ctx = Context::new();
+        Ok(Self::build_response(Status::Success, String::new()))
     }
 
     fn build_response(status: Status, message: String) -> Response {
-        // construct your Response here
-        todo!()
+        Response {
+            operation: Some(response::response::Operation::SignOut(response::SignOut {
+                status: status as i32,
+                message,
+            })),
+        }
     }
 }
 
@@ -293,18 +264,16 @@ impl RequestHandler for request::Follow {
     }
 
     async fn handle(&self, backend: &TWServer, ctx: &mut Context) -> Result<Response, ()> {
-        match backend.db().follow(&self.user_name, &ctx.user_name).await {
-            Ok(_) => {}
-            Err(e) => {
-                return Ok(Self::build_response(Status::BackendError, e.message));
-            }
-        }
-
-        match backend.db().follow(&self.user_name, &ctx.user_name).await {
-            Ok(_) => {}
-            Err(e) => {
-                return Ok(Self::build_response(Status::BackendError, e.message));
-            }
+        if backend
+            .db()
+            .follow(&self.user_name, &ctx.user_name)
+            .await
+            .is_err()
+        {
+            return Ok(Self::build_response(
+                Status::BackendError,
+                BACKEND_ERROR.to_string(),
+            ));
         }
         Ok(Self::build_response(Status::Success, String::new()))
     }
@@ -329,22 +298,16 @@ impl RequestHandler for request::UnFollow {
     }
 
     async fn handle(&self, backend: &TWServer, ctx: &mut Context) -> Result<Response, ()> {
-        match backend.db().read_user(&self.user_name).await {
-            Ok(_) => {}
-            Err(e) => {
-                return Ok(Self::build_response(Status::BackendError, e.message));
-            }
-        }
-
-        match backend
+        if backend
             .db()
             .un_follow(&self.user_name, &ctx.user_name)
             .await
+            .is_err()
         {
-            Ok(_) => {}
-            Err(e) => {
-                return Ok(Self::build_response(Status::BackendError, e.message));
-            }
+            return Ok(Self::build_response(
+                Status::BackendError,
+                BACKEND_ERROR.to_string(),
+            ));
         }
 
         Ok(Self::build_response(Status::Success, String::new()))
@@ -429,6 +392,77 @@ impl RequestHandler for request::ListFollowers {
 #[async_trait]
 impl RequestHandler for request::UploadProfilePicture {
     fn validate(&self, _ctx: &Context) -> Result<(), String> {
+        if self.data.is_empty() {
+            return Err(String::from(DATA_CANNOT_BE_EMPTY));
+        }
+
+        if self.data.len() > constants::IMAGE_SIZE {
+            return Err(String::from(MAXIMUM_SIZE_EXCEDED));
+        }
+        Ok(())
+    }
+
+    async fn handle(&self, backend: &TWServer, ctx: &mut Context) -> Result<Response, ()> {
+        let key = hex::encode(&ctx.user_id);
+        if backend
+            .bucket()
+            .put_object(key, self.data.clone())
+            .await
+            .is_err()
+        {
+            return Ok(Self::build_response(
+                response::Status::BackendError,
+                BACKEND_ERROR.to_string(),
+            ));
+        }
+
+        Ok(Self::build_response(Status::Success, String::new()))
+    }
+
+    fn build_response(status: Status, message: String) -> Response {
+        Response {
+            operation: Some(response::response::Operation::UpdateProfilePicture(
+                response::UploadProfilePicture {
+                    status: status as i32,
+                    message,
+                },
+            )),
+        }
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::RemoveProfilePicture {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
+        Ok(())
+    }
+
+    async fn handle(&self, backend: &TWServer, ctx: &mut Context) -> Result<Response, ()> {
+        let key = hex::encode(&ctx.user_id);
+        if backend.bucket().remove_object(key).await.is_err() {
+            return Ok(Self::build_response(
+                Status::BackendError,
+                BACKEND_ERROR.to_string(),
+            ));
+        }
+        Ok(Self::build_response(Status::Success, String::new()))
+    }
+
+    fn build_response(status: Status, message: String) -> Response {
+        Response {
+            operation: Some(response::response::Operation::RemoveProfilePicture(
+                response::RemoveProfilePicture {
+                    status: status as i32,
+                    message,
+                },
+            )),
+        }
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::RemoveUser {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }
 
@@ -437,6 +471,23 @@ impl RequestHandler for request::UploadProfilePicture {
     }
 
     fn build_response(status: Status, message: String) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::ChangePassword {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: String) -> Response {
+        // construct your Response here
         todo!()
     }
 }
@@ -458,7 +509,23 @@ impl RequestHandler for request::ResetPassword {
 }
 
 #[async_trait]
-impl RequestHandler for request::RemoveProfilePicture {
+impl RequestHandler for request::GetUser {
+    fn validate(&self, _ctx: &Context) -> Result<(), String> {
+        todo!()
+    }
+
+    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
+        todo!()
+    }
+
+    fn build_response(status: Status, message: String) -> Response {
+        // construct your Response here
+        todo!()
+    }
+}
+
+#[async_trait]
+impl RequestHandler for request::UpdateUser {
     fn validate(&self, _ctx: &Context) -> Result<(), String> {
         todo!()
     }

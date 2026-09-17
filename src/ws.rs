@@ -42,10 +42,7 @@ impl WsClient {
             }
             let data = data.into_data().to_vec();
 
-            let req = match request::Request::decode(data.as_slice()) {
-                Ok(req) => req,
-                Err(_) => return Err(()),
-            };
+            let req = request::Request::decode(data.as_slice()).map_err(|_| ())?;
 
             println!("Req {}", req);
 

@@ -1,10 +1,10 @@
 use crate::{
-    Context,
-    helper::POST_CANNOT_BE_EMPTY,
+    Context, crypto,
+    helper::{BACKEND_ERROR, POST_CANNOT_BE_EMPTY},
     operations::traits::RequestHandler,
     protos::{
         request,
-        response::{Response, Status},
+        response::{self, Response, Status},
     },
 };
 use async_trait::async_trait;
@@ -19,44 +19,116 @@ impl RequestHandler for request::AddPost {
         Ok(())
     }
 
-    async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
-        todo!()
+    async fn handle(&self, backend: &TWServer, ctx: &mut Context) -> Result<Response, ()> {
+        let uuid = crypto::uuid();
+        let post = self.post.clone().unwrap();
+
+        if backend
+            .db()
+            .add_post(&uuid, &post.text, &ctx.user_name)
+            .await
+            .is_err()
+        {
+            return Ok(Self::build_response(
+                Status::BackendError,
+                BACKEND_ERROR.to_string(),
+            ));
+        }
+
+        Ok(response::Response {
+            operation: Some(response::response::Operation::AddPost(response::AddPost {
+                status: Status::Success as i32,
+                message: String::new(),
+                post_id: uuid,
+            })),
+        })
     }
 
     fn build_response(status: Status, message: String) -> Response {
-        todo!()
+        Response {
+            operation: Some(response::response::Operation::AddPost(response::AddPost {
+                status: status as i32,
+                message,
+                post_id: Vec::new(),
+            })),
+        }
     }
 }
 
 #[async_trait]
 impl RequestHandler for request::RemovePost {
     fn validate(&self, _ctx: &Context) -> Result<(), String> {
-        todo!()
+        if self.post_id.is_empty() {
+            return Err(String::from(POST_CANNOT_BE_EMPTY));
+        }
+        Ok(())
     }
 
     async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
-        todo!()
+        if backend.db().remove_post(&self.post_id).await.is_err() {
+            return Ok(Self::build_response(
+                Status::BackendError,
+                BACKEND_ERROR.to_string(),
+            ));
+        }
+
+        Ok(Self::build_response(Status::Success, String::new()))
     }
 
     fn build_response(status: Status, message: String) -> Response {
-        // construct your Response here
-        todo!()
+        Response {
+            operation: Some(response::response::Operation::RemovePost(
+                response::RemovePost {
+                    status: status as i32,
+                    message,
+                },
+            )),
+        }
     }
 }
 
 #[async_trait]
 impl RequestHandler for request::GetPost {
     fn validate(&self, _ctx: &Context) -> Result<(), String> {
-        todo!()
+        if self.post_id.is_empty() {
+            return Err(String::from(POST_CANNOT_BE_EMPTY));
+        }
+        Ok(())
     }
 
     async fn handle(&self, backend: &TWServer, _ctx: &mut Context) -> Result<Response, ()> {
-        todo!()
+        let (owner, text, created_at) = match backend.db().read_post(&self.post_id).await {
+            Ok(post) => post,
+
+            Err(_) => {
+                return Ok(Self::build_response(
+                    Status::BackendError,
+                    BACKEND_ERROR.to_string(),
+                ));
+            }
+        };
+
+        let mut post = crate::protos::common::Post::default();
+        post.created_at = created_at as u64;
+        post.owner = owner;
+        post.text = text;
+        Ok(Response {
+            operation: Some(response::response::Operation::GetPost(response::GetPost {
+                status: Status::Success as i32,
+                message: String::new(),
+                post: Some(post),
+            })),
+        })
     }
 
     fn build_response(status: Status, message: String) -> Response {
-        // construct your Response here
-        todo!()
+        Response {
+            operation: Some(response::response::Operation::GetPost(response::GetPost {
+                status: status as i32,
+                post: None,
+                message,
+            })),
+        }
     }
 }
 

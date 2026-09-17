@@ -1432,6 +1432,7 @@ dependencies = [
  "chrono",
  "moka",
  "opendal",
+ "prost",
  "sqlx",
  "tokio",
 ]

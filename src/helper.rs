@@ -5,3 +5,5 @@ pub const ALREADY_AUTHENTICATED: &str = "User is already authenticated ";
 pub const INVALID_OTP: &str = "Invalid opt";
 pub const BACKEND_ERROR: &str = "Something went wrong please try again";
 pub const POST_CANNOT_BE_EMPTY: &str = "Post cannot be empty";
+pub const DATA_CANNOT_BE_EMPTY: &str = "Image cannot be empty";
+pub const MAXIMUM_SIZE_EXCEDED: &str = "Maximum size is exceded";
